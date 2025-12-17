@@ -19,6 +19,7 @@ interface LandingPageProps {
   onGoToExaminationTerminal: () => void;
   scrollToSection?: string | null;
   onScrollComplete?: () => void;
+  onGoToEnrollment: () => void;
 }
 
 const ACTION_ICONS = [
@@ -86,7 +87,7 @@ const APPROACH_STEPS = [
 ];
 
 
-export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete, onGoToEnrollment }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const programPageRef = useRef<HTMLDivElement>(null); 
   const { config } = useConfig();
@@ -410,54 +411,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
       {/* NEW SECTION: About WingMentor Program - Replaced with PilotsStory Scroll */}
       <PilotsStory />
 
-      {/* NEW SECTION: How We Fill The Aviation Low Timer Pilot Gap */}
-      <div 
-        id="how-we-fill-gap-section"
-        className="w-full bg-black"
-      >
-        {/* Black Strip for Titles and instructions */}
-        <div className="w-full relative pt-24 pb-16 px-6 flex flex-col items-center justify-center">
-            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
-                <RevealOnScroll delay={100}>
-                    <h2 className="text-4xl md:text-6xl font-bold brand-font uppercase tracking-wider mb-6 text-white">
-                        How We Filled The Aviation Low Timer Pilot Gap
-                    </h2>
-                    <h3 className="text-xl md:text-3xl font-light leading-relaxed uppercase tracking-widest text-zinc-300">
-                        Visualizing the Pilot's Journey: Bridging the Red Gap
-                    </h3>
-                </RevealOnScroll>
-                <RevealOnScroll delay={200}>
-                  <p className="text-center text-zinc-500 text-xs mt-12 uppercase tracking-widest animate-pulse relative z-10">
-                    Hover over nodes to reveal details • Click nodes to unfold the story
-                  </p>
-                </RevealOnScroll>
-            </div>
-        </div>
-
-        {/* MindMap Section - background is now handled inside MindMap component */}
-        <div className="w-full relative pb-24 px-6 flex flex-col items-center justify-center">
-            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
-                {/* New Vertical Branching MindMap */}
-                <MindMap />
-                {/* End of MindMap integration */}
-
-                <RevealOnScroll delay={700}>
-                    <button 
-                    onClick={onGoToGapPage}
-                    className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl mt-16
-                                bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20`}
-                    >
-                    Access Our Pilot Gap Forum For More Information <i className="fas fa-arrow-right ml-3"></i>
-                    </button>
-                    <p className="mt-4 text-sm max-w-xl mx-auto text-zinc-400">
-                    Insight into previous pilot investments so that you don’t have to experience and avoid hardship and loss.
-                    </p>
-                </RevealOnScroll>
-            </div>
-        </div>
-      </div>
-
-      {/* NEW SECTION: About WingMentor Program */}
+      {/* NEW SECTION: About WingMentor Program (MOVED UP) */}
       <div 
         id="about-program-overview-section"
         className={`w-full relative py-24 px-6 flex flex-col items-center justify-center transition-colors duration-500
@@ -567,6 +521,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                       <p>
                           The Wing Mentor program is not a flight school; we provide the solution to the 'experience paradox' for low-timer pilots. For mentors, this is your opportunity to gain hands-on CRM and consultation experience, building a verifiable logbook that sets you apart. We have watched too many talented pilots give up due to industry standards and market saturation. Our handbook details not just the program, but the unfiltered reality that recent commercial pilots face.
                       </p>
+                  </div>
+              </RevealOnScroll>
+
+              {/* NEW BECOMING A WING MENTOR SECTION */}
+              <RevealOnScroll delay={450} className="max-w-4xl mx-auto mb-16">
+                  <div className={`p-8 border-l-4 border-red-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-red-600' : 'bg-white border-red-600'}`}>
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
+                        
+                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                            <div className="flex-1 text-left">
+                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-3 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                                    Becoming a Wing Mentor
+                                </h3>
+                                <p className={`text-sm md:text-base leading-relaxed mb-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
+                                    Walk into an interview not just with a license, but with the leverage to say, <span className="italic font-semibold">'I have supported and guided pilots.'</span> Transform your flight hours into verifiable leadership experience. Join our team of qualified mentors and build a professional portfolio that airlines respect.
+                                </p>
+                                <button 
+                                    onClick={onGoToEnrollment}
+                                    className="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold uppercase tracking-widest rounded-md shadow-lg transition-all transform hover:translate-x-2 flex items-center"
+                                >
+                                    Enroll Now <i className="fas fa-plane-departure ml-3"></i>
+                                </button>
+                            </div>
+                            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 hidden md:block shadow-md border border-zinc-500/20 transform rotate-2 group-hover:rotate-0 transition-transform duration-500">
+                                <img src={images.STORY_CPL} alt="Wing Mentor" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                  </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={500}>
+                  <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>
                       <p>
                           For the <strong className={textHighlight}>Mentee</strong>, your path is one of guided growth. Your mission is to absorb, learn, and overcome challenges with the support of a dedicated mentor. Upon successful enrollment and a vetting interview, you gain access to the <strong>Wing Mentor Knowledge Vault</strong>—our comprehensive library of resources including study materials for PPL, CPL, IR, and ME ratings. This is about building a deep, practical understanding that prepares you for your next lesson and instills the confidence to command a career.
                       </p>
@@ -621,6 +607,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </button>
               </RevealOnScroll>
           </div>
+      </div>
+
+      {/* NEW SECTION: How We Fill The Aviation Low Timer Pilot Gap (MOVED DOWN) */}
+      <div 
+        id="how-we-fill-gap-section"
+        className="w-full bg-black"
+      >
+        {/* Black Strip for Titles and instructions */}
+        <div className="w-full relative pt-24 pb-16 px-6 flex flex-col items-center justify-center">
+            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
+                <RevealOnScroll delay={100}>
+                    <h2 className="text-4xl md:text-6xl font-bold brand-font uppercase tracking-wider mb-6 text-white">
+                        How We Filled The Aviation Low Timer Pilot Gap
+                    </h2>
+                    <h3 className="text-xl md:text-3xl font-light leading-relaxed uppercase tracking-widest text-zinc-300">
+                        Visualizing the Pilot's Journey: Bridging the Red Gap
+                    </h3>
+                </RevealOnScroll>
+                <RevealOnScroll delay={200}>
+                  <p className="text-center text-zinc-500 text-xs mt-12 uppercase tracking-widest animate-pulse relative z-10">
+                    Hover over nodes to reveal details • Click nodes to unfold the story
+                  </p>
+                </RevealOnScroll>
+            </div>
+        </div>
+
+        {/* MindMap Section - background is now handled inside MindMap component */}
+        <div className="w-full relative pb-24 px-6 flex flex-col items-center justify-center">
+            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
+                {/* New Vertical Branching MindMap */}
+                <MindMap />
+                {/* End of MindMap integration */}
+
+                <RevealOnScroll delay={700}>
+                    <button 
+                    onClick={onGoToGapPage}
+                    className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl mt-16
+                                bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20`}
+                    >
+                    Access Our Pilot Gap Forum For More Information <i className="fas fa-arrow-right ml-3"></i>
+                    </button>
+                    <p className="mt-4 text-sm max-w-xl mx-auto text-zinc-400">
+                    Insight into previous pilot investments so that you don’t have to experience and avoid hardship and loss.
+                    </p>
+                </RevealOnScroll>
+            </div>
+        </div>
       </div>
 
       <div 

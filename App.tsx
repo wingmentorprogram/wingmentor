@@ -179,6 +179,7 @@ const AppContent: React.FC = () => {
           onGoToExaminationTerminal={goToExaminationTerminal}
           scrollToSection={scrollToSection}
           onScrollComplete={() => setScrollToSection(null)}
+          onGoToEnrollment={goToEnrollment} // NEW: Added prop
         />
       )}
       {stage === LoadingStage.HUB && (
