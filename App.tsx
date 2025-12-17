@@ -252,7 +252,7 @@ const AppContent: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden font-['Raleway'] transition-colors duration-300
+    <div className="min-h-screen min-w-[1440px] w-full overflow-x-hidden font-['Raleway'] transition-colors duration-300
                     dark:bg-black dark:text-white
                     light:bg-white light:text-black">
       

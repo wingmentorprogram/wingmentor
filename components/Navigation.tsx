@@ -107,7 +107,7 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
         <div className="flex items-center space-x-3 md:space-x-6">
             <button 
                 onClick={() => setSidebarOpen(true)}
-                className={`transition-colors p-1 md:p-2 ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
+                className={`transition-colors p-1 md:p-2 lg:hidden ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
             >
                 <i className="fas fa-bars text-lg md:text-2xl"></i>
             </button>
