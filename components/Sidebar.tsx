@@ -19,16 +19,20 @@ interface SidebarProps {
   onGoToOperatingHandbook: () => void; 
   onGoToTeamPage: () => void; 
   onGoToGapPage: () => void;
+  onGoToHub: () => void; // New prop
+  onGoToLanding: () => void; // New prop
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, isLoggedIn, onGoToProgramDetail, onGoToShop, onGoToBlackBox, onGoToLatestNews, onGoToLandingAndScroll, onGoToOperatingHandbook, onGoToTeamPage, onGoToGapPage }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, isLoggedIn, onGoToProgramDetail, onGoToShop, onGoToBlackBox, onGoToLatestNews, onGoToLandingAndScroll, onGoToOperatingHandbook, onGoToTeamPage, onGoToGapPage, onGoToHub, onGoToLanding }) => {
   const { isDarkMode } = useTheme();
   const { config } = useConfig();
   const { images } = config;
 
   const handleMenuItemClick = (itemTarget?: string, itemName?: string) => {
     onClose(); 
-    if (itemTarget === 'program-detail') {
+    if (itemTarget === 'landing-page') {
+      onGoToLanding();
+    } else if (itemTarget === 'program-detail') {
       onGoToProgramDetail();
     } else if (itemTarget === 'gap-page') {
       if (isLoggedIn) {
@@ -49,6 +53,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, is
     } else if (itemTarget && ['program-section', 'about-us-section', 'contact-us-section', 'how-we-fill-gap-section'].includes(itemTarget)) { 
       onGoToLandingAndScroll(itemTarget);
     }
+  };
+
+  const handleAirportClick = () => {
+    onClose();
+    onGoToHub();
   };
 
   return (
@@ -86,12 +95,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, is
                 </div>
             </div>
 
+            {/* Special Airport Button for Mobile */}
+            <div className="mb-6">
+                <button
+                    onClick={handleAirportClick}
+                    className={`w-full flex items-center space-x-3 p-3 rounded-md transition-all group border border-transparent
+                                ${isDarkMode 
+                                ? 'bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700' 
+                                : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border-zinc-200'}`}
+                >
+                    <span className="w-8 text-center flex justify-center">
+                        <i className={`fas fa-plane-departure text-lg ${isDarkMode ? 'text-yellow-500' : 'text-blue-600'}`}></i>
+                    </span>
+                    <span className="font-bold tracking-wide uppercase text-sm">Wing Mentor Airport</span>
+                </button>
+            </div>
+
             <h3 className={`text-xs uppercase font-bold mb-4 tracking-[0.2em] border-b pb-2
                            ${isDarkMode ? 'text-yellow-500 border-zinc-800' : 'text-blue-700 border-zinc-200'}`}>Tools</h3>
             <ul className="space-y-2 mb-8">
                 {TOOLS_MENU.map((item) => (
                     <li key={item.name}>
                         <a href={`#${item.name.toLowerCase().replace(' ', '-')}`} 
+                           onClick={() => handleMenuItemClick(item.target, item.name)} // Handle clicks for tools if they have targets
                            className={`flex items-center space-x-3 p-3 rounded-md transition-all group border border-transparent
                                       ${isDarkMode 
                                         ? 'text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-zinc-700' 
@@ -113,7 +139,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, is
                     <li key={item.name}>
                         <button
                            onClick={() => handleMenuItemClick(item.target, item.name)} 
-                           className={`flex items-center space-x-3 p-3 rounded-md transition-all group border border-transparent w-full
+                           className={`flex items-center space-x-3 p-3 rounded-md transition-all group border border-transparent w-full text-left
                                       ${isDarkMode 
                                         ? 'text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-zinc-700' 
                                         : 'text-zinc-700 hover:bg-zinc-100 hover:text-blue-900 hover:border-zinc-200'}`}>

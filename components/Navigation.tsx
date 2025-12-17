@@ -22,11 +22,9 @@ interface NavigationProps {
   onGoToOperatingHandbook: () => void; // NEW: Prop for Operating Handbook
   onGoToTeamPage: () => void; // NEW: Prop for Team Page
   onGoToEnrollment: () => void; // NEW: Prop for Enrollment (Sign Up)
-  isMobileView: boolean;
-  onToggleMobileView: () => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin, onGoToLanding, onGoToHub, onGoToProgramDetail, onGoToShop, onGoToGapPage, onGoToBlackBox, onGoToLatestNews, onGoToLandingAndScroll, onGoToOperatingHandbook, onGoToTeamPage, onGoToEnrollment, isMobileView, onToggleMobileView }) => {
+export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin, onGoToLanding, onGoToHub, onGoToProgramDetail, onGoToShop, onGoToGapPage, onGoToBlackBox, onGoToLatestNews, onGoToLandingAndScroll, onGoToOperatingHandbook, onGoToTeamPage, onGoToEnrollment }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [loginUser, setLoginUser] = useState('');
@@ -255,17 +253,6 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
             >
               <i className={`fas ${isDarkMode ? 'fa-moon' : 'fa-sun'} text-xs md:text-sm`}></i>
             </button>
-
-            <button
-              onClick={onToggleMobileView}
-              className={`ml-1 md:ml-2 flex items-center space-x-2 p-1.5 md:p-2 rounded-full backdrop-blur-md border transition-all
-                          ${isDarkMode 
-                            ? 'bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 text-white hover:text-yellow-400' 
-                            : 'bg-zinc-200/80 hover:bg-300/80 border-zinc-300 text-black hover:text-blue-600'}`}
-              aria-label="Toggle Mobile/Desktop View"
-            >
-              <i className={`fas ${isMobileView ? 'fa-desktop' : 'fa-mobile-alt'} text-xs md:text-sm`}></i>
-            </button>
         </div>
       </nav>
 
@@ -282,6 +269,8 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
         onGoToLandingAndScroll={onGoToLandingAndScroll} 
         onGoToOperatingHandbook={onGoToOperatingHandbook}
         onGoToTeamPage={onGoToTeamPage} 
+        onGoToHub={onGoToHub} // Passed prop
+        onGoToLanding={onGoToLanding} // Passed prop
       />
     </>
   );

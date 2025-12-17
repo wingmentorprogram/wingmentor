@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect } from 'react';
 import { LoadingStage } from './types';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -28,7 +26,6 @@ const AppContent: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false); // Used only for Hub navigation LOGIN option now
   const [isVideoWarm, setIsVideoWarm] = useState(false);
   const [scrollToSection, setScrollToSection] = useState<string | null>(null);
-  const [isMobileView, setIsMobileView] = useState(false); 
   const { config } = useConfig();
 
   useEffect(() => {
@@ -146,10 +143,6 @@ const AppContent: React.FC = () => {
     }
   };
 
-  const toggleMobileView = () => {
-    setIsMobileView(prev => !prev);
-  };
-
   const renderAppContent = () => (
     <>
       {(stage !== LoadingStage.LOGIN && stage !== LoadingStage.LOGO && stage !== LoadingStage.HUB && stage !== LoadingStage.DEVELOPER_EDITOR && stage !== LoadingStage.EXAMINATION_TERMINAL) && (
@@ -167,8 +160,6 @@ const AppContent: React.FC = () => {
           onGoToOperatingHandbook={goToOperatingHandbook}
           onGoToTeamPage={goToTeamPage} 
           onGoToEnrollment={goToEnrollment} // NEW: Passed for the popup "Sign Up" button
-          isMobileView={isMobileView} 
-          onToggleMobileView={toggleMobileView} 
         />
       )}
 
@@ -261,7 +252,7 @@ const AppContent: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen overflow-x-hidden font-['Raleway'] transition-colors duration-300
+    <div className="min-h-screen w-full overflow-x-hidden font-['Raleway'] transition-colors duration-300
                     dark:bg-black dark:text-white
                     light:bg-white light:text-black">
       
@@ -280,19 +271,8 @@ const AppContent: React.FC = () => {
         <LoadingScreen />
       )}
 
-      {/* Render app content for all stages, but mobile wrapper logic applies */}
       {(stage === LoadingStage.HUB || stage === LoadingStage.LANDING || stage === LoadingStage.PROGRAM_DETAIL || stage === LoadingStage.ENROLLMENT || stage === LoadingStage.SHOP || stage === LoadingStage.LOW_TIMER_GAP || stage === LoadingStage.BLACK_BOX || stage === LoadingStage.LATEST_NEWS || stage === LoadingStage.DEVELOPER_EDITOR || stage === LoadingStage.OPERATING_HANDBOOK || stage === LoadingStage.TEAM_PAGE || stage === LoadingStage.EXAMINATION_TERMINAL || stage === LoadingStage.LOGIN) && ( 
-        isMobileView ? (
-          <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm z-50">
-            <div className="relative w-full h-full max-w-[420px] max-h-[800px] bg-black rounded-[3rem] shadow-2xl overflow-hidden border-8 border-zinc-800">
-              <div className="relative w-full h-full overflow-y-auto custom-scrollbar"> 
-                {renderAppContent()}
-              </div>
-            </div>
-          </div>
-        ) : (
-          renderAppContent()
-        )
+        renderAppContent()
       )}
     </div>
   );
