@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect } from 'react';
 import { LoadingStage } from './types';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -34,7 +35,7 @@ const AppContent: React.FC = () => {
     // Stage 0: Logo Splash (3 seconds)
     if (stage === LoadingStage.LOGO) {
       const timer = setTimeout(() => {
-        setStage(LoadingStage.HUB);
+        setStage(LoadingStage.LANDING);
       }, 3000);
       return () => clearTimeout(timer);
     }

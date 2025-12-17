@@ -21,6 +21,8 @@
 
 
 
+
+
 export const IMAGES = {
     LOGO: "https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR", // Updated to new logo
     HERO_ALT: "https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR", // Same icon for consistency
@@ -63,113 +65,4 @@ export const IMAGES = {
     CESSNA_152_IMG_2: "https://images.unsplash.com/photo-1476302262276-29177114b7e8?q=80&w=2940&auto-format&fit=crop", // Replaced Google User Content link
     // New Images for Latest News Page
     NEWS_BG: "https://lh3.googleusercontent.com/d/1xZ5rv7k6fhS5Mhx_Db1TlDUkWyZDjMVb", // Updated to new news background
-    NEWS_ARTICLE_1: "https://images.unsplash.com/photo-1542436442-f5c225576a26?q=80&w=2940&auto-format&fit=crop", // Placeholder news image
-    NEWS_ARTICLE_2: "https://images.unsplash.com/photo-1507679774577-495039f50e13?q=80&w=2940&auto-format&fit=crop", // Placeholder news image
-    NEWS_ARTICLE_3: "https://images.unsplash.com/photo-1498677210137-b19e2c65a7e1?q=80&w=2940&auto-format&fit=crop&ixlib-rb-4.0.3&ixid=M3wxMjA3",
-    // New images for Operating Handbook and other pages
-    LOGBOOK_IMG: "https://lh3.googleusercontent.com/d/1p1PrXJtsOxzDapNsA877LNww_6Us4UKk", // Updated image for Logbook app
-    ECONOMIC_TRAP_IMG: "https://lh3.googleusercontent.com/d/17avqeJjB6sm0LDDsceBu3odsZZgg1vJf", // Updated to new Google User Content link
-    COMFORT_TRAP_IMG: "https://lh3.googleusercontent.com/d/1vKe7xkLzViFX_P26HKM3EOewc_WJ5MF6", // Updated to new Google User Content link
-    ANALYST_PROFILE_IMG: "https://lh3.googleusercontent.com/d/1NJMUDq2SM5uC71dG3bSX6wtu5R0D9hB0", // Updated image for Analyst Profile
-    STRATEGIC_PATHWAYS_IMG: "https://lh3.googleusercontent.com/d/1ytmiZmjwFIlH3cqO4vCXsSnmBmYlRI4u", // Updated image for Strategic Pathways
-    BENJAMIN_BOWLER_PORTRAIT: "https://lh3.googleusercontent.com/d/1LePT83ZCh958EgLo2ioy_99uW2-yau8D", // Placeholder for Benjamin Bowler's portrait
-    KARL_VOGT_PORTRAIT: "https://lh3.googleusercontent.com/d/1wvNobo69VtlIdpk9zFtrMXMszP19zcy5", // Placeholder for Karl Vogt's portrait
-    FINAL_VERDICT_IMG: "https://lh3.googleusercontent.com/d/1My79_PxBzY4MDZcd3dv5Me4qgRazdBg8", // NEW: Image for "The Final Verdict Analysis"
-    SUBSCRIPTION_TRAP_IMG: "https://lh3.googleusercontent.com/d/1kyq5gnSrFIS3zG_nI3Ggq27ZLLwm5OW5", // NEW: Image for "The Subscription Trap"
-    MINDMAP_BG: "https://lh3.googleusercontent.com/d/10Q1nBwxCfzJALwYXH74wwO0Zh6V8eggZ",
-    // Pilot Story Scroll Images
-    STORY_MAP_BG: "https://lh3.googleusercontent.com/d/1bBA0W7Qqw_nJRVrFLIeGWV3h0jjc_rCK", // NEW: Map Background for Story
-    STORY_PAPER_OVERLAY: "https://lh3.googleusercontent.com/d/12pf5A8zfaAmnN0TFPrL6_OV8Em7lX_p9", // NEW: Paper Texture Overlay
-    STORY_STUDENT: "https://lh3.googleusercontent.com/d/1Rsi8rGidQoBXk5ZyHNQVHj5t09wodQwi", // Placeholder for Student
-    STORY_SOLO: "https://images.unsplash.com/photo-1559627704-3bf4202798f5?q=80&w=2000&auto-format&fit=crop", // Placeholder for Solo
-    STORY_PPL: "https://lh3.googleusercontent.com/d/16jxua-yU3b3Oagao4-erSja_Ddw8A4oJ", // Updated Junior Mentor image
-    STORY_CPL: "https://lh3.googleusercontent.com/d/11kbdH5oJ6yNCRn5kHH7eQoaL1zuomDRI", // New Official Wingmentor image
-    STORY_MENTOR_1: "https://lh3.googleusercontent.com/d/1sPvcuLwhX_ofgxuGcZ-yesFYt2DMCGrb", // Updated image for Guidance & Strategy
-    STORY_MENTOR_2: "https://lh3.googleusercontent.com/d/1LFLSOAU4qJug2A3oP99JXXjGmp9cRg6b", // Updated image for Verifiable Experience
-    STORY_MENTOR_3: "https://lh3.googleusercontent.com/d/1r7BpNyEMHtjEwUezjnYDg65lTMYTDCyy", // Updated image for Interview Leverage
-};
-
-export const TOOLS_MENU = [
-    { name: 'Image Editor', icon: 'fa-crop-alt', target: 'developer-editor' }, // Example tool
-    { name: 'Black Box', icon: 'fa-box-open', target: 'black-box-page' },
-    // Add more tools as needed
-];
-
-export const GENERAL_MENU = [
-    { name: 'Home', icon: 'fa-home', target: 'landing-page' },
-    { name: 'Program', icon: 'fa-graduation-cap', target: 'program-section' },
-    { name: 'About Us', icon: 'fa-users', target: 'about-us-section' },
-    { name: 'Contact Us', icon: 'fa-envelope', target: 'contact-us-section' },
-    { name: 'The Gap', icon: 'fa-exclamation-triangle', target: 'gap-page' },
-    { name: 'Shop', icon: 'fa-shopping-cart', target: 'shop-page' },
-    { name: 'Latest News', icon: 'fa-newspaper', target: 'latest-news-page' },
-    { name: 'Operating Handbook', icon: 'fa-book-open', target: 'operating-handbook-page' },
-    { name: 'Team/Standards', icon: 'fa-shield-alt', target: 'team-page' },
-];
-
-export const WING_NOTES = [
-    { text: 'Pre-flight checks are paramount for a safe journey.' },
-    { text: 'A smooth take-off begins with thorough planning.' },
-    { text: 'Altitude is your friend; never compromise on safety.' },
-    { text: 'The sky is not the limit, it is your domain.' },
-    { text: 'Every landing is a successful conclusion to a great flight.' },
-    { text: 'Maintain situational awareness at all times.' },
-    { text: 'Teamwork makes the dream work, even at 30,000 feet.' },
-    { text: 'Adaptability is key in dynamic flight environments.' },
-    { text: 'Learn from every flight, for experience is the greatest teacher.' },
-    { text: 'The best pilots are always learning, always improving.' },
-];
-
-export const SHOP_PRODUCTS = [
-    { id: '1', name: 'WingMentor Pilot Logbook', category: 'Accessories', price: '49.99', image: 'https://images.unsplash.com/photo-1582210850020-2580a1841e4a?q=80&w=2940&auto-format&fit=crop' },
-    { id: '2', name: 'Aviator Sunglasses', category: 'Apparel', price: '129.00', image: 'https://images.unsplash.com/photo-1627993444445-5601d33190b2?q=80&w=2940&auto-format&fit=crop' },
-    { id: '3', name: 'WingMentor Flight Jacket', category: 'Apparel', price: '249.00', image: 'https://images.unsplash.com/photo-1584050819777-62283a005c2a?q=80&w=2940&auto-format&fit=crop' },
-    { id: '4', name: 'Aircraft Model Kit', category: 'Hobbies', price: '89.99', image: 'https://images.unsplash.com/photo-1549032338-7f9e8f49d21e?q=80&w=2940&auto-format&fit=crop' },
-    { id: '5', name: 'Professional Pilot Headset', category: 'Electronics', price: '799.00', image: 'https://images.unsplash.com/photo-1517479109725-b46320577d33?q=80&w=2835&auto-format&fit=crop' },
-    { id: '6', name: 'WingMentor Mug', category: 'Merchandise', price: '19.99', image: 'https://images.unsplash.com/photo-1522201948408-5452f1e67041?q=80&w=2940&auto-format&fit=crop' },
-];
-
-export const TIMELINE_STAGES = [
-    { id: 'student', title: 'STUDENT PILOT', hours: '0 - 50 Hours', color: 'text-emerald-500', description: 'Mastering the fundamentals of flight, from basic maneuvers to your first solo.' },
-    { id: 'private', title: 'PRIVATE PILOT', hours: '50 - 200 Hours', color: 'text-blue-500', description: 'Earning the freedom to fly solo and carry passengers, building cross-country experience.' },
-    { id: 'commercial', title: 'COMMERCIAL PILOT', hours: '200 - 300 Hours', color: 'text-yellow-500', description: 'Licensed to fly for compensation, but now facing the industry\'s notorious "experience gap".' },
-    { id: 'wing_mentor', title: 'WING MENTOR', hours: '500+ Hours', color: 'text-red-500', description: 'Bridging the gap by building verifiable experience through guiding the next generation of pilots.' },
-];
-
-export const LATEST_NEWS_ARTICLES = [
-    {
-        id: '1',
-        title: 'WingMentor Launches New Initiative to Combat Pilot Shortage',
-        date: 'November 20, 2024',
-        excerpt: 'Our new program aims to bridge the experience gap for low-timer pilots, providing critical mentorship and career support.',
-        imageUrl: IMAGES.NEWS_ARTICLE_1,
-    },
-    {
-        id: '2',
-        title: 'Interview with Captain Bowler: The Future of Aviation Mentorship',
-        date: 'November 15, 2024',
-        excerpt: 'Captain Benjamin Bowler discusses the vision behind WingMentor and its impact on aspiring pilots worldwide.',
-        imageUrl: IMAGES.NEWS_ARTICLE_2,
-    },
-    {
-        id: '3',
-        title: 'How WingMentor is Reshaping Pilot Career Pathways',
-        date: 'November 10, 2024',
-        excerpt: 'A deep dive into our unique approach to verifiable experience and community-driven professional development.',
-        imageUrl: IMAGES.NEWS_ARTICLE_3,
-    },
-    {
-        id: '4',
-        title: 'WingMentor Partners with International Flight Academies',
-        date: 'November 05, 2024',
-        excerpt: 'New collaborations expand our reach and provide more opportunities for mentees globally.',
-        imageUrl: "https://images.unsplash.com/photo-1621243719000-0e1d1f1b0a0e?q=80&w=2940&auto-format&fit=crop",
-    },
-    {
-        id: '5',
-        title: 'Technology in the Cockpit: A Pilot\'s Perspective',
-        date: 'October 28, 2024',
-        excerpt: 'Exploring the latest advancements in avionics and how they impact modern flight operations.',
-        imageUrl: "https://images.unsplash.com/photo-1549032338-7f9e8f49d21e?q=80&w=2940&auto-format&fit=crop",
-    },
-];
+    NEWS_ARTICLE_1: "https://images.unsplash.com/photo-1542436442-f5c225576a26?q

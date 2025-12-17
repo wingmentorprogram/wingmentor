@@ -1,4 +1,6 @@
 
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useConfig } from '../context/ConfigContext';
 
@@ -176,14 +178,14 @@ export const PilotsStory: React.FC = () => {
                         <text dy="-15">
                             <textPath 
                                 href="#flight-path-curve" 
-                                startOffset="8%" 
+                                startOffset="10%" 
                                 className="fill-[#b91c1c] font-['Playfair_Display',_serif] text-sm md:text-lg font-bold tracking-[0.2em] opacity-80"
                             >
                                 PATHWAY TO MENTOR
                             </textPath>
                             <textPath
                                 href="#flight-path-curve"
-                                startOffset="18%"
+                                startOffset="20%"
                                 className="fill-black font-['Playfair_Display',_serif] text-sm md:text-lg font-bold tracking-[0.2em]"
                                 style={{ opacity: storyState.progress > 0.15 ? 0.7 : 0, transition: 'opacity 0.5s ease-in-out' }}
                             >
@@ -191,7 +193,7 @@ export const PilotsStory: React.FC = () => {
                             </textPath>
                             <textPath
                                 href="#flight-path-curve"
-                                startOffset="26%"
+                                startOffset="28%"
                                 className="fill-black font-['Playfair_Display',_serif] text-sm md:text-base font-semibold tracking-wider"
                                 style={{ opacity: storyState.progress > 0.23 ? 0.7 : 0, transition: 'opacity 0.5s ease-in-out' }}
                             >
@@ -252,88 +254,47 @@ export const PilotsStory: React.FC = () => {
                     </div>
 
                     {/* STAGE 1: Starter Mentee (Top Left) */}
-                    <div ref={starterMenteeRef} className="relative mb-4 flex flex-col justify-start items-center md:items-start pl-4 md:pl-10">
-                        <div className="w-48 md:w-64 transform -rotate-2 group relative z-10">
-                            <div className="text-center font-['Playfair_Display',_serif] text-2xl md:text-3xl font-bold text-[#4a3b2a] mb-3 italic tracking-wide drop-shadow-sm">
-                                Starter Mentee
-                            </div>
-                            <div className="p-2 bg-[#fdfbf7] shadow-[5px_5px_15px_rgba(0,0,0,0.3)] border-2 border-[#8b7355] transform transition-transform group-hover:scale-105 duration-300 rotate-1">
-                                <div className="overflow-hidden border border-[#d6c4a0]">
-                                    <img src={images.STORY_STUDENT} alt="Starter Mentee" className="w-full h-auto" />
-                                </div>
+                    <div ref={starterMenteeRef} className="relative mb-64 flex justify-start pl-4 md:pl-10">
+                        <div className="relative w-64 h-96 md:w-80 md:h-[28rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
+                            <img src={images.STORY_STUDENT} alt="Starter Mentee" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-6">
+                                <h3 className="text-white text-3xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Starter Mentee</h3>
+                                <p className="text-zinc-300 text-sm mt-2 font-['Playfair_Display',_serif] italic leading-relaxed">
+                                    "This is where you start... Reach the goal of 10 hrs with a mentor to get access to the Black Box where all pilot knowledge will help you through your pilot career."
+                                </p>
                             </div>
                             {/* Red Dot Marker */}
-                            <div className="absolute top-1/2 right-[-20px] md:right-[-40px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] z-10 border-2 border-white"></div>
-                        </div>
-
-                        {/* Sticky Note Text for Starter Mentee - Positioned under the image */}
-                        <div className="mt-8 max-w-xs relative z-20 group-hover:z-30 transition-all">
-                             <div className="relative bg-[#fef3c7] p-6 shadow-[5px_10px_15px_rgba(0,0,0,0.3)] transform -rotate-1 border-b border-r border-[#d4c5a6]">
-                                {/* Red Pin Visual */}
-                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-md">
-                                    <i className="fas fa-thumbtack text-2xl md:text-3xl text-red-600 rotate-[-15deg] shadow-red-900/50"></i>
-                                </div>
-                                
-                                <p className="font-['Playfair_Display',_serif] text-[#4a3b2a] text-lg italic leading-relaxed text-center pt-2">
-                                    "This is where you start in the WingMentor program. Reach the goal of 10 hrs with a mentor to get access to the Black Box where all pilot knowledge will help you through your pilot career."
-                                </p>
-                             </div>
+                            <div className="absolute top-1/2 right-[-12px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] z-10 border-2 border-white"></div>
                         </div>
                     </div>
 
                     {/* STAGE 3: Junior Mentor (Middle Right) */}
-                    <div className="relative mb-56 flex flex-col items-end pr-4 md:pr-10">
-                        <div className="w-48 md:w-64 transform rotate-2 relative group z-10">
-                            {/* Red Dot Marker */}
-                            <div className="absolute top-1/2 left-[-30px] md:left-[-50px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] border-2 border-white"></div>
-                            
-                            <div className="p-2 bg-[#fdfbf7] shadow-[5px_5px_15px_rgba(0,0,0,0.3)] border-2 border-[#8b7355] transform transition-transform group-hover:scale-105 duration-300 -rotate-2">
-                                <div className="overflow-hidden border border-[#d6c4a0]">
-                                    <img src={images.STORY_PPL} alt="Junior Mentor" className="w-full h-auto" />
-                                </div>
-                            </div>
-                            <div className="text-center font-['Playfair_Display',_serif] text-2xl md:text-3xl font-bold text-[#4a3b2a] mt-3 italic tracking-wide drop-shadow-sm">
-                                Junior Mentor
-                            </div>
-                        </div>
-
-                        {/* Sticky Note Text for Junior Mentor */}
-                        <div className="mt-8 max-w-xs relative z-20 group-hover:z-30 transition-all">
-                            <div className="relative bg-[#fef3c7] p-6 shadow-[5px_10px_15px_rgba(0,0,0,0.3)] transform rotate-1 border-b border-r border-[#d4c5a6]">
-                                {/* Red Pin Visual */}
-                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-30 filter drop-shadow-md">
-                                    <i className="fas fa-thumbtack text-2xl md:text-3xl text-red-600 rotate-[15deg] shadow-red-900/50"></i>
-                                </div>
-                                
-                                <p className="font-['Playfair_Display',_serif] text-[#4a3b2a] text-lg italic leading-relaxed text-center pt-2">
+                    <div className="relative mb-64 flex justify-end pr-4 md:pr-10">
+                        <div className="relative w-64 h-96 md:w-80 md:h-[28rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
+                            <img src={images.STORY_PPL} alt="Junior Mentor" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-6">
+                                <h3 className="text-white text-3xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Junior Mentor</h3>
+                                <p className="text-zinc-300 text-sm mt-2 font-['Playfair_Display',_serif] italic leading-relaxed">
                                     "After completing 20 hours of supervised mentorship, you shall gain the experience and valuable skills to become an official mentor."
                                 </p>
                             </div>
+                            {/* Red Dot Marker */}
+                            <div className="absolute top-1/2 left-[-12px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] z-10 border-2 border-white"></div>
                         </div>
                     </div>
 
                     {/* STAGE 4: Official Wingmentor (Bottom Center) */}
                     <div className="relative mb-20 flex flex-col items-center justify-center px-4">
-                        <div className="w-64 md:w-80 transform -rotate-1 relative group z-10">
-                            <div className="text-center font-['Playfair_Display',_serif] text-2xl md:text-3xl font-bold text-[#4a3b2a] mb-3 italic tracking-wide drop-shadow-sm">
-                                Official Wingmentor
-                            </div>
-                            <div className="p-2 bg-[#fdfbf7] shadow-[5px_5px_15px_rgba(0,0,0,0.3)] border-2 border-[#8b7355] transform transition-transform group-hover:scale-105 duration-300 rotate-2">
-                                <div className="overflow-hidden border border-[#d6c4a0]">
-                                    <img src={images.STORY_CPL} alt="Official Wingmentor" className="w-full h-auto" />
-                                </div>
-                            </div>
-                                {/* Red Dot Marker */}
-                                <div className="absolute top-1/2 right-[-20px] md:right-[-40px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] border-2 border-white"></div>
-                        </div>
-
-                        {/* Paragraph Description for Official Wingmentor */}
-                        <div className="mt-12 max-w-3xl relative z-20 text-center">
-                            <div className="relative bg-[#fdfbf7]/70 backdrop-blur-sm p-8 rounded-lg border border-[#d6c4a0]/50 shadow-lg">
-                                <p className="font-['Playfair_Display',_serif] text-[#3e2b1e] text-xl md:text-2xl leading-relaxed">
-                                    Official Wingmentor status is granted at the 20th hour. Upon completing your 50th hour, you will be awarded a program completion certificate. This journey equips you with invaluable hands-on experience, consulting problem-solving skills, Crew Resource Management, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X pilots,' setting you apart from other flight instructor applicants.
+                        <div className="relative w-full max-w-2xl h-[32rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
+                            <img src={images.STORY_CPL} alt="Official Wingmentor" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex flex-col justify-end p-8 text-center">
+                                <h3 className="text-white text-4xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Official Wingmentor</h3>
+                                <p className="text-zinc-200 text-base mt-4 font-['Playfair_Display',_serif] leading-relaxed">
+                                    Official Wingmentor status is granted at the 20th hour...This journey equips you with invaluable hands-on experience, consulting problem-solving skills, CRM, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X pilots,' setting you apart.
                                 </p>
                             </div>
+                            {/* Red Dot Marker */}
+                            <div className="absolute top-1/2 right-[-12px] w-6 h-6 bg-[#b91c1c] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.4)] z-10 border-2 border-white"></div>
                         </div>
                     </div>
                 </div>
@@ -344,29 +305,29 @@ export const PilotsStory: React.FC = () => {
                         Becoming a Wing Mentor
                     </h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 px-4 h-64 md:h-80 shadow-[0_15px_30px_-10px_rgba(0,0,0,0.4)]">
                         {/* Panel 1 */}
-                        <div className="bg-white border-4 border-black p-2 shadow-[10px_10px_0px_rgba(0,0,0,0.2)] transform rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
-                            <div className="border-2 border-black h-48 overflow-hidden bg-gray-100">
-                                <img src={images.STORY_MENTOR_1} alt="Mentor Meeting" className="w-full h-full object-cover contrast-125 transition-all duration-500" />
+                        <div className="relative overflow-hidden group border-2 border-black/50 rounded-lg">
+                            <img src={images.STORY_MENTOR_1} alt="Guidance & Strategy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center p-4 transition-all duration-300 group-hover:bg-black/40">
+                                <h3 className="text-white text-xl md:text-2xl font-bold uppercase tracking-wider text-center drop-shadow-lg notam-font transition-all duration-300 group-hover:scale-105 pb-2">"Guidance & Strategy"</h3>
                             </div>
-                            <p className="font-['Comic_Neue',_cursive] font-bold text-lg mt-3 uppercase tracking-wider text-black">"Guidance & Strategy"</p>
                         </div>
 
                         {/* Panel 2 */}
-                        <div className="bg-white border-4 border-black p-2 shadow-[10px_10px_0px_rgba(0,0,0,0.2)] transform rotate-[2deg] hover:rotate-0 transition-transform duration-300 relative -top-6 md:top-0 z-10">
-                            <div className="border-2 border-black h-48 overflow-hidden bg-gray-100">
-                                <img src={images.STORY_MENTOR_2} alt="Logbook Verification" className="w-full h-full object-cover contrast-125 transition-all duration-500" />
+                        <div className="relative overflow-hidden group border-2 border-black/50 rounded-lg">
+                            <img src={images.STORY_MENTOR_2} alt="Verifiable Experience" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center p-4 transition-all duration-300 group-hover:bg-black/40">
+                                <h3 className="text-white text-xl md:text-2xl font-bold uppercase tracking-wider text-center drop-shadow-lg notam-font transition-all duration-300 group-hover:scale-105 pb-2">"Verifiable Experience"</h3>
                             </div>
-                            <p className="font-['Comic_Neue',_cursive] font-bold text-lg mt-3 uppercase tracking-wider text-black">"Verifiable Experience"</p>
                         </div>
 
                         {/* Panel 3 */}
-                        <div className="bg-white border-4 border-black p-2 shadow-[10px_10px_0px_rgba(0,0,0,0.2)] transform rotate-[-1deg] hover:rotate-0 transition-transform duration-300">
-                            <div className="border-2 border-black h-48 overflow-hidden bg-gray-100">
-                                <img src={images.STORY_MENTOR_3} alt="Interview Leverage" className="w-full h-full object-cover contrast-125 transition-all duration-500" />
+                        <div className="relative overflow-hidden group border-2 border-black/50 rounded-lg">
+                            <img src={images.STORY_MENTOR_3} alt="Interview Leverage" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center p-4 transition-all duration-300 group-hover:bg-black/40">
+                                <h3 className="text-white text-xl md:text-2xl font-bold uppercase tracking-wider text-center drop-shadow-lg notam-font transition-all duration-300 group-hover:scale-105 pb-2">"Interview Leverage with Experience"</h3>
                             </div>
-                            <p className="font-['Comic_Neue',_cursive] font-bold text-lg mt-3 uppercase tracking-wider text-black">"Interview Leverage with Experience"</p>
                         </div>
                     </div>
 
