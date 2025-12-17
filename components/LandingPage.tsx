@@ -52,6 +52,39 @@ const ACTION_ICONS = [
     },
 ];
 
+const APPROACH_STEPS = [
+  {
+      num: "01",
+      title: "THE DEBRIEF: PROBLEM IDENTIFIED",
+      desc: "Following a lesson with your Certified Flight Instructor (CFI), you receive a grading sheet highlighting areas needing improvement. This document becomes the mission objective."
+  },
+  {
+      num: "02",
+      title: "THE CONSULTATION: SUPPORT REQUESTED",
+      desc: "You submit the grading sheet and relevant notes through the Wing Mentor platform to schedule a session with a qualified mentor."
+  },
+  {
+      num: "03",
+      title: "THE ASSESSMENT: MENTOR ANALYSIS",
+      desc: "Your Wing Mentor reviews the data, diagnoses the root cause of the issue, and prepares a tailored consultation plan. This is the 'Doctor's' preparation phase."
+  },
+  {
+      num: "04",
+      title: "THE SESSION: GUIDANCE PROVIDED",
+      desc: "In a one-on-one session (online or in-person), the mentor guides you through the problem, utilizing diagrams, simulators, and practical examples to build deep understanding."
+  },
+  {
+      num: "05",
+      title: "THE LOGBOOK: EXPERIENCE VERIFIED",
+      desc: "The session is meticulously documented in the official Wing Mentor logbook, detailing the issue, consultation provided, and duration, signed by the mentee. This creates a verifiable record of experience for the mentor."
+  },
+  {
+      num: "06",
+      title: "THE PRE-FLIGHT: PROFICIENCY APPLIED",
+      desc: "Armed with new insights and strategies, you are fully prepared for your next flight with your CFI, ready to demonstrate mastery and turn a weakness into a strength."
+  }
+];
+
 
 export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -67,6 +100,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   
   // State for hover effect on apps
   const [hoveredApp, setHoveredApp] = useState<string | null>(null);
+  
+  // State for App Loading Overlay
+  const [loadingApp, setLoadingApp] = useState<string | null>(null);
 
   useEffect(() => {
     if (scrollToSection) {
@@ -161,22 +197,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   };
 
   const handleIconClick = (target: string) => {
-    switch (target) {
-        case 'handbook':
-            onGoToOperatingHandbook();
-            break;
-        case 'examination':
-            onGoToExaminationTerminal();
-            break;
-        case 'gap':
-            onGoToGapPage();
-            break;
-        case 'blackbox':
-            onGoToBlackBox();
-            break;
-        default:
-            break;
-    }
+    setLoadingApp(target); // Start loading state
+    
+    setTimeout(() => {
+        setLoadingApp(null); // Clear loading state
+        switch (target) {
+            case 'handbook':
+                onGoToOperatingHandbook();
+                break;
+            case 'examination':
+                onGoToExaminationTerminal();
+                break;
+            case 'gap':
+                onGoToGapPage();
+                break;
+            case 'blackbox':
+                onGoToBlackBox();
+                break;
+            default:
+                break;
+        }
+    }, 2000); // 2 second delay for loading animation
   };
 
   const textHighlight = isDarkMode ? 'text-blue-400' : 'text-blue-600';
@@ -184,6 +225,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   return (
     <div className="relative pt-32 min-h-screen bg-white dark:bg-black flex flex-col animate-in fade-in duration-700 transition-colors">
       
+      {/* App Loading Overlay */}
+      {loadingApp && (
+        <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-in fade-in duration-300">
+            {(() => {
+                const app = ACTION_ICONS.find(a => a.target === loadingApp);
+                if (!app) return null;
+                return (
+                    <div className="flex flex-col items-center p-8">
+                        <div className="relative mb-8">
+                            <div className="absolute inset-0 bg-yellow-500/20 blur-2xl rounded-full animate-pulse"></div>
+                            <img 
+                                src={app.image} 
+                                alt={app.title} 
+                                className="w-32 h-32 md:w-48 md:h-48 object-cover rounded-2xl relative z-10 shadow-2xl border border-zinc-800"
+                                style={{ animation: 'logo-glow-pulse 2s infinite ease-in-out' }}
+                            />
+                        </div>
+                        <h2 className="text-2xl md:text-4xl font-bold brand-font text-white uppercase tracking-widest mb-2 text-center">
+                            {app.title}
+                        </h2>
+                        <div className="flex items-center space-x-2 mt-4">
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0s'}}></div>
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s'}}></div>
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s'}}></div>
+                        </div>
+                        <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest mt-4 animate-pulse">
+                            Initializing System...
+                        </p>
+                    </div>
+                );
+            })()}
+        </div>
+      )}
+
       <DeveloperConsole isOpen={isDevConsoleOpen} onClose={() => setDevConsoleOpen(false)} />
 
       <div className="relative z-10 flex flex-col items-center pb-8 px-4 pointer-events-none text-center space-y-2">
@@ -394,47 +469,98 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
           <div className="relative z-10 max-w-5xl mx-auto text-center">
               <RevealOnScroll>
+                  <div className="flex justify-center mb-6">
+                      <img src={images.LOGO} alt="Wing Mentor Logo" className={`w-32 h-auto object-contain ${isDarkMode ? 'filter brightness-0 invert' : ''}`} />
+                  </div>
                   <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest mb-4 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                      About The WingMentor Program
+                      WingMentor Program & Apps
                   </h2>
                   <p className={`text-xl md:text-2xl leading-relaxed mb-12 ${textHighlight}`}>
                       Transforming Low-Time Pilots into Verifiable Assets.
                   </p>
               </RevealOnScroll>
 
-              {/* Benefit Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                  <RevealOnScroll delay={100} className={`p-8 rounded-xl border transition-all duration-300 hover:-translate-y-2
-                                          ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-blue-500/50' : 'bg-white/70 border-zinc-200 hover:border-blue-400'}`}>
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-900/20 text-blue-400 border border-blue-500/30`}>
-                          <i className="fas fa-file-signature text-2xl"></i>
+              {/* REPLACED: Benefit Cards with Detailed Description & Image */}
+              <RevealOnScroll delay={100} className="max-w-4xl mx-auto mb-16 text-left">
+                  
+                  {/* Moved Image to top of section as requested */}
+                  <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-zinc-700/50 relative group mb-10">
+                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                      <img 
+                          src="https://lh3.googleusercontent.com/d/143EeRX8BneoJRBh32bD4UgpHLUByBCbc" 
+                          alt="Wing Mentor Session Analysis" 
+                          className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                          <p className="text-white text-xs font-bold uppercase tracking-widest text-center">Verified Logged Guidance & Consultation</p>
                       </div>
-                      <h3 className={`text-xl font-bold brand-font uppercase mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>Verifiable Experience</h3>
-                      <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                          Go beyond flight hours. Our structured program documents your mentorship, leadership, and problem-solving skills in a verifiable logbook.
+                  </div>
+
+                  <div className={`text-lg leading-relaxed space-y-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
+                      <p>
+                          The WingMentor program creates a symbiotic environment where both mentor and mentee gain valuable experience. Every logged mentor session is another tangible step towards your program goals. Within the WingMentor framework, you will assess and learn how to understand and assess mentees on their decision-making thinking—whether it is in a simulator practice session or analyzing complex <span className="font-bold text-yellow-500">IFR approach charts</span>.
                       </p>
-                  </RevealOnScroll>
-                  <RevealOnScroll delay={200} className={`p-8 rounded-xl border transition-all duration-300 hover:-translate-y-2
-                                          ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-blue-500/50' : 'bg-white/70 border-zinc-200 hover:border-blue-400'}`}>
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-900/20 text-blue-400 border border-blue-500/30`}>
-                          <i className="fas fa-users-cog text-2xl"></i>
+                      <p>
+                          The more detailed the session, the more profound the Crew Resource Management (CRM) skills you gain. You are building capability not just as a mentor, but as a pilot who can expertly consult and assess problem-solving skills in high-stakes environments.
+                      </p>
+                  </div>
+              </RevealOnScroll>
+
+              {/* NEW SECTION: Differentiation Image & Text */}
+              <RevealOnScroll delay={200} className="max-w-4xl mx-auto mb-16 text-left">
+                  {/* Title */}
+                  <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-6 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                      Differentiation: Flight Instructor vs Wing Mentor Consultancy Approach
+                  </h3>
+
+                  {/* The Image */}
+                  <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-zinc-700/50 mb-8 group relative">
+                      <img 
+                          src={images.INSTRUCTION_VS_CONSULTANCY_IMG}
+                          alt="Instruction vs Consultancy" 
+                          className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                  </div>
+
+                  {/* The Text Content - Box Removed */}
+                  <div className={`text-lg leading-relaxed space-y-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
+                      <p>
+                          It is crucial to understand the distinction: <span className="font-bold text-yellow-500">We do not teach lectures or seminars.</span> It is not our role to teach initial concepts or replace your flight school's curriculum. Instead, our mission is to <span className="font-bold">support and consult</span> based on your specific performance within your education and flight training in the aviation industry.
+                      </p>
+                      <p>
+                          Whether you are a <span className="font-bold">student pilot</span> struggling with a specific maneuver, a <span className="font-bold">flight instructor</span> looking to refine your briefing techniques, or a <span className="font-bold">pilot returning after 10 years</span> who needs a skills refresher to get back in the cockpit—this is where WingMentor comes in. We analyze your performance gaps and provide the targeted consultation needed to bridge them.
+                      </p>
+                  </div>
+              </RevealOnScroll>
+
+              {/* NEW SECTION: The Wing Mentor Approach Chart - Simplified Bullet Design */}
+              <RevealOnScroll delay={300} className="max-w-4xl mx-auto mb-16">
+                  <div className={`p-6 md:p-8 rounded-xl border ${isDarkMode ? 'border-zinc-800 bg-zinc-900/30' : 'border-zinc-200 bg-white/50'}`}>
+                      <div className="text-left mb-6">
+                          <h3 className={`text-xl md:text-2xl font-bold brand-font uppercase ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                              The Wing Mentor Approach Chart
+                          </h3>
                       </div>
-                      <h3 className={`text-xl font-bold brand-font uppercase mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>Hands-On Consultation</h3>
-                      <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                          Act as a consultant, not just an instructor. Diagnose issues from real flight debriefs and provide targeted, effective guidance to fellow pilots.
-                      </p>
-                  </RevealOnScroll>
-                  <RevealOnScroll delay={300} className={`p-8 rounded-xl border transition-all duration-300 hover:-translate-y-2
-                                          ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-blue-500/50' : 'bg-white/70 border-zinc-200 hover:border-blue-400'}`}>
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-900/20 text-blue-400 border border-blue-500/30`}>
-                          <i className="fas fa-trophy text-2xl"></i>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-left">
+                          {APPROACH_STEPS.map((step, index) => (
+                              <div key={index} className="flex items-start space-x-3">
+                                  <span className="text-yellow-500 font-bold font-mono text-lg shrink-0 mt-0.5">{step.num}.</span>
+                                  <div>
+                                      <h4 className={`text-xs md:text-sm font-bold uppercase mb-1 ${isDarkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>{step.title}</h4>
+                                      <p className={`text-xs leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>{step.desc}</p>
+                                  </div>
+                              </div>
+                          ))}
                       </div>
-                      <h3 className={`text-xl font-bold brand-font uppercase mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>Competitive Advantage</h3>
-                      <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                          Enter interviews with a portfolio of success. Demonstrate the command authority and CRM skills that airlines are looking for.
-                      </p>
-                  </RevealOnScroll>
-              </div>
+
+                      <div className={`mt-8 pt-4 border-t ${isDarkMode ? 'border-zinc-800 text-zinc-500' : 'border-zinc-200 text-zinc-500'}`}>
+                          <p className="text-xs italic">
+                              "Within your first 20 hours, you will be supervised by one of our Wing Mentor team members. Once completed, your Wing Mentor passport will be stamped, marking your first milestone."
+                          </p>
+                      </div>
+                  </div>
+              </RevealOnScroll>
 
               <RevealOnScroll delay={400}>
                   <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>

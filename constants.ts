@@ -21,6 +21,7 @@ export const IMAGES = {
     MINDMAP_SECTION_BG: "https://lh3.googleusercontent.com/d/1y-ZMwtx856ksi70mOvhyTIpmSC0WEShQ", // New background for the mindmap section
     FORUM_BG: "https://lh3.googleusercontent.com/d/1xZ5rv7k6fhS5Mhx_Db1TlDUkWyZDjMVb", // New background for Pilot Gap Forum
     IPAD_APPS_IMG: "https://lh3.googleusercontent.com/d/1g2fsJA4Kg8MhFqwcs_ALrVulKMigZ_6_", // New iPad with 4 apps image
+    INSTRUCTION_VS_CONSULTANCY_IMG: "https://lh3.googleusercontent.com/d/1GyMG1004Ny93i4_ktGikIXgzy-FHiPBI", // New Instruction vs Consultancy Image
     // New App Icons
     WINGMENTOR_PASSPORT_APP_IMG: "https://lh3.googleusercontent.com/d/12yV8_AmHGkJedZ7c86VZoUwzcSbZt3fV",
     PILOT_GAP_FORUM_APP_IMG: "https://lh3.googleusercontent.com/d/1G_lxRvm9GQ8-X41aPUInaQ-Xqf29qnKr",

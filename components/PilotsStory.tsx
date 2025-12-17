@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useConfig } from '../context/ConfigContext';
 
@@ -23,6 +24,9 @@ export const PilotsStory: React.FC = () => {
       if (!scrollRef.current || !pathRef.current || !starterMenteeRef.current) return;
       
       const elementHeight = scrollRef.current.getBoundingClientRect().height;
+      
+      if (elementHeight === 0) return; // Prevent division by zero if element is hidden or height is 0
+
       const starterMenteeRect = starterMenteeRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
@@ -42,8 +46,18 @@ export const PilotsStory: React.FC = () => {
       
       // Calculate Plane Position and Rotation
       const path = pathRef.current;
+      
+      // Check if getTotalLength exists and returns a valid number (browser compatibility/state check)
+      if (typeof path.getTotalLength !== 'function') return;
+
       const totalLen = path.getTotalLength();
+      
+      if (!Number.isFinite(totalLen) || totalLen === 0) return; // Safety check
+
       const currentLen = totalLen * progress;
+      
+      if (!Number.isFinite(currentLen)) return; // Prevent passing non-finite value to getPointAtLength
+
       const point = path.getPointAtLength(currentLen);
       
       // Calculate angle for rotation (look ahead/behind for tangent)
