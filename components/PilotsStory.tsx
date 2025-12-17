@@ -34,7 +34,8 @@ export const PilotsStory: React.FC = () => {
       rawProgress = Math.max(0, Math.min(1, rawProgress));
 
       // Apply a constant fast speed curve to the progress
-      let progress = rawProgress * 1.5;
+      // Adjusted speed to be faster (approx 1.5 times faster than original 1.5 multiplier)
+      let progress = rawProgress * 2.25;
 
       // Final animation progress is clamped to 1
       progress = Math.min(1, progress);
@@ -175,7 +176,7 @@ export const PilotsStory: React.FC = () => {
                         <text dy="-15">
                             <textPath 
                                 href="#flight-path-curve" 
-                                startOffset="10%" 
+                                startOffset="13%" 
                                 className="fill-[#b91c1c] font-['Playfair_Display',_serif] text-sm md:text-lg font-bold tracking-[0.2em] opacity-80"
                             >
                                 PATHWAY TO MENTOR
@@ -217,6 +218,29 @@ export const PilotsStory: React.FC = () => {
                                 • IFR Rated
                             </textPath>
                         </text>
+
+                        {/* Airport/Runway at Destination (End of Line) */}
+                        <rect 
+                            x="330" 
+                            y="1170" 
+                            width="40" 
+                            height="120" 
+                            fill="#1a1a1a" 
+                            rx="1" 
+                            transform="rotate(-30 350 1200)"
+                            className="drop-shadow-sm"
+                        />
+                        {/* Runway Centerline */}
+                        <line 
+                            x1="350" 
+                            y1="1180" 
+                            x2="350" 
+                            y2="1280" 
+                            stroke="#e5e5e5" 
+                            strokeWidth="2" 
+                            strokeDasharray="8 8" 
+                            transform="rotate(-30 350 1200)" 
+                        />
 
                         {/* The Visible Red Dashed Line (Masked) */}
                         <path 
@@ -287,7 +311,7 @@ export const PilotsStory: React.FC = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex flex-col justify-end p-8 text-center">
                                 <h3 className="text-white text-4xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Official Wingmentor</h3>
                                 <p className="text-zinc-200 text-base mt-4 font-['Playfair_Display',_serif] leading-relaxed">
-                                    "Official Wingmentor status is granted at the 20th hour. Upon completing your 50th hour, you will be awarded a program completion certificate. This journey equips you with invaluable hands-on experience, consulting problem-solving skills, Crew Resource Management, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X pilots,' setting you apart from other flight instructor applicants."
+                                    "Official Wingmentor status is granted at the 20th hour. Upon completing your 50th hour, you will be awarded a program completion certificate. This journey equips you with invaluable hands-on experience, consulting problem-solving skills, Crew Resource Management, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X amount of pilots,' setting you apart from other flight instructor applicants."
                                 </p>
                             </div>
                             {/* Red Dot Marker */}
