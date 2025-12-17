@@ -279,7 +279,7 @@ export const PilotsStory: React.FC = () => {
                         <div className="relative w-64 h-96 md:w-80 md:h-[28rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
                             <img src={images.STORY_STUDENT} alt="Starter Mentee" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-6">
-                                <h3 className="text-white text-3xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Starter Mentee</h3>
+                                <h3 className="text-white text-3xl brand-font font-bold drop-shadow-lg uppercase tracking-wide">Starter Mentee</h3>
                                 <p className="text-zinc-300 text-sm mt-2 font-['Playfair_Display',_serif] italic leading-relaxed">
                                     "This is where you start... Reach the goal of 10 hrs with a mentor to get access to the Black Box where all pilot knowledge will help you through your pilot career."
                                 </p>
@@ -294,7 +294,7 @@ export const PilotsStory: React.FC = () => {
                         <div className="relative w-64 h-96 md:w-80 md:h-[28rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
                             <img src={images.STORY_PPL} alt="Junior Mentor" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end p-6">
-                                <h3 className="text-white text-3xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Junior Mentor</h3>
+                                <h3 className="text-white text-3xl brand-font font-bold drop-shadow-lg uppercase tracking-wide">Junior Mentor</h3>
                                 <p className="text-zinc-300 text-sm mt-2 font-['Playfair_Display',_serif] italic leading-relaxed">
                                     "After completing 20 hours of supervised mentorship, you shall gain the experience and valuable skills to become an official mentor."
                                 </p>
@@ -309,7 +309,7 @@ export const PilotsStory: React.FC = () => {
                         <div className="relative w-full max-w-2xl h-[32rem] overflow-hidden group border-2 border-black/50 rounded-lg shadow-2xl">
                             <img src={images.STORY_CPL} alt="Official Wingmentor" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex flex-col justify-end p-8 text-center">
-                                <h3 className="text-white text-4xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Official Wingmentor</h3>
+                                <h3 className="text-white text-4xl brand-font font-bold drop-shadow-lg uppercase tracking-wide">Official Wingmentor</h3>
                                 <p className="text-zinc-200 text-base mt-4 font-['Playfair_Display',_serif] leading-relaxed">
                                     "Official Wingmentor status is granted at the 20th hour. Upon completing your 50th hour, you will be awarded a program completion certificate. This journey equips you with invaluable hands-on experience, consulting problem-solving skills, Crew Resource Management, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X amount of pilots,' setting you apart from other flight instructor applicants."
                                 </p>

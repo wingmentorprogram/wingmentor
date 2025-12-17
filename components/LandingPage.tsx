@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 import React, { useRef, useState, useEffect } from 'react';
 import { useConfig } from '../context/ConfigContext';
 import { DeveloperConsole } from './DeveloperConsole';
@@ -28,10 +22,34 @@ interface LandingPageProps {
 }
 
 const ACTION_ICONS = [
-    { icon: 'fa-book-open', title: 'Operating Handbook', description: 'Access the official Program Operating Handbook.', target: 'handbook' },
-    { icon: 'fa-terminal', title: 'Examination Terminal', description: 'Prepare for checkrides and knowledge tests.', target: 'examination' },
-    { icon: 'fa-exclamation-triangle', title: 'Pilot Gap Forum', description: 'Discuss industry challenges with peers and mentors.', target: 'gap' },
-    { icon: 'fa-box-open', title: 'The Black Box', description: 'Unlock deeply guarded information and resources.', target: 'blackbox' },
+    { 
+      icon: 'fa-book-open', 
+      title: 'Operating Handbook', 
+      description: 'Access the official Program Operating Handbook.', 
+      target: 'handbook', 
+      image: 'https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN' 
+    },
+    { 
+      icon: 'fa-terminal', 
+      title: 'Examination Terminal', 
+      description: 'Prepare for checkrides and knowledge tests.', 
+      target: 'examination', 
+      image: 'https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF' 
+    },
+    { 
+      icon: 'fa-exclamation-triangle', 
+      title: 'Pilot Gap Forum', 
+      description: 'Discuss industry challenges with peers and mentors.', 
+      target: 'gap',
+      image: 'https://lh3.googleusercontent.com/d/1InHXB-jhAZ3UNDXcvHbENwbB5ApY8eOp' 
+    },
+    { 
+      icon: 'fa-box-open', 
+      title: 'The Black Box', 
+      description: 'Unlock deeply guarded information and resources.', 
+      target: 'blackbox', 
+      image: 'https://lh3.googleusercontent.com/d/18in9LNCamnoxyJATd4qxioMSgb4V8zVv' 
+    },
 ];
 
 
@@ -47,6 +65,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   const [isLoading, setIsLoading] = useState(!isVideoWarm);
   const [programPageVisible, setProgramPageVisible] = useState(false); 
   
+  // State for hover effect on apps
+  const [hoveredApp, setHoveredApp] = useState<string | null>(null);
 
   useEffect(() => {
     if (scrollToSection) {
@@ -268,21 +288,47 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </div>
             </div>
         </div>
+        
+        {/* App Grid */}
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8">
-          {ACTION_ICONS.map((feature, index) => (
-            <RevealOnScroll key={feature.target} delay={index * 100}>
-              <button
-                onClick={() => handleIconClick(feature.target)}
-                className="w-full h-full p-6 text-center rounded-xl transition-all duration-300 hover:bg-zinc-900 hover:-translate-y-2 focus:outline-none focus:ring-2 ring-offset-2 ring-offset-black ring-yellow-500 group"
-              >
-                <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 rounded-full bg-zinc-900 border border-zinc-800 text-yellow-500 transition-colors duration-300 group-hover:bg-yellow-500 group-hover:text-black">
-                  <i className={`fas ${feature.icon} text-2xl md:text-3xl`}></i>
-                </div>
-                <h4 className="font-bold text-sm md:text-base uppercase tracking-wider text-white mb-2">{feature.title}</h4>
-                <p className="text-xs text-zinc-400">{feature.description}</p>
-              </button>
-            </RevealOnScroll>
-          ))}
+          {ACTION_ICONS.map((feature, index) => {
+            const isHovered = hoveredApp === feature.target;
+            const isBlurred = hoveredApp !== null && hoveredApp !== feature.target;
+
+            return (
+                <RevealOnScroll key={feature.target} delay={index * 100}>
+                  <div 
+                    className={`transition-all duration-500 ease-out transform
+                        ${isHovered ? 'scale-110 z-20' : 'z-10'}
+                        ${isBlurred ? 'blur-[4px] scale-90 opacity-40 grayscale' : ''}
+                    `}
+                    onMouseEnter={() => setHoveredApp(feature.target)}
+                    onMouseLeave={() => setHoveredApp(null)}
+                  >
+                      <button
+                        onClick={() => handleIconClick(feature.target)}
+                        className="w-full h-full p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative"
+                      >
+                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-6 
+                                        ${feature.image ? 'rounded-3xl border-0 shadow-2xl' : 'rounded-full border border-zinc-800'} 
+                                        bg-zinc-900 text-yellow-500 transition-all duration-500 overflow-hidden relative shadow-lg
+                                        ${!feature.image ? 'group-hover:bg-yellow-500 group-hover:text-black' : ''}`}>
+                          {feature.image ? (
+                              <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                          ) : (
+                              <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
+                          )}
+                        </div>
+                        {/* Title removed, keeping only description */}
+                        <p className={`text-xs font-bold uppercase tracking-widest transition-colors duration-300
+                                      ${isHovered ? 'text-white' : 'text-zinc-500'}`}>
+                            {feature.description}
+                        </p>
+                      </button>
+                  </div>
+                </RevealOnScroll>
+            );
+          })}
         </div>
       </div>
 

@@ -1,5 +1,7 @@
+
 export const IMAGES = {
     LOGO: "https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR", // Updated to new logo
+    PILOT_GAP_LOGO: "https://lh3.googleusercontent.com/d/1BKT1CFVS2HwUnX2528UchLjnFN8TeCkf", // New Pilot Gap Logo
     HERO_ALT: "https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR", // Same icon for consistency
     HERO_VIDEO: "https://www.dropbox.com/scl/fi/1gd40zo6t5uityywl005v/videoSharingFinalOutput.mov?rlkey=obo681srrrhsisi34bfvbgnsh&st=2oewaq7n&raw=1",
     HUB_VIDEO: "https://www.dropbox.com/scl/fi/4gk5uoxr0vxxwstazfh6y/videoSharingFinalOutput.mov?rlkey=qy8y8bj2y88egy9njrremglom&st=oj65v4py&raw=1",

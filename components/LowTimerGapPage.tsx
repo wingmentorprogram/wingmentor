@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useConfig } from '../context/ConfigContext'; // Import useConfig
@@ -200,6 +201,7 @@ export const LowTimerGapPage: React.FC<LowTimerGapPageProps> = ({ onBackToLandin
   const [password, setPassword] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [commentText, setCommentText] = useState(''); 
+  const [isLoading, setIsLoading] = useState(true);
 
   const pageBg = isDarkMode ? 'bg-slate-950' : 'bg-slate-50';
   const sidebarBg = isDarkMode ? 'bg-slate-900' : 'bg-slate-100';
@@ -242,6 +244,13 @@ export const LowTimerGapPage: React.FC<LowTimerGapPageProps> = ({ onBackToLandin
       setHasAccess(true);
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth >= 1024 && !activeTopicId) { 
@@ -1027,6 +1036,31 @@ export const LowTimerGapPage: React.FC<LowTimerGapPageProps> = ({ onBackToLandin
         </div>
     </div>
   );
+
+  if (isLoading) {
+    return (
+        <div className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center animate-in fade-in duration-500">
+            <div className="relative">
+                <img 
+                    src={images.PILOT_GAP_LOGO} // Use new Pilot Gap Logo
+                    alt="Loading..." 
+                    className="w-32 h-32 md:w-48 md:h-48 object-contain"
+                    style={{ animation: 'logo-glow-pulse 2s infinite ease-in-out' }}
+                />
+            </div>
+            <div className="mt-8 flex flex-col items-center space-y-2">
+                <div className="text-yellow-500/80 font-mono text-xs uppercase tracking-[0.3em] animate-pulse">
+                    Establishing Secure Link
+                </div>
+                <div className="flex space-x-1">
+                    <div className="w-1 h-1 bg-yellow-500/50 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                    <div className="w-1 h-1 bg-yellow-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-1 h-1 bg-yellow-500/50 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+            </div>
+        </div>
+    );
+  }
 
   if (!hasAccess) {
       return renderGate();
