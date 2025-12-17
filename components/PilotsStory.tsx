@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useConfig } from '../context/ConfigContext';
 
@@ -290,7 +287,7 @@ export const PilotsStory: React.FC = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex flex-col justify-end p-8 text-center">
                                 <h3 className="text-white text-4xl font-['Playfair_Display',_serif] font-bold drop-shadow-lg italic">Official Wingmentor</h3>
                                 <p className="text-zinc-200 text-base mt-4 font-['Playfair_Display',_serif] leading-relaxed">
-                                    Official Wingmentor status is granted at the 20th hour...This journey equips you with invaluable hands-on experience, consulting problem-solving skills, CRM, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X pilots,' setting you apart.
+                                    "Official Wingmentor status is granted at the 20th hour. Upon completing your 50th hour, you will be awarded a program completion certificate. This journey equips you with invaluable hands-on experience, consulting problem-solving skills, Crew Resource Management, and verified logged hours. You'll have the leverage to confidently state in job interviews, 'I have supported and guided X pilots,' setting you apart from other flight instructor applicants."
                                 </p>
                             </div>
                             {/* Red Dot Marker */}
