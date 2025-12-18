@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1280" />
+    <meta name="viewport" content="width=2560" />
     <title>WingMentor</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,6 +20,14 @@
         margin: 0;
         overflow-x: hidden;
         transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      
+      /* Constrain App to 50% of the 2560px virtual viewport */
+      #root {
+        width: 1280px;
+        margin: 0 auto;
+        min-height: 100vh;
+        position: relative;
       }
       
       html.light body {
