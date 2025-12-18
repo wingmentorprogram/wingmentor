@@ -227,4 +227,47 @@ export const MailSystem: React.FC<MailSystemProps> = ({ onBackToHub }) => {
 
               <button
                 onClick={handleAiDraft}
-                disabled
+                disabled={isGenerating || !aiPrompt.trim()}
+                className={`w-full py-4 rounded-lg font-bold uppercase tracking-widest text-sm transition-all
+                           ${isGenerating || !aiPrompt.trim() 
+                             ? 'bg-zinc-700/50 text-zinc-500 cursor-not-allowed' 
+                             : 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-900/20'}`}
+              >
+                {isGenerating ? (
+                  <span className="flex items-center justify-center">
+                    <i className="fas fa-spinner fa-spin mr-2"></i> Initializing Gemini Uplink...
+                  </span>
+                ) : (
+                  'Generate Official Draft'
+                )}
+              </button>
+
+              {aiDraft && (
+                <div className={`p-6 rounded-lg border animate-in slide-in-from-top-2 duration-300
+                               ${isDarkMode ? 'bg-black border-zinc-800' : 'bg-zinc-50 border-zinc-200'}`}>
+                  <h4 className="text-[10px] font-bold uppercase text-blue-500 mb-3 tracking-widest">Suggested Draft Output</h4>
+                  <div className="text-sm leading-relaxed whitespace-pre-wrap font-serif italic mb-4">
+                    {aiDraft}
+                  </div>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(aiDraft);
+                      alert('Draft copied to clipboard.');
+                    }}
+                    className="text-[10px] font-bold uppercase text-zinc-500 hover:text-blue-500 transition-colors"
+                  >
+                    <i className="fas fa-copy mr-1"></i> Copy to Clipboard
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            <div className={`px-8 py-4 border-t text-center ${isDarkMode ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-zinc-200'}`}>
+              <p className="text-[9px] text-zinc-500 uppercase tracking-widest">Warning: AI content should be verified before dispatch.</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
