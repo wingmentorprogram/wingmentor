@@ -143,6 +143,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
     }
   };
 
+  const handleLearnMoreApps = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const appsSection = document.getElementById('pilot-apps-made-by-pilots-section');
+    if (appsSection) {
+        appsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsMuted(!isMuted);
@@ -391,9 +399,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   >
                       <button
                         onClick={() => handleIconClick(feature.target)}
-                        className="w-full h-full p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative"
+                        className="w-full h-full p-4 md:p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative flex flex-col items-center"
                       >
-                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-6 
+                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-4 
                                         ${feature.image ? 'rounded-3xl border-0 shadow-2xl' : 'rounded-full border border-zinc-800'} 
                                         bg-zinc-900 text-yellow-500 transition-all duration-500 overflow-hidden relative shadow-lg
                                         ${!feature.image ? 'group-hover:bg-yellow-500 group-hover:text-black' : ''}`}>
@@ -403,10 +411,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                               <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
                           )}
                         </div>
-                        <p className={`text-xs font-bold uppercase tracking-widest transition-colors duration-300
+                        <h4 className={`text-[11px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300 mb-2
                                       ${isHovered ? 'text-white' : 'text-zinc-50'}`}>
-                            {feature.description}
-                        </p>
+                            {feature.title}
+                        </h4>
+                        <span 
+                            onClick={handleLearnMoreApps}
+                            className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-yellow-500 transition-colors cursor-pointer border-b border-zinc-700/50 hover:border-yellow-500/50 pb-0.5"
+                        >
+                            learn more about pilot apps
+                        </span>
                       </button>
                   </div>
                 </RevealOnScroll>
@@ -635,9 +649,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
               {/* NEW APPS HEADER */}
               <RevealOnScroll delay={575}>
-                  <h2 className={`text-3xl md:text-5xl font-bold brand-font uppercase tracking-widest text-center mt-20 mb-10 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                      Apps for pilots made by pilots
-                  </h2>
+                  <div id="pilot-apps-made-by-pilots-section" className="mt-20 mb-10 text-center">
+                    <h2 className={`text-3xl md:text-5xl font-bold brand-font uppercase tracking-widest transition-colors duration-500
+                                  ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                        pilot apps <br />
+                        <span className="text-yellow-500">made by pilots</span>
+                    </h2>
+                  </div>
               </RevealOnScroll>
 
               <RevealOnScroll delay={600}>
