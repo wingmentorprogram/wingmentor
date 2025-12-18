@@ -1,24 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useConfig } from '../context/ConfigContext';
 import { useTheme } from '../context/ThemeContext';
 import { IMAGES } from '../constants';
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai"; // Import Gemini API
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
 interface ImageEditorPageProps {
   onBackToHub: () => void;
-}
-
-// Utility function to convert Blob to Base64
-async function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = (reader.result as string).split(',')[1];
-      resolve(base64String);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
 }
 
 export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub }) => {
@@ -32,6 +19,24 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
+  const [hasApiKey, setHasApiKey] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkApiKey = async () => {
+      if (window.aistudio && typeof window.aistudio.hasSelectedApiKey === 'function') {
+        const hasKey = await window.aistudio.hasSelectedApiKey();
+        setHasApiKey(hasKey);
+      }
+    };
+    checkApiKey();
+  }, []);
+
+  const handleSelectKey = async () => {
+    if (window.aistudio && typeof window.aistudio.openSelectKey === 'function') {
+      await window.aistudio.openSelectKey();
+      setHasApiKey(true);
+    }
+  };
 
   const handleInputChange = (key: string, value: string) => {
     setEditValues(prev => ({ ...prev, [key]: value }));
@@ -40,8 +45,6 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
   const handleSave = (key: keyof typeof IMAGES) => {
     if (editValues[key] !== undefined) {
       updateImage(key, editValues[key]);
-      // Clear edit value after save to show it's synced or keep it? 
-      // Keeping it is fine, but maybe show visual feedback.
     }
   };
 
@@ -56,31 +59,32 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
     setGenerationError(null);
 
     try {
-      // Ensure API_KEY is available in the environment
-      if (!process.env.API_KEY) {
-        throw new Error("API Key is not configured. Please ensure process.env.API_KEY is set.");
+      const apiKey = process.env.API_KEY;
+      if (!apiKey) {
+        throw new Error("API Key is missing. Please select a valid key via the [ACTIVATE AI UPLINK] button.");
       }
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+      const ai = new GoogleGenAI({ apiKey });
       const response: GenerateContentResponse = await ai.models.generateContent({
-        model: 'gemini-3-pro-image-preview', // Using high-quality image generation model
+        model: 'gemini-3-pro-image-preview',
         contents: {
-          parts: [
-            { text: generationPrompt },
-          ],
+          parts: [{ text: generationPrompt }],
         },
         config: {
           imageConfig: {
-            aspectRatio: "1:1", // Default to square for versatility
-            imageSize: "1K" // Default to 1K resolution
+            aspectRatio: "1:1",
+            imageSize: "1K"
           },
         },
       });
 
       let base64EncodeString: string | undefined;
-      for (const part of response.candidates?.[0]?.content?.parts || []) {
-        if (part.inlineData) {
-          base64EncodeString = part.inlineData.data;
-          break;
+      if (response.candidates?.[0]?.content?.parts) {
+        for (const part of response.candidates[0].content.parts) {
+          if (part.inlineData) {
+            base64EncodeString = part.inlineData.data;
+            break;
+          }
         }
       }
 
@@ -91,7 +95,12 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
       }
     } catch (error: any) {
       console.error('Image generation failed:', error);
-      setGenerationError(`Generation failed: ${error.message || 'Unknown error'}`);
+      if (error.message?.includes("Requested entity was not found")) {
+        setHasApiKey(false);
+        setGenerationError("API Key session expired or invalid. Please re-activate uplink.");
+      } else {
+        setGenerationError(`Generation failed: ${error.message || 'Unknown error'}`);
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -101,7 +110,7 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
     if (generatedImageUrl) {
       const base64Data = generatedImageUrl.split(',')[1];
       navigator.clipboard.writeText(base64Data)
-        .then(() => alert('Image URL (Base64) copied to clipboard!'))
+        .then(() => alert('Image data (Base64) copied to clipboard!'))
         .catch(err => console.error('Failed to copy image URL:', err));
     }
   };
@@ -112,7 +121,6 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
   return (
     <div className={`min-h-screen p-8 transition-colors ${isDarkMode ? 'bg-black text-white' : 'bg-zinc-50 text-black'}`}>
       
-      {/* Header */}
       <div className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
             <h1 className="text-3xl font-bold brand-font uppercase tracking-widest text-yellow-500">
@@ -123,6 +131,14 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
             </p>
         </div>
         <div className="flex items-center gap-4">
+            {!hasApiKey && (
+              <button 
+                onClick={handleSelectKey}
+                className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-500 rounded transition-all text-xs font-bold uppercase tracking-widest animate-pulse shadow-lg shadow-blue-600/20"
+              >
+                <i className="fas fa-key mr-2"></i> Activate AI Uplink
+              </button>
+            )}
             <button 
                 onClick={resetImages}
                 className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded transition-colors text-xs font-bold uppercase tracking-widest"
@@ -139,40 +155,56 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
         </div>
       </div>
 
-      {/* AI Image Generation Section */}
       <div className={`max-w-7xl mx-auto p-6 rounded-lg border flex flex-col space-y-4 shadow-lg mb-8
                        ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'}`}>
         <h2 className="text-xl font-bold brand-font uppercase tracking-widest text-blue-500 flex items-center">
           <i className="fas fa-magic mr-3"></i> AI Image Generation
         </h2>
-        <div className="flex-1">
-          <label className={`block text-[10px] uppercase font-bold mb-1 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
-            Image Generation Prompt
-          </label>
-          <textarea
-            value={generationPrompt}
-            onChange={(e) => setGenerationPrompt(e.target.value)}
-            className={`w-full p-2 text-xs font-mono rounded border resize-y h-24 focus:outline-none focus:border-blue-500
-                        ${isDarkMode ? 'bg-black border-zinc-700 text-zinc-300' : 'bg-zinc-50 border-zinc-300 text-zinc-800'}`}
-            placeholder="Describe the image you want to generate (e.g., 'A vintage airplane flying over a sunset, realistic')"
-          />
-        </div>
-        <button
-          onClick={handleGenerateImage}
-          disabled={isGenerating || !generationPrompt.trim()}
-          className={`px-6 py-3 rounded font-bold uppercase tracking-wider transition-all
-                      ${isGenerating || !generationPrompt.trim()
-                        ? 'bg-zinc-700/50 text-zinc-500 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'}`}
-        >
-          {isGenerating ? (
-            <span className="flex items-center justify-center">
-              <i className="fas fa-spinner fa-spin mr-2"></i> Generating...
-            </span>
-          ) : (
-            'Generate Image'
-          )}
-        </button>
+
+        {!hasApiKey ? (
+          <div className="text-center py-10">
+             <i className="fas fa-lock text-4xl text-zinc-700 mb-4"></i>
+             <p className="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-6">AI Generation requires an active satellite link</p>
+             <button 
+                onClick={handleSelectKey}
+                className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded font-bold uppercase tracking-widest text-sm shadow-xl"
+             >
+                Initialize API Key Selection
+             </button>
+             <p className="text-[10px] text-zinc-600 mt-4">Note: Gemini 3 Pro requires a billing-enabled API key. See <a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank" className="underline">billing docs</a>.</p>
+          </div>
+        ) : (
+          <>
+            <div className="flex-1">
+              <label className={`block text-[10px] uppercase font-bold mb-1 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+                Image Generation Prompt
+              </label>
+              <textarea
+                value={generationPrompt}
+                onChange={(e) => setGenerationPrompt(e.target.value)}
+                className={`w-full p-2 text-xs font-mono rounded border resize-y h-24 focus:outline-none focus:border-blue-500
+                            ${isDarkMode ? 'bg-black border-zinc-700 text-zinc-300' : 'bg-zinc-50 border-zinc-300 text-zinc-800'}`}
+                placeholder="Describe the image you want to generate (e.g., 'A modern aircraft landing at sunset, cinematic lighting')"
+              />
+            </div>
+            <button
+              onClick={handleGenerateImage}
+              disabled={isGenerating || !generationPrompt.trim()}
+              className={`px-6 py-3 rounded font-bold uppercase tracking-wider transition-all
+                          ${isGenerating || !generationPrompt.trim()
+                            ? 'bg-zinc-700/50 text-zinc-500 cursor-not-allowed'
+                            : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/20'}`}
+            >
+              {isGenerating ? (
+                <span className="flex items-center justify-center">
+                  <i className="fas fa-spinner fa-spin mr-2"></i> Generating Asset...
+                </span>
+              ) : (
+                'Execute Image Generation'
+              )}
+            </button>
+          </>
+        )}
 
         {generationError && (
           <div className="text-red-500 text-sm mt-4 p-3 border border-red-700 bg-red-900/20 rounded">
@@ -193,20 +225,19 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
               className={`w-full px-4 py-2 rounded text-xs font-bold uppercase tracking-wider transition-all
                           bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20`}
             >
-              <i className="fas fa-copy mr-2"></i> Copy Image URL (Base64)
+              <i className="fas fa-copy mr-2"></i> Copy Base64 String
             </button>
             <p className={`text-[10px] text-zinc-500 mt-2 text-center`}>
-              Paste this URL into any 'Image URL' field above to update an asset.
+              Copy this string and paste it into the URL field of an image key below to update the UI.
             </p>
           </div>
         )}
       </div>
 
-      {/* Search */}
       <div className="max-w-7xl mx-auto mb-8">
         <input 
             type="text" 
-            placeholder="Search Image Keys..." 
+            placeholder="Filter Assets by Name..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={`w-full p-4 rounded-lg border font-mono text-sm focus:outline-none focus:border-yellow-500
@@ -214,8 +245,7 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
         />
       </div>
 
-      {/* Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
         {filteredKeys.map((key) => {
             const currentUrl = config.images[key];
             const editedUrl = editValues[key] !== undefined ? editValues[key] : currentUrl;
@@ -226,17 +256,15 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
                                          ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'}`}>
                     <div className="flex justify-between items-center border-b pb-2 border-zinc-700/50">
                         <span className="font-mono text-xs font-bold text-yellow-500 truncate" title={key}>{key}</span>
-                        {isChanged && <span className="text-[10px] bg-yellow-500 text-black px-1 rounded font-bold">MODIFIED</span>}
+                        {isChanged && <span className="text-[10px] bg-yellow-500 text-black px-1 rounded font-bold">DIRTY</span>}
                     </div>
                     
-                    {/* Preview */}
                     <div className="w-full h-32 bg-black/50 rounded overflow-hidden flex items-center justify-center border border-zinc-700">
                         <img src={editedUrl} alt={key} className="w-full h-full object-contain" />
                     </div>
 
-                    {/* Input */}
                     <div className="flex-1">
-                        <label className={`block text-[10px] uppercase font-bold mb-1 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Image URL</label>
+                        <label className={`block text-[10px] uppercase font-bold mb-1 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Asset source (URL / BASE64)</label>
                         <textarea
                             value={editedUrl}
                             onChange={(e) => handleInputChange(key, e.target.value)}
@@ -245,7 +273,6 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex justify-end pt-2">
                          <button 
                             onClick={() => handleSave(key)}
@@ -255,7 +282,7 @@ export const ImageEditorPage: React.FC<ImageEditorPageProps> = ({ onBackToHub })
                                         ? 'bg-yellow-600 hover:bg-yellow-500 text-white shadow-lg shadow-yellow-900/20' 
                                         : 'bg-zinc-700/50 text-zinc-500 cursor-not-allowed'}`}
                         >
-                            Save Update
+                            Sync Change
                         </button>
                     </div>
                 </div>

@@ -10,8 +10,8 @@
     <style>
       /* Imported Raleway, Oswald, and Playfair Display fonts */
       @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Raleway:wght@100..900&display=swap');
-      /* Custom font for NOTAM-like text */
-      @import url('https://fonts.dev/css2?family=Hack&display=swap');
+      /* Corrected font domain for custom monospace */
+      @import url('https://fonts.googleapis.com/css2?family=Hack&display=swap');
       
       body {
         font-family: 'Raleway', sans-serif;
@@ -19,15 +19,14 @@
         color: white;
         margin: 0;
         overflow-x: hidden;
-        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
       
-      /* Basic Light mode styles for body directly */
       html.light body {
         background-color: white;
         color: black;
       }
-      html.dark body { /* Ensure dark mode explicitly sets dark if light is set */
+      html.dark body {
         background-color: black;
         color: white;
       }
@@ -40,7 +39,6 @@
         font-family: 'Hack', 'Courier New', monospace;
       }
 
-      /* Custom scrollbar for sidebar */
       ::-webkit-scrollbar {
         width: 8px;
       }
@@ -56,213 +54,120 @@
       }
 
       .epaulet-bar {
-        /* Updated shadow to match yellow-400/amber-400 gold tone */
         box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
       }
       
-      .fade-enter {
-        opacity: 0;
-      }
-      .fade-enter-active {
-        opacity: 1;
-        transition: opacity 1000ms;
-      }
-      .fade-exit {
-        opacity: 1;
-      }
-      .fade-exit-active {
-        opacity: 0;
-        transition: opacity 1000ms;
-      }
+      .fade-enter { opacity: 0; }
+      .fade-enter-active { opacity: 1; transition: opacity 1000ms; }
+      .fade-exit { opacity: 1; }
+      .fade-exit-active { opacity: 0; transition: opacity 1000ms; }
 
-      /* Chevron Animation */
       @keyframes chevron-pulse {
-        0% {
-          opacity: 0;
-          transform: rotate(45deg) translate(-8px, -8px);
-        }
-        50% {
-          opacity: 1;
-          transform: rotate(45deg) translate(0px, 0px);
-        }
-        100% {
-          opacity: 0;
-          transform: rotate(45deg) translate(8px, 8px);
-        }
+        0% { opacity: 0; transform: rotate(45deg) translate(-8px, -8px); }
+        50% { opacity: 1; transform: rotate(45deg) translate(0px, 0px); }
+        100% { opacity: 0; transform: rotate(45deg) translate(8px, 8px); }
       }
       
       .chevron-scroll {
         display: block;
         width: 20px;
         height: 20px;
-        border-bottom: 3px solid #eab308; /* Tailwind yellow-500 */
+        border-bottom: 3px solid #eab308;
         border-right: 3px solid #eab308;
         transform: rotate(45deg);
         margin: -4px;
         animation: chevron-pulse 2s infinite;
       }
       
-      .chevron-scroll:nth-child(1) {
-        animation-delay: 0s;
-      }
-      .chevron-scroll:nth-child(2) {
-        animation-delay: 0.15s;
-      }
-      .chevron-scroll:nth-child(3) {
-        animation-delay: 0.3s;
-      }
+      .chevron-scroll:nth-child(1) { animation-delay: 0s; }
+      .chevron-scroll:nth-child(2) { animation-delay: 0.15s; }
+      .chevron-scroll:nth-child(3) { animation-delay: 0.3s; }
 
-      /* Loading Bar Animation */
       @keyframes barFadeIn {
         from { opacity: 0; transform: scaleY(0.5); }
         to { opacity: 1; transform: scaleY(1); }
       }
       .bar-anim {
-        /* Slowed down from 0.8s to 2s for a 4 second page duration */
         animation: barFadeIn 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        opacity: 0; /* Start hidden */
+        opacity: 0;
         transform-origin: bottom;
       }
 
-      /* Quote Fade-in Animation */
       .quote-fade-in {
         opacity: 0;
         transform: translateY(20px);
         animation: quoteFadeIn 1s ease-out forwards;
-        animation-delay: 0.8s; /* Delay slightly after page loads */
+        animation-delay: 0.8s;
       }
 
       @keyframes quoteFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Custom animations for blueprint */
       @keyframes pulse-slow {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.6; }
       }
-      .animate-pulse-slow {
-        animation: pulse-slow 3s infinite ease-in-out;
-      }
+      .animate-pulse-slow { animation: pulse-slow 3s infinite ease-in-out; }
 
       @keyframes glow-light {
         0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 188, 212, 0.7)); }
         50% { filter: drop-shadow(0 0 15px rgba(0, 188, 212, 1)); }
       }
-      .animate-glow-light {
-        animation: glow-light 2s infinite ease-in-out;
-      }
+      .animate-glow-light { animation: glow-light 2s infinite ease-in-out; }
 
       @keyframes glow-light-text {
         0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
         50% { text-shadow: 0 0 15px rgba(255, 255, 255, 0.9); }
       }
-      .animate-glow-light-text {
-        animation: glow-light-text 2s infinite ease-in-out;
-      }
+      .animate-glow-light-text { animation: glow-light-text 2s infinite ease-in-out; }
 
-      /* Flight Traffic Animations */
-      /* Takeoff: Start on runway, accelerate, rotate, climb out */
       @keyframes plane-takeoff {
         0% { transform: translate3d(0%, 30%, 0px) scale(0.4); opacity: 0; }
-        10% { opacity: 1; transform: translate3d(0%, 30%, 0px) scale(0.4); } /* Hold short */
-        20% { transform: translate3d(10%, 25%, 0px) scale(0.4); } /* Line up */
-        40% { transform: translate3d(30%, 25%, 0px) scale(0.4); } /* Roll */
-        50% { transform: translate3d(40%, 25%, 10px) scale(0.45); } /* Rotate */
-        100% { transform: translate3d(100%, -50%, 150px) scale(0.2); opacity: 0; } /* Climb out */
+        10% { opacity: 1; transform: translate3d(0%, 30%, 0px) scale(0.4); }
+        20% { transform: translate3d(10%, 25%, 0px) scale(0.4); }
+        40% { transform: translate3d(30%, 25%, 0px) scale(0.4); }
+        50% { transform: translate3d(40%, 25%, 10px) scale(0.45); }
+        100% { transform: translate3d(100%, -50%, 150px) scale(0.2); opacity: 0; }
       }
-      .animate-plane-takeoff {
-        animation: plane-takeoff 15s infinite linear;
-      }
+      .animate-plane-takeoff { animation: plane-takeoff 15s infinite linear; }
 
-      /* Approach: Start high and far, descend, flare, touchdown, rollout */
       @keyframes plane-landing {
         0% { transform: translate3d(-50%, 50%, 150px) scale(0.2); opacity: 0; }
         10% { opacity: 1; }
-        60% { transform: translate3d(10%, 25%, 5px) scale(0.4); } /* Threshold */
-        70% { transform: translate3d(20%, 25%, 0px) scale(0.4); } /* Touchdown */
-        90% { transform: translate3d(40%, 25%, 0px) scale(0.4); } /* Rollout */
-        100% { transform: translate3d(50%, 35%, 0px) scale(0.4); opacity: 0; } /* Taxi off */
+        60% { transform: translate3d(10%, 25%, 5px) scale(0.4); }
+        70% { transform: translate3d(20%, 25%, 0px) scale(0.4); }
+        90% { transform: translate3d(40%, 25%, 0px) scale(0.4); }
+        100% { transform: translate3d(50%, 35%, 0px) scale(0.4); opacity: 0; }
       }
-      .animate-plane-landing {
-        animation: plane-landing 20s infinite linear;
-      }
+      .animate-plane-landing { animation: plane-landing 20s infinite linear; }
 
-      /* Holding Pattern / Traffic */
       @keyframes plane-orbit {
         0% { transform: translate3d(50%, -50%, 100px) rotateZ(0deg) translateX(50px) rotateZ(0deg) scale(0.2); }
         100% { transform: translate3d(50%, -50%, 100px) rotateZ(360deg) translateX(50px) rotateZ(-360deg) scale(0.2); }
       }
-      .animate-plane-orbit {
-        animation: plane-orbit 10s infinite linear;
-      }
+      .animate-plane-orbit { animation: plane-orbit 10s infinite linear; }
 
-      @keyframes radar-sweep {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      .animate-radar-sweep {
-        animation: radar-sweep 4s infinite linear;
-      }
+      @keyframes radar-sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .animate-radar-sweep { animation: radar-sweep 4s infinite linear; }
 
-      @keyframes blip-flash {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(0.8); }
-      }
-      .animate-blip {
-        animation: blip-flash 1s infinite;
-      }
+      @keyframes blip-flash { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+      .animate-blip { animation: blip-flash 1s infinite; }
 
       @keyframes master-switch-pulse {
-        0%, 100% {
-          box-shadow: 0 0 15px rgba(200,0,0,0.4);
-          transform: scale(1);
-        }
-        50% {
-          box-shadow: 0 0 30px rgba(255,0,0,0.8);
-          transform: scale(1.03);
-        }
+        0%, 100% { box-shadow: 0 0 15px rgba(200,0,0,0.4); transform: scale(1); }
+        50% { box-shadow: 0 0 30px rgba(255,0,0,0.8); transform: scale(1.03); }
       }
-      .animate-master-switch-pulse {
-        animation: master-switch-pulse 2s infinite ease-in-out;
-      }
+      .animate-master-switch-pulse { animation: master-switch-pulse 2s infinite ease-in-out; }
 
-      /* Animation for Hub takeoff */
-      @keyframes plane-takeoff-hub {
-        0% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-        100% {
-          transform: translateX(100px);
-          opacity: 0;
-        }
-      }
-      .plane-takeoff-animation {
-        animation: plane-takeoff-hub 0.8s ease-in forwards;
-      }
+      @keyframes plane-takeoff-hub { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100px); opacity: 0; } }
+      .plane-takeoff-animation { animation: plane-takeoff-hub 0.8s ease-in forwards; }
 
-      /* Startup Animation */
-      @keyframes startup-fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
+      @keyframes startup-fade-in { from { opacity: 0; } to { opacity: 1; } }
       @keyframes logo-glow-pulse {
-        0%, 100% {
-          transform: scale(1);
-          filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-        }
-        50% {
-          transform: scale(1.05);
-          filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.5));
-        }
+        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2)); }
+        50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.5)); }
       }
     </style>
   <script type="importmap">
