@@ -133,21 +133,6 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
 
         <div className="flex items-center space-x-8">
             
-            <div className="flex items-center space-x-6">
-                {GENERAL_MENU.map((item) => (
-                    <button
-                        key={item.name}
-                        onClick={() => handleGeneralMenuItemClick(item.target, item.name)}
-                        className={`transition-colors text-[11px] font-medium uppercase tracking-widest text-center flex items-center space-x-2
-                                   ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
-                        aria-label={item.name}
-                        title={item.name}
-                    >
-                        <span>{item.name}</span>
-                    </button>
-                ))}
-            </div>
-
             <div className={`w-px h-8 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}></div>
 
             <div className="relative flex items-center space-x-6">
@@ -208,7 +193,7 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
                                         type="password" 
                                         value={loginPass}
                                         onChange={(e) => setLoginPass(e.target.value)}
-                                        className={`w-full p-2 text-xs font-mono rounded border focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-colors
+                                        className={`w-full p-2 text-xs font-mono rounded border focus:outline-none focus:ring-1 focus:ring-yellow-500 transition-all text-sm font-mono tracking-wide placeholder-zinc-700"
                                                   ${isDarkMode ? 'bg-black border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-black'}`}
                                         placeholder="••••••"
                                     />
