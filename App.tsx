@@ -17,6 +17,7 @@ import { ExaminationTerminalPage } from './components/ExaminationTerminalPage';
 import { LoginPage } from './components/LoginPage'; 
 import { WingMentorshipProgramPage } from './components/WingMentorshipProgramPage'; 
 import { MailSystem } from './components/MailSystem';
+import { BottomAppBar } from './components/BottomAppBar';
 import { ConfigProvider, useConfig } from './context/ConfigContext';
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -86,6 +87,7 @@ const AppContent: React.FC = () => {
       PASSPORT: goToOperatingHandbook,
       LOGS: goToOperatingHandbook,
       MAIL: goToMailSystem,
+      HUB: goToHub,
       LOGIN: () => setStage(LoadingStage.LOGIN),
       TOOLS: goToLanding
     };
@@ -174,6 +176,7 @@ const AppContent: React.FC = () => {
             />
           )}
           {renderCurrentPage()}
+          {!isBooting && <BottomAppBar isVisible={!isBooting} onNavigate={handleHubNavigation} />}
         </>
       )}
     </div>
