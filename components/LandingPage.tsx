@@ -477,6 +477,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                           Whether you are a <span className="font-bold">student pilot</span> struggling with a specific maneuver, a <span className="font-bold">flight instructor</span> looking to refine your briefing techniques, or a <span className="font-bold">pilot returning after 10 years</span> who needs a skills refresher to get back in the cockpit—this is where WingMentor comes in. We analyze your performance gaps and provide the targeted consultation needed to bridge them.
                       </p>
                   </div>
+
+                  <div className="mt-10 flex flex-col items-center space-y-6">
+                      <p className={`text-sm italic font-medium tracking-wide text-center max-w-2xl mx-auto ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                        Read more engaging sketched pilot real life scenarios in our handbook
+                      </p>
+                      <button 
+                          onClick={onGoToOperatingHandbook}
+                          className={`px-10 py-5 rounded-full tracking-widest text-lg font-black transition-all shadow-xl border-4
+                                      ${isDarkMode 
+                                          ? 'bg-blue-600 border-zinc-300 hover:bg-blue-500 text-white shadow-blue-900/20' 
+                                          : 'bg-blue-700 border-zinc-400 hover:bg-blue-600 text-white shadow-blue-200'}
+                                      animate-master-switch-pulse`}
+                      >
+                          READ THE HANDBOOK AS A REQUIREMENT OF THE PROGRAM <i className="fas fa-book-open ml-3"></i>
+                      </button>
+                  </div>
               </RevealOnScroll>
 
               <RevealOnScroll delay={300} className="max-w-4xl mx-auto mb-16">
@@ -643,18 +659,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                             </div>
                         </RevealOnScroll>
                     </div>
-                  </div>
-
-                  <div className="flex justify-center mt-20">
-                      <button 
-                          onClick={onGoToOperatingHandbook}
-                          className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl
-                                      ${isDarkMode 
-                                          ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20' 
-                                          : 'bg-blue-700 hover:bg-blue-600 text-white shadow-blue-200'}`}
-                      >
-                          Read The Handbook <i className="fas fa-book-open ml-3"></i>
-                      </button>
                   </div>
               </RevealOnScroll>
           </div>
