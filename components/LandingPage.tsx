@@ -303,7 +303,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
         </p>
       </div>
 
-      <div className="relative w-full h-[60vh] md:h-[75vh] overflow-hidden group flex flex-col border-t border-zinc-300 dark:border-zinc-900 bg-black">
+      {/* Optimized Video Container - Width stabilized for 680px frame */}
+      <div className="relative w-full h-[55vh] md:h-[65vh] overflow-hidden group flex flex-col border-y border-zinc-300 dark:border-zinc-900 bg-black">
         
         {isLoading && !isVideoWarm && (
             <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-opacity duration-300 pointer-events-none">
@@ -319,7 +320,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
         <div className={`absolute inset-0 overflow-hidden bg-black flex items-center justify-center ${isMuted ? 'pointer-events-none' : 'pointer-events-auto'}`}>
             <video 
                 ref={videoRef}
-                className="w-full h-full object-cover scale-[1.35]" 
+                className="w-full h-full object-cover transition-opacity duration-1000" // Removed scale-[1.35] to fix cropping
                 autoPlay
                 loop
                 muted={isMuted}
@@ -360,7 +361,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
       </div>
       
-      <div className="w-full py-16 md:py-24 bg-black border-y border-zinc-900 relative">
+      <div className="w-full py-16 md:py-24 bg-black border-b border-zinc-900 relative">
         <div 
             className="cursor-pointer flex flex-col items-center justify-center space-y-4 select-none mb-20" 
             onClick={handleScrollClick}
