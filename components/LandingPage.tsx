@@ -362,18 +362,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
       
       <div className="w-full py-16 md:py-24 bg-black border-y border-zinc-900 relative">
         <div 
-            className="cursor-pointer flex flex-col items-center justify-center space-y-4 select-none mb-20" 
+            className="cursor-pointer flex flex-col items-center justify-center space-y-4 select-none mb-16 md:mb-20" 
             onClick={handleScrollClick}
         >
-            <div className="w-full flex flex-col items-center justify-center text-center">
-                <span className="text-[14px] md:text-lg font-bold text-yellow-500 uppercase tracking-[0.15em]">
+            <div className="w-full flex flex-col items-center justify-center text-center px-4">
+                <span className="text-[13px] md:text-lg font-bold text-yellow-500 uppercase tracking-[0.15em] leading-tight">
                     wingmentor apps for pilots made by pilots
                 </span>
-                <span className="text-[10px] md:text-xs font-bold text-zinc-400 uppercase tracking-[0.3em] font-['Raleway'] mr-[-0.3em] mt-3">
+                <span className="text-[9px] md:text-xs font-bold text-zinc-400 uppercase tracking-[0.3em] font-['Raleway'] mr-[-0.3em] mt-3 opacity-80">
                     Learn more about the program
                 </span>
             </div>
-            <div className="w-full flex justify-center pt-6">
+            <div className="w-full flex justify-center pt-4 md:pt-6">
                 <div className="flex flex-col items-center justify-center">
                     <div className="chevron-scroll"></div>
                     <div className="chevron-scroll"></div>
@@ -382,7 +382,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8 mb-16">
+        {/* App Icon Grid - Strictly 2x2 on mobile for cross-browser consistency */}
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 px-6 md:px-12 mb-20 md:mb-24">
           {ACTION_ICONS.map((feature, index) => {
             const isHovered = hoveredApp === feature.target;
             const isBlurred = hoveredApp !== null && hoveredApp !== feature.target;
@@ -390,29 +391,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             return (
                 <RevealOnScroll key={feature.target} delay={index * 100}>
                   <div 
-                    className={`transition-all duration-500 ease-out transform
-                        ${isHovered ? 'scale-110 z-20' : 'z-10'}
-                        ${isBlurred ? 'blur-[4px] scale-90 opacity-40 grayscale' : ''}
+                    className={`transition-all duration-500 ease-out transform flex flex-col items-center
+                        ${isHovered ? 'scale-105 z-20' : 'z-10'}
+                        ${isBlurred ? 'blur-[2px] opacity-60' : ''}
                     `}
                     onMouseEnter={() => setHoveredApp(feature.target)}
                     onMouseLeave={() => setHoveredApp(null)}
                   >
                       <button
                         onClick={() => handleIconClick(feature.target)}
-                        className="w-full h-full p-4 md:p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative flex flex-col items-center"
+                        className="w-full flex flex-col items-center text-center rounded-xl transition-all duration-300 focus:outline-none group"
                       >
-                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-4 
-                                        ${feature.image ? 'rounded-3xl border-0 shadow-2xl' : 'rounded-full border border-zinc-800'} 
-                                        bg-zinc-900 text-yellow-500 transition-all duration-500 overflow-hidden relative shadow-lg
-                                        ${!feature.image ? 'group-hover:bg-yellow-500 group-hover:text-black' : ''}`}>
+                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-4 md:mb-5
+                                        rounded-3xl border border-zinc-800/50 shadow-2xl bg-zinc-900 overflow-hidden relative transition-all duration-500
+                                        group-active:scale-95`}>
                           {feature.image ? (
-                              <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                              <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                           ) : (
-                              <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
+                              <i className={`fas ${feature.icon} text-4xl md:text-6xl text-yellow-500 transition-transform duration-300 group-hover:rotate-6`}></i>
                           )}
+                          <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
                         </div>
-                        <h4 className={`text-[11px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300
-                                      ${isHovered ? 'text-white' : 'text-zinc-50'}`}>
+                        <h4 className={`text-[10px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300 px-2 leading-tight
+                                      ${isHovered ? 'text-yellow-400' : 'text-zinc-50'}`}>
                             {feature.title}
                         </h4>
                       </button>
@@ -422,13 +423,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
           })}
         </div>
 
-        {/* Unified Link positioned on the border of the section */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20 flex justify-center">
+        {/* Unified Pill Link - Border Centered Position */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20">
             <button 
                 onClick={handleLearnMoreApps}
-                className="px-8 py-3 bg-black border border-zinc-700 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-yellow-500 hover:border-yellow-500/50 transition-all shadow-2xl backdrop-blur-md"
+                className="px-6 md:px-10 py-3 md:py-4 bg-black border border-zinc-700/80 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-[0.35em] text-zinc-400 hover:text-yellow-500 hover:border-yellow-500/50 transition-all shadow-2xl backdrop-blur-xl group flex items-center"
             >
-                learn more about pilot apps <i className="fas fa-chevron-right ml-2 text-[8px] animate-pulse"></i>
+                learn more about pilot apps 
+                <i className="fas fa-chevron-right ml-3 text-[7px] md:text-[9px] group-hover:translate-x-1 transition-transform animate-pulse"></i>
             </button>
         </div>
       </div>
