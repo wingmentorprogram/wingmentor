@@ -25,30 +25,30 @@ const ACTION_ICONS = [
     { 
       icon: 'fa-book-open', 
       title: 'Operating Handbook', 
-      description: 'Access the official Program Operating Handbook.', 
+      description: 'Access the official Program Operating Handbook. Detailed protocols and program guidelines.', 
       target: 'handbook', 
       image: 'https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN' 
     },
     { 
       icon: 'fa-terminal', 
       title: 'Examination Terminal', 
-      description: 'Prepare for checkrides and knowledge tests.', 
+      description: 'Prepare for checkrides and knowledge tests with our interactive preparation hub.', 
       target: 'examination', 
       image: 'https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF' 
     },
     { 
       icon: 'fa-exclamation-triangle', 
       title: 'Pilot Gap Forum', 
-      description: 'Discuss industry challenges with peers and mentors.', 
+      description: 'Discuss industry challenges with peers and mentors in our secure intelligence hub.', 
       target: 'gap',
       image: 'https://lh3.googleusercontent.com/d/1InHXB-jhAZ3UNDXcvHbENwbB5ApY8eOp' 
     },
     { 
       icon: 'fa-box-open', 
       title: 'The Black Box', 
-      description: 'Unlock deeply guarded information and resources.', 
+      description: 'Unlock deeply guarded information and resources from our comprehensive knowledge vault.', 
       target: 'blackbox', 
-      image: 'https://lh3.googleusercontent.com/d/18in9LNCamnoxyJATd4qxioMSgb4V8zVv' 
+      image: 'https://lh3.googleusercontent.com/d/1yLM_bGVPN8Sa__fqR95C0EeA1CUsTAA7' 
     },
 ];
 
@@ -96,8 +96,70 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(!isVideoWarm);
   
-  const [hoveredApp, setHoveredApp] = useState<string | null>(null);
   const [loadingApp, setLoadingApp] = useState<string | null>(null);
+
+  const appSuiteData = [
+    {
+        title: "WingMentor Passport",
+        desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and manage your program progress from a single, intuitive interface.",
+        image: images.WINGMENTOR_PASSPORT_APP_IMG,
+    },
+    {
+        title: "Examination Terminal",
+        desc: "A tactical preparation hub designed for mastery. Access simulated checkrides, comprehensive study reviewers, and performance analytics to turn weaknesses into strengths.",
+        image: "https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF",
+    },
+    {
+        title: "WingLogs",
+        desc: "Your verifiable proof of experience. A professional digital logbook designed to meticulously document every consultation session, building a credible portfolio for your career.",
+        image: images.LOGBOOK_IMG,
+    },
+    {
+        title: "The Pilot Gap Forum",
+        desc: "The intelligence hub for the modern aviator. Engage in critical discussions on industry trends, share strategic insights, and connect with peers and senior mentors.",
+        image: images.PILOT_GAP_FORUM_APP_IMG,
+    },
+    {
+        title: "The Black Box",
+        desc: "The ultimate knowledge vault. Gain exclusive, members-only access to a comprehensive library of study materials, flight data, and career intelligence.",
+        image: "https://lh3.googleusercontent.com/d/1yLM_bGVPN8Sa__fqR95C0EeA1CUsTAA7",
+    },
+    {
+        title: "The Program Handbook",
+        desc: "The definitive operational manual for your mentorship journey. Access mission-critical protocols, program guidelines, and real-life pilot scenarios.",
+        image: "https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN",
+    }
+  ];
+
+  // States for two separate carousels
+  const [selectedActionIndex, setSelectedActionIndex] = useState(1); // Upper carousel
+  const [selectedAppIndex, setSelectedAppIndex] = useState(2);       // Lower carousel
+  
+  const touchStartX = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  
+  const handleTouchEnd = (e: React.TouchEvent, type: 'action' | 'app') => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX.current;
+      const SWIPE_THRESHOLD = 50;
+      
+      if (type === 'action') {
+          if (deltaX > SWIPE_THRESHOLD) {
+              setSelectedActionIndex(prev => Math.max(0, prev - 1));
+          } else if (deltaX < -SWIPE_THRESHOLD) {
+              setSelectedActionIndex(prev => Math.min(ACTION_ICONS.length - 1, prev + 1));
+          }
+      } else {
+          if (deltaX > SWIPE_THRESHOLD) {
+              setSelectedAppIndex(prev => Math.max(0, prev - 1));
+          } else if (deltaX < -SWIPE_THRESHOLD) {
+              setSelectedAppIndex(prev => Math.min(appSuiteData.length - 1, prev + 1));
+          }
+      }
+  };
 
   useEffect(() => {
     if (scrollToSection) {
@@ -200,45 +262,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   };
 
   const textHighlight = isDarkMode ? 'text-blue-400' : 'text-blue-600';
-
-  const appSuiteData = [
-    {
-        title: "WingMentor Passport",
-        desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.",
-        image: images.WINGMENTOR_PASSPORT_APP_IMG,
-        isLarge: true
-    },
-    {
-        title: "Examination Terminal",
-        desc: "Your tactical preparation hub. Access simulated checkrides, Knowledge & Skills Verification (KSV) exams, and comprehensive study reviewers to ensure you are always flight-ready and industry-competitive.",
-        image: "https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF",
-        isLarge: false
-    },
-    {
-        title: "WingLogs",
-        desc: "Your verifiable proof of experience. A digital logbook designed to meticulously document every consultation session, providing a credible record of your skills for future employers.",
-        image: images.LOGBOOK_IMG,
-        isLarge: true
-    },
-    {
-        title: "The Pilot Gap Forum",
-        desc: "The intelligence hub of our community. Engage in critical discussions, share real-world insights, and connect with peers and senior mentors to navigate industry challenges.",
-        image: images.PILOT_GAP_FORUM_APP_IMG,
-        isLarge: false
-    },
-    {
-        title: "The Black Box",
-        desc: "The ultimate knowledge vault. Gain exclusive access to a comprehensive library of study materials, checkride preparations, and deeply guarded industry information for all pilot ratings.",
-        image: images.BLACK_BOX_APP_IMG,
-        isLarge: false
-    },
-    {
-        title: "The Program Handbook",
-        desc: "The definitive operational manual. Access the complete Wing Mentor Program Operating Handbook (POH) featuring mission-critical protocols, legal frameworks, and sketched real-life pilot scenarios to guide your professional conduct.",
-        image: "https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN",
-        isLarge: false
-    }
-  ];
 
   return (
     <div className="relative pt-32 min-h-screen bg-white dark:bg-black flex flex-col animate-in fade-in duration-700 transition-colors">
@@ -383,45 +406,110 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
         
-        {/* Adjusted to grid-cols-2 consistently for 2x2 layout */}
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-8 md:gap-16 px-8 mb-16">
-          {ACTION_ICONS.map((feature, index) => {
-            const isHovered = hoveredApp === feature.target;
-            const isBlurred = hoveredApp !== null && hoveredApp !== feature.target;
+        {/* Action Icons Cover Flow - Scaled Smaller for a sleek look */}
+        <div className="w-full flex flex-col items-center mb-16">
+            <div className="w-full flex items-center justify-center h-[220px] relative">
+                {/* Cover Flow Container */}
+                <div 
+                  className="relative w-full max-w-4xl h-full flex justify-center items-center" 
+                  style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={(e) => handleTouchEnd(e, 'action')}
+                >
+                    {ACTION_ICONS.map((feature, index) => {
+                        const offset = index - selectedActionIndex;
+                        const absOffset = Math.abs(offset);
+                        const isActive = offset === 0;
+                        
+                        let rotateY = 0;
+                        if (offset < 0) rotateY = 75;
+                        if (offset > 0) rotateY = -75;
 
-            return (
-                <RevealOnScroll key={feature.target} delay={index * 100}>
-                  <div 
-                    className={`transition-all duration-500 ease-out transform
-                        ${isHovered ? 'scale-110 z-20' : 'z-10'}
-                        ${isBlurred ? 'blur-[4px] scale-90 opacity-40 grayscale' : ''}
-                    `}
-                    onMouseEnter={() => setHoveredApp(feature.target)}
-                    onMouseLeave={() => setHoveredApp(null)}
-                  >
-                      <button
-                        onClick={() => handleIconClick(feature.target)}
-                        className="w-full h-full p-4 md:p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative flex flex-col items-center"
-                      >
-                        <div className={`flex items-center justify-center w-28 h-28 md:w-44 md:h-44 mx-auto mb-4 
-                                        ${feature.image ? 'rounded-3xl border-0 shadow-2xl' : 'rounded-full border border-zinc-800'} 
-                                        bg-zinc-900 text-yellow-500 transition-all duration-500 overflow-hidden relative shadow-lg
-                                        ${!feature.image ? 'group-hover:bg-yellow-500 group-hover:text-black' : ''}`}>
-                          {feature.image ? (
-                              <img src={feature.image} alt={feature.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                          ) : (
-                              <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
-                          )}
+                        const spacing = 30; 
+                        const centerGap = 100;
+                        let translateX = 0;
+                        
+                        if (offset < 0) translateX = (offset * spacing) - centerGap;
+                        if (offset > 0) translateX = (offset * spacing) + centerGap;
+                        if (isActive) translateX = 0;
+
+                        const scale = isActive ? 1.2 : 0.7;
+                        const zIndex = 100 - absOffset;
+                        const brightness = isActive ? 1 : 0.15;
+                        const opacity = isActive ? 1 : 0.6;
+
+                        const style: React.CSSProperties = {
+                            position: 'absolute',
+                            width: '120px',
+                            height: '120px',
+                            left: '50%', 
+                            top: '40%', 
+                            marginLeft: '-60px',
+                            marginTop: '-60px',
+                            transform: `translateX(${translateX}px) translateZ(${isActive ? 0 : -200}px) rotateY(${rotateY}deg) scale(${scale})`,
+                            zIndex: zIndex,
+                            transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                            filter: `brightness(${brightness})`,
+                            opacity: opacity,
+                            cursor: 'pointer'
+                        };
+
+                        return (
+                            <div 
+                              key={feature.target} 
+                              style={style}
+                              onClick={() => isActive ? handleIconClick(feature.target) : setSelectedActionIndex(index)}
+                            >
+                                <div className="w-full h-full relative group">
+                                    <div className="absolute inset-0 bg-yellow-500/0 group-hover:bg-yellow-500/10 transition-colors rounded-xl"></div>
+                                    <img 
+                                        src={feature.image} 
+                                        alt={feature.title} 
+                                        className="w-full h-full object-cover rounded-xl shadow-2xl border border-zinc-800"
+                                        style={{
+                                            // @ts-ignore
+                                            WebkitBoxReflect: `below 4px linear-gradient(transparent, transparent 65%, rgba(0,0,0,0.3))`
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Navigation Controls below carousel - Title in between arrows with Cross-Fade */}
+            <div className="flex items-center justify-center gap-6 z-50 mt-2">
+                <button 
+                  onClick={() => setSelectedActionIndex(prev => Math.max(0, prev - 1))} 
+                  disabled={selectedActionIndex === 0} 
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isDarkMode ? 'bg-zinc-800 text-white' : 'bg-zinc-200 text-black'} disabled:opacity-30 hover:bg-yellow-500 hover:text-black shadow-lg`}
+                >
+                    <i className="fas fa-chevron-left text-[10px]"></i>
+                </button>
+                
+                <div className="relative w-[180px] h-10 flex items-center justify-center overflow-hidden">
+                    {ACTION_ICONS.map((feature, idx) => (
+                        <div 
+                            key={feature.target}
+                            className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-500 transform ${selectedActionIndex === idx ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}`}
+                        >
+                            <h3 className="text-[10px] md:text-xs font-bold brand-font uppercase tracking-[0.2em] text-white text-center">
+                                {feature.title}
+                            </h3>
+                            <div className="w-6 h-0.5 bg-yellow-500 mt-1"></div>
                         </div>
-                        <h4 className={`text-[11px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300
-                                      ${isHovered ? 'text-white' : 'text-zinc-50'}`}>
-                            {feature.title}
-                        </h4>
-                      </button>
-                  </div>
-                </RevealOnScroll>
-            );
-          })}
+                    ))}
+                </div>
+
+                <button 
+                  onClick={() => setSelectedActionIndex(prev => Math.min(ACTION_ICONS.length - 1, prev + 1))} 
+                  disabled={selectedActionIndex === ACTION_ICONS.length - 1} 
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isDarkMode ? 'bg-zinc-800 text-white' : 'bg-zinc-200 text-black'} disabled:opacity-30 hover:bg-yellow-500 hover:text-black shadow-lg`}
+                >
+                    <i className="fas fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
         </div>
 
         {/* Unified Link positioned on the border of the section */}
@@ -590,7 +678,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW BECOMING A WING MENTOR SECTION (FOR MENTORS) */}
+              {/* BECOMING A WING MENTOR SECTION (FOR MENTORS) */}
               <RevealOnScroll delay={450} className="max-w-4xl mx-auto mb-12">
                   <div className={`p-8 border-l-4 border-red-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-red-600' : 'bg-white border-red-600'}`}>
                         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
@@ -617,7 +705,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW ENROLL AS MENTEE SECTION */}
+              {/* ENROLL AS MENTEE SECTION */}
               <RevealOnScroll delay={500} className="max-w-4xl mx-auto mb-16">
                   <div className={`p-8 border-l-4 border-blue-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-blue-600' : 'bg-white border-blue-600'}`}>
                         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
@@ -644,7 +732,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* MENTEE DESCRIPTION PARAGRAPH MOVED BELOW CTA */}
+              {/* MENTEE DESCRIPTION PARAGRAPH BELOW CTA */}
               <RevealOnScroll delay={550}>
                   <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>
                       <p>
@@ -653,81 +741,149 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW APPS HEADER */}
-              <RevealOnScroll delay={575}>
-                  <div id="pilot-apps-made-by-pilots-section" className="mt-20 mb-10 text-center">
-                    <h2 className={`text-3xl md:text-5xl font-bold brand-font uppercase tracking-widest transition-colors duration-500
-                                  ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+              {/* Extended Black Space for Pilot Apps Suite */}
+              <div id="pilot-apps-made-by-pilots-section" className="mt-20 w-full bg-black border-y border-zinc-900 py-48 px-6 flex flex-col items-center">
+                <RevealOnScroll>
+                    <h2 className="text-3xl md:text-6xl font-bold brand-font uppercase tracking-[0.15em] text-center text-white mb-6">
                         pilot apps <br />
                         <span className="text-yellow-500">made by pilots</span>
                     </h2>
-                  </div>
-              </RevealOnScroll>
-
-              <RevealOnScroll delay={600}>
-                  {/* Restructured iPad Apps Section - Alternating Rows */}
-                  <div className="my-16">
-                    <p className={`text-lg leading-relaxed mt-8 max-w-3xl mx-auto text-center ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                      Your digital command center. The WingMentor suite of applications provides seamless access to all program resources, from logging mentorship hours to accessing critical flight knowledge, all from a single, integrated platform.
+                    <p className="text-sm md:text-lg font-light text-zinc-500 uppercase tracking-[0.2em] text-center max-w-3xl mx-auto mb-24 leading-relaxed">
+                        The ultimate digital ecosystem for mission readiness. <br/> 
+                        Access every tool you need to navigate the industry gap through our bespoke software suite.
                     </p>
+                </RevealOnScroll>
 
-                    <div className="mt-20 max-w-6xl mx-auto space-y-16 md:space-y-32">
-                        {appSuiteData.map((app, idx) => (
-                            <RevealOnScroll key={idx} delay={idx * 150}>
-                                <div className={`flex flex-col md:flex-row items-center gap-8 md:gap-20 ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-                                    {/* Image Segment */}
-                                    <div className="w-full md:w-1/2 flex justify-center items-center">
-                                        <div className={`relative group transition-all duration-500 aspect-square w-full 
-                                                        ${app.isLarge ? 'md:w-[600px] md:h-[600px]' : 'md:w-[480px] md:h-[480px]'} 
-                                                        flex items-center justify-center
-                                                        ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
-                                            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500 z-10 rounded-2xl"></div>
+                {/* Apple Cover Flow Carousel Section */}
+                <div className="w-full flex flex-col items-center">
+                    <div className="w-full flex flex-col items-center justify-center">
+                        {/* Cover Flow Container */}
+                        <div 
+                            className="relative w-full max-w-5xl h-[420px] flex justify-center items-center" 
+                            style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={(e) => handleTouchEnd(e, 'app')}
+                        >
+                            {appSuiteData.map((app, index) => {
+                                const offset = index - selectedAppIndex;
+                                const absOffset = Math.abs(offset);
+                                const isActive = offset === 0;
+                                
+                                let rotateY = 0;
+                                if (offset < 0) rotateY = 65;
+                                if (offset > 0) rotateY = -65;
+
+                                const spacing = 50; 
+                                const centerGap = 200;
+                                let translateX = 0;
+                                
+                                if (offset < 0) translateX = (offset * spacing) - centerGap;
+                                if (offset > 0) translateX = (offset * spacing) + centerGap;
+                                if (isActive) translateX = 0;
+
+                                const scale = isActive ? 1.35 : 0.75;
+                                const zIndex = 100 - absOffset;
+                                const brightness = isActive ? 1 : 0.2;
+                                const opacity = isActive ? 1 : 0.5;
+
+                                const style: React.CSSProperties = {
+                                    position: 'absolute',
+                                    width: '280px',
+                                    height: '280px',
+                                    left: '50%', 
+                                    top: '40%', 
+                                    marginLeft: '-140px', 
+                                    marginTop: '-140px',
+                                    transform: `translateX(${translateX}px) translateZ(${isActive ? 0 : -300}px) rotateY(${rotateY}deg) scale(${scale})`,
+                                    zIndex: zIndex,
+                                    transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    filter: `brightness(${brightness})`,
+                                    opacity: opacity,
+                                    cursor: 'pointer'
+                                };
+
+                                return (
+                                    <div 
+                                        key={app.title} 
+                                        style={style}
+                                        onClick={() => setSelectedAppIndex(index)}
+                                    >
+                                        <div className="w-full h-full relative group">
+                                            <div className="absolute inset-0 bg-yellow-500/0 group-hover:bg-yellow-500/5 transition-colors rounded-2xl"></div>
                                             <img 
                                                 src={app.image} 
                                                 alt={app.title} 
-                                                className={`w-full h-full transform transition-transform duration-1000 object-contain 
-                                                          ${app.isLarge ? '' : 'group-hover:scale-110'} 
-                                                          ${!app.isLarge ? 'p-8' : 'p-0'}`} 
+                                                className="w-full h-full object-cover rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-zinc-800"
+                                                style={{
+                                                    // @ts-ignore
+                                                    WebkitBoxReflect: `below 10px linear-gradient(transparent, transparent 65%, rgba(255,255,255,0.08))`
+                                                }}
                                             />
                                         </div>
                                     </div>
+                                );
+                            })}
+                        </div>
 
-                                    {/* Writing Segment */}
-                                    <div className="w-full md:w-1/2 text-left space-y-4">
-                                        <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                            {app.title}
-                                        </h3>
-                                        <div className="w-16 h-1 bg-yellow-500"></div>
-                                        <p className={`text-lg md:text-xl leading-relaxed font-light ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                                            {app.desc}
-                                        </p>
-                                    </div>
-                                </div>
-                            </RevealOnScroll>
-                        ))}
-
-                        {/* Featured iPad Image - Moved to Bottom */}
-                        <RevealOnScroll delay={300} className="pt-20">
-                            <div className="w-full">
-                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-10 text-center ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                    WingMentor App Suite
-                                </h3>
-                                <div className={`rounded-3xl overflow-hidden shadow-2xl max-w-4xl mx-auto ${isDarkMode ? 'bg-zinc-900/50' : 'bg-white'} group`}>
-                                    <img 
-                                        src={images.IPAD_APPS_IMG} 
-                                        alt="WingMentor Digital Command Center" 
-                                        className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105" 
-                                    />
-                                </div>
+                        {/* Navigation Controls */}
+                        <div className="flex items-center justify-center gap-12 mt-8 mb-24 z-50">
+                            <button onClick={() => setSelectedAppIndex(prev => Math.max(0, prev - 1))} disabled={selectedAppIndex === 0} className="w-12 h-12 rounded-full flex items-center justify-center transition-all bg-zinc-900 border border-zinc-800 text-white disabled:opacity-30 hover:bg-yellow-500 hover:text-black shadow-2xl">
+                                <i className="fas fa-chevron-left text-sm"></i>
+                            </button>
+                            
+                            <div className="flex space-x-2">
+                                {appSuiteData.map((_, i) => (
+                                    <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${selectedAppIndex === i ? 'bg-yellow-500 w-4' : 'bg-zinc-800'}`}></div>
+                                ))}
                             </div>
-                        </RevealOnScroll>
+
+                            <button onClick={() => setSelectedAppIndex(prev => Math.min(appSuiteData.length - 1, prev + 1))} disabled={selectedAppIndex === appSuiteData.length - 1} className="w-12 h-12 rounded-full flex items-center justify-center transition-all bg-zinc-900 border border-zinc-800 text-white disabled:opacity-30 hover:bg-yellow-500 hover:text-black shadow-2xl">
+                                <i className="fas fa-chevron-right text-sm"></i>
+                            </button>
+                        </div>
                     </div>
-                  </div>
-              </RevealOnScroll>
+                    
+                    {/* Centered App Description with Robust Cross-Fade Effect */}
+                    <div className="relative w-full max-w-4xl mx-auto h-72 px-10 text-center flex items-center justify-center mb-16">
+                        {appSuiteData.map((app, index) => (
+                            <div 
+                                key={app.title} 
+                                className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-800 ease-in-out transform 
+                                           ${selectedAppIndex === index 
+                                             ? 'opacity-100 translate-y-0 scale-100 blur-0' 
+                                             : 'opacity-0 translate-y-8 scale-95 blur-sm pointer-events-none'}`}
+                            >
+                                <h3 className="text-3xl md:text-5xl font-bold brand-font uppercase tracking-[0.4em] text-white mb-6 drop-shadow-2xl">
+                                    {app.title}
+                                </h3>
+                                <div className="w-20 h-1 bg-yellow-500 mb-10 rounded-full shadow-[0_0_15px_rgba(234,179,8,0.5)]"></div>
+                                <p className="text-lg md:text-xl leading-relaxed font-light text-zinc-300 max-w-3xl text-center italic px-4">
+                                    {app.desc}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Featured iPad Image - Stays in the Black Section */}
+                    <div className="mt-40 w-full flex flex-col items-center">
+                        <div className="w-32 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent mb-20"></div>
+                        <h3 className="text-2xl md:text-3xl font-bold brand-font uppercase mb-12 text-center text-white tracking-[0.2em]">
+                            WingMentor App Suite <span className="text-yellow-600/50 ml-3">Digital Core</span>
+                        </h3>
+                        <div className="rounded-[3rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,1)] max-w-5xl mx-auto bg-zinc-950 border border-zinc-900 group p-2">
+                            <img 
+                                src={images.IPAD_APPS_IMG} 
+                                alt="WingMentor Digital Command Center" 
+                                className="w-full h-auto object-cover transform transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100 rounded-[2.5rem]" 
+                            />
+                        </div>
+                    </div>
+                </div>
+              </div>
           </div>
       </div>
 
-      {/* NEW SECTION: How We Fill The Aviation Low Timer Pilot Gap (MOVED DOWN) */}
+      {/* How We Fill The Aviation Low Timer Pilot Gap */}
       <div 
         id="how-we-fill-gap-section"
         className="w-full bg-black"
@@ -742,16 +898,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                         Visualizing the Pilot's Journey: Bridging the Red Gap
                     </h3>
                 </RevealOnScroll>
-                <RevealOnScroll delay={200}>
-                  <p className="text-center text-zinc-500 text-xs mt-12 uppercase tracking-widest animate-pulse relative z-10">
-                    Hover over nodes to reveal details • Click nodes to unfold the story
-                  </p>
-                </RevealOnScroll>
             </div>
+        </div>
+
+        <div className="px-6 pb-16">
+            <RevealOnScroll delay={150}>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-zinc-800 bg-zinc-950 group max-w-7xl mx-auto">
+                    <img 
+                      src="https://lh3.googleusercontent.com/d/1cyHKAiNbxXZltgOwIk5wxZg2_J_2ShGO" 
+                      alt="Aviation Gap Strategic Blueprint" 
+                      className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.01]"
+                    />
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+            </RevealOnScroll>
         </div>
 
         <div className="w-full relative pb-24 px-6 flex flex-col items-center justify-center">
             <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
+                <RevealOnScroll delay={200}>
+                  <p className="text-center text-zinc-500 text-xs mb-12 uppercase tracking-widest animate-pulse relative z-10">
+                    Hover over nodes to reveal details • Click nodes to unfold the story
+                  </p>
+                </RevealOnScroll>
+                
                 <MindMap />
 
                 <RevealOnScroll delay={700}>
