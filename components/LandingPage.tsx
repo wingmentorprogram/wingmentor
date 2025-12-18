@@ -195,7 +195,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
   const appSuiteData = [
     {
-        title: "WingMentor App",
+        title: "WingMentor Passport",
         desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.",
         image: images.WINGMENTOR_PASSPORT_APP_IMG
     },
@@ -388,7 +388,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                           )}
                         </div>
                         <p className={`text-xs font-bold uppercase tracking-widest transition-colors duration-300
-                                      ${isHovered ? 'text-white' : 'text-zinc-500'}`}>
+                                      ${isHovered ? 'text-white' : 'text-zinc-50'}`}>
                             {feature.description}
                         </p>
                       </button>
@@ -438,7 +438,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
                   <div className={`text-lg leading-relaxed space-y-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
                       <p>
-                          The WingMentor program creates a symbiotic environment where both mentor and mentee gain valuable experience. Every logged mentor session is another tangible step towards your program goals. Within the WingMentor framework, you will assess and learn how to understand and assess mentees on their decision-making thinking—whether it is in a simulator practice session or analyzing complex <span className="font-bold text-yellow-500">IFR approach charts</span>.
+                          The WingMentor program creates a symbiotic environment where both mentor and mentee gain valuable experience. Every logged mentor session is another tangible step towards your program goals. Within the WingMentor framework, you will assess and learn how to understand and assess mentees on their decision-making thinking—whether it is in a simulator practice session or analyzing complex <span className="font-bold">IFR approach charts</span>.
                       </p>
                       <p>
                           The more detailed the session, the more profound the Crew Resource Management (CRM) skills you gain. You are building capability not just as a mentor, but as a pilot who can expertly consult and assess problem-solving skills in high-stakes environments.
@@ -446,7 +446,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              <RevealOnScroll delay={150} className="flex justify-center mb-16">
+              <RevealOnScroll delay={150} className="flex justify-center mb-24">
                   <button 
                       onClick={onGoToProgramDetail}
                       className="px-10 py-5 bg-red-700 hover:bg-red-600 text-white font-bold uppercase tracking-widest rounded-full shadow-2xl transform transition-all hover:scale-105 active:scale-95 flex items-center gap-3 group"
@@ -456,7 +456,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </button>
               </RevealOnScroll>
 
-              <RevealOnScroll delay={200} className="max-w-4xl mx-auto mb-16 text-left">
+              {/* NEW SECTION: Milestones & Achievements */}
+              <RevealOnScroll delay={200} className="max-w-4xl mx-auto mb-24 text-center">
+                  <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase tracking-widest mb-12 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                      Milestones & Achievements
+                  </h3>
+                  
+                  <div className="mb-12">
+                      <p className={`text-lg md:text-xl leading-relaxed font-light mb-12 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
+                          Throughout your mentorship journey, your dedication is tracked and celebrated. You will receive recognition through <span className="font-bold">official digital badges</span>, exclusive pilot awards, and a progressive rank structure. Every milestone you reach within the WingMentor ecosystem is a verifiable achievement that signals your growth as an aviator and a leader. We provide <span className="font-bold">Program Completion Certificates</span> and specialized awards for mentors who exhibit exceptional CRM and technical consultation skills. These aren't just pieces of paper; they are assets for your professional portfolio, proving you have been vetted and recognized by a senior panel of industry professionals.
+                      </p>
+                      
+                      <div className="flex justify-center">
+                          <div className={`relative p-2 rounded-2xl border ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'} shadow-2xl overflow-hidden group max-w-2xl`}>
+                              <img 
+                                src="https://lh3.googleusercontent.com/d/112h6L1fuk_wR5HVZEtiDJY7Xz02KyEbx" 
+                                alt="WingMentor Milestones & Achievements" 
+                                className="w-full h-auto object-cover rounded-xl transform transition-transform duration-700 group-hover:scale-105"
+                              />
+                          </div>
+                      </div>
+                  </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={300} className="max-w-4xl mx-auto mb-16 text-left">
                   <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-6 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
                       Differentiation: Flight Instructor vs Wing Mentor Consultancy Approach
                   </h3>
@@ -471,7 +494,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
                   <div className={`text-lg leading-relaxed space-y-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
                       <p>
-                          It is crucial to understand the distinction: <span className="font-bold text-yellow-500">We do not teach lectures or seminars.</span> It is not our role to teach initial concepts or replace your flight school's curriculum. Instead, our mission is to <span className="font-bold">support and consult</span> based on your specific performance within your education and flight training in the aviation industry.
+                          It is crucial to understand the distinction: <span className="font-bold">We do not teach lectures or seminars.</span> It is not our role to teach initial concepts or replace your flight school's curriculum. Instead, our mission is to <span className="font-bold">support and consult</span> based on your specific performance within your education and flight training in the aviation industry.
                       </p>
                       <p>
                           Whether you are a <span className="font-bold">student pilot</span> struggling with a specific maneuver, a <span className="font-bold">flight instructor</span> looking to refine your briefing techniques, or a <span className="font-bold">pilot returning after 10 years</span> who needs a skills refresher to get back in the cockpit—this is where WingMentor comes in. We analyze your performance gaps and provide the targeted consultation needed to bridge them.
@@ -479,7 +502,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
 
                   <div className="mt-10 flex flex-col items-center space-y-6">
-                      <p className={`text-sm italic font-medium tracking-wide text-center max-w-2xl mx-auto ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                      <p className={`text-sm italic font-medium tracking-wide text-center max-w-2xl mx-auto ${isDarkMode ? 'text-zinc-400' : 'text-zinc-50'}`}>
                         Read more engaging sketched pilot real life scenarios in our handbook
                       </p>
                       <button 
@@ -763,7 +786,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                       About Wing Mentor
                   </h2>
                 </RevealOnScroll>
-                <div className={`w-32 h-1 mx-auto ${isDarkMode ? 'bg-red-600' : 'bg-red-500'}`}></div>
+                <div className={`w-32 h-1 mx-auto ${isDarkMode ? 'bg-red-600' : 'bg-red-50'}`}></div>
             </div>
 
             <div className="mb-24">
