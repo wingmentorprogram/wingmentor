@@ -360,7 +360,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
 
       </div>
       
-      <div className="w-full py-16 md:py-24 bg-black border-y border-zinc-900">
+      <div className="w-full py-16 md:py-24 bg-black border-y border-zinc-900 relative">
         <div 
             className="cursor-pointer flex flex-col items-center justify-center space-y-4 select-none mb-20" 
             onClick={handleScrollClick}
@@ -382,7 +382,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8 mb-16">
           {ACTION_ICONS.map((feature, index) => {
             const isHovered = hoveredApp === feature.target;
             const isBlurred = hoveredApp !== null && hoveredApp !== feature.target;
@@ -411,21 +411,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                               <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
                           )}
                         </div>
-                        <h4 className={`text-[11px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300 mb-2
+                        <h4 className={`text-[11px] md:text-sm font-black uppercase tracking-[0.2em] transition-colors duration-300
                                       ${isHovered ? 'text-white' : 'text-zinc-50'}`}>
                             {feature.title}
                         </h4>
-                        <span 
-                            onClick={handleLearnMoreApps}
-                            className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-yellow-500 transition-colors cursor-pointer border-b border-zinc-700/50 hover:border-yellow-500/50 pb-0.5"
-                        >
-                            learn more about pilot apps
-                        </span>
                       </button>
                   </div>
                 </RevealOnScroll>
             );
           })}
+        </div>
+
+        {/* Unified Link positioned on the border of the section */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20 flex justify-center">
+            <button 
+                onClick={handleLearnMoreApps}
+                className="px-8 py-3 bg-black border border-zinc-700 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-yellow-500 hover:border-yellow-500/50 transition-all shadow-2xl backdrop-blur-md"
+            >
+                learn more about pilot apps <i className="fas fa-chevron-right ml-2 text-[8px] animate-pulse"></i>
+            </button>
         </div>
       </div>
 
