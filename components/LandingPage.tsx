@@ -197,22 +197,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
     {
         title: "WingMentor Passport",
         desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.",
-        image: images.WINGMENTOR_PASSPORT_APP_IMG
+        image: images.WINGMENTOR_PASSPORT_APP_IMG,
+        isLarge: true
+    },
+    {
+        title: "Examination Terminal",
+        desc: "Your tactical preparation hub. Access simulated checkrides, Knowledge & Skills Verification (KSV) exams, and comprehensive study reviewers to ensure you are always flight-ready and industry-competitive.",
+        image: "https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF",
+        isLarge: false
     },
     {
         title: "WingLogs",
         desc: "Your verifiable proof of experience. A digital logbook designed to meticulously document every consultation session, providing a credible record of your skills for future employers.",
-        image: images.LOGBOOK_IMG
+        image: images.LOGBOOK_IMG,
+        isLarge: true
     },
     {
         title: "The Pilot Gap Forum",
         desc: "The intelligence hub of our community. Engage in critical discussions, share real-world insights, and connect with peers and senior mentors to navigate industry challenges.",
-        image: images.PILOT_GAP_FORUM_APP_IMG
+        image: images.PILOT_GAP_FORUM_APP_IMG,
+        isLarge: false
     },
     {
         title: "The Black Box",
         desc: "The ultimate knowledge vault. Gain exclusive access to a comprehensive library of study materials, checkride preparations, and deeply guarded industry information for all pilot ratings.",
-        image: images.BLACK_BOX_APP_IMG
+        image: images.BLACK_BOX_APP_IMG,
+        isLarge: false
+    },
+    {
+        title: "The Program Handbook",
+        desc: "The definitive operational manual. Access the complete Wing Mentor Program Operating Handbook (POH) featuring mission-critical protocols, legal frameworks, and sketched real-life pilot scenarios to guide your professional conduct.",
+        image: "https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN",
+        isLarge: false
     }
   ];
 
@@ -635,10 +651,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                         {appSuiteData.map((app, idx) => (
                             <RevealOnScroll key={idx} delay={idx * 150}>
                                 <div className={`flex flex-col md:flex-row items-center gap-8 md:gap-20 ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-                                    {/* Image Segment - Expanded Container for specific indices */}
+                                    {/* Image Segment */}
                                     <div className="w-full md:w-1/2 flex justify-center items-center">
                                         <div className={`relative group transition-all duration-500 aspect-square w-full 
-                                                        ${idx < 2 ? 'md:w-[600px] md:h-[600px]' : 'md:w-[480px] md:h-[480px]'} 
+                                                        ${app.isLarge ? 'md:w-[600px] md:h-[600px]' : 'md:w-[480px] md:h-[480px]'} 
                                                         flex items-center justify-center
                                                         ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
                                             <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500 z-10 rounded-2xl"></div>
@@ -646,8 +662,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                                                 src={app.image} 
                                                 alt={app.title} 
                                                 className={`w-full h-full transform transition-transform duration-1000 object-contain 
-                                                          ${idx < 2 ? '' : 'group-hover:scale-110'} 
-                                                          ${idx >= 2 ? 'p-8' : 'p-0'}`} 
+                                                          ${app.isLarge ? '' : 'group-hover:scale-110'} 
+                                                          ${!app.isLarge ? 'p-8' : 'p-0'}`} 
                                             />
                                         </div>
                                     </div>
@@ -850,7 +866,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                     <img src={images.LOGO} alt="Wing Mentor Logo" className="w-12 h-12 object-contain filter brightness-0 invert opacity-90" />
                     <span className="text-xl font-bold brand-font text-white uppercase tracking-widest">Wing Mentor</span>
                 </div>
-                <p className="text-zinc-500 text-xs leading-relaxed max-w-sm">
+                <p className="text-zinc-500 text-xs leading-relaxed max-sm">
                     Bridging the gap between license and career. A dedicated platform for low-timer pilots to build verifiable experience, command authority, and professional industry connections.
                 </p>
                 <div className="flex items-center space-x-4">
