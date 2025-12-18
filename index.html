@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1800" />
+    <meta name="viewport" content="width=680" />
     <title>WingMentor</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,20 +26,17 @@
         min-height: 100vh;
       }
       
-      /* Reduced width to 900px for better mobile rendering stability */
-      /* Centered on a 1800px virtual canvas (50% width look) */
+      /* Optimized width to 680px for the "Perfect Fit" on mobile while accommodating the 650px SVG path */
       #root {
-        width: 900px;
+        width: 680px;
         min-height: 100vh;
         margin: 0 auto;
         position: relative;
         overflow-y: auto;
         overflow-x: hidden;
         background-color: black;
-        /* Subtle frame aesthetics */
-        border-left: 2px solid rgba(255,255,255,0.05);
-        border-right: 2px solid rgba(255,255,255,0.05);
-        box-shadow: 0 0 100px rgba(0,0,0,0.8);
+        /* Clean aesthetics for desktop focus */
+        box-shadow: 0 0 100px rgba(0,0,0,1);
       }
 
       /* Hide scrollbar for the phone root */
