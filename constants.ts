@@ -60,8 +60,6 @@ export const IMAGES = {
     STORY_MENTOR_1: "https://lh3.googleusercontent.com/d/1sPvcuLwhX_ofgxuGcZ-yesFYt2DMCGrb", 
     STORY_MENTOR_2: "https://lh3.googleusercontent.com/d/1LFLSOAU4qJug2A3oP99JXXjGmp9cRg6b", 
     STORY_MENTOR_3: "https://lh3.googleusercontent.com/d/1yEnBPSIo5-TkyvZwh2wjiTO0tIuztyP4", 
-    IPHONE_16_PRO_IMG: "https://lh3.googleusercontent.com/d/17-xbS9NOukudNIfLoYveLEShZABV4OXR", // Placeholder with existing URL pattern
-    IPHONE_11_PRO_IMG: "https://lh3.googleusercontent.com/d/1InHXB-jhAZ3UNDXcvHbENwbB5ApY8eOp", // Placeholder with existing URL pattern
 };
 
 export const TOOLS_MENU = [
