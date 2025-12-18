@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TOOLS_MENU, GENERAL_MENU } from '../constants';
 import { useConfig } from '../context/ConfigContext'; // Import useConfig
@@ -55,11 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, is
     }
   };
 
-  const handleAirportClick = () => {
-    onClose();
-    onGoToHub();
-  };
-
   return (
     <>
       <div 
@@ -93,22 +87,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, userLevel, is
                     <p className={`text-xs uppercase tracking-wider mb-1 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Pilot Rank</p>
                     <EpauletBars count={userLevel} size="small" />
                 </div>
-            </div>
-
-            {/* Special Airport Button for Mobile */}
-            <div className="mb-6">
-                <button
-                    onClick={handleAirportClick}
-                    className={`w-full flex items-center space-x-3 p-3 rounded-md transition-all group border border-transparent
-                                ${isDarkMode 
-                                ? 'bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700' 
-                                : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border-zinc-200'}`}
-                >
-                    <span className="w-8 text-center flex justify-center">
-                        <i className={`fas fa-plane-departure text-lg ${isDarkMode ? 'text-yellow-500' : 'text-blue-600'}`}></i>
-                    </span>
-                    <span className="font-bold tracking-wide uppercase text-sm">Wing Mentor Airport</span>
-                </button>
             </div>
 
             <h3 className={`text-xs uppercase font-bold mb-4 tracking-[0.2em] border-b pb-2

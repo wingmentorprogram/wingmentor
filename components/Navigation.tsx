@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GENERAL_MENU } from '../constants';
 import { useConfig } from '../context/ConfigContext'; // Import useConfig
@@ -101,22 +100,22 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full h-16 md:h-32 z-40 flex items-center justify-between px-4 lg:px-10 transition-all duration-300
+      <nav className={`fixed top-0 left-0 w-full h-32 z-40 flex items-center justify-between px-10 transition-all duration-300
                       ${isDarkMode ? 'bg-gradient-to-b from-black via-black/90 to-transparent' : 'bg-gradient-to-b from-white via-white/90 to-transparent'}`}>
         
-        <div className="flex items-center space-x-3 md:space-x-6">
+        <div className="flex items-center space-x-6">
             <button 
                 onClick={() => setSidebarOpen(true)}
-                className={`transition-colors p-1 md:p-2 ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
+                className={`transition-colors p-2 ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
             >
-                <i className="fas fa-bars text-lg md:text-2xl"></i>
+                <i className="fas fa-bars text-2xl"></i>
             </button>
             
-            <button onClick={onGoToLanding} className="flex items-center space-x-2 md:space-x-4 group">
-                 <div className="w-10 h-10 md:w-24 md:h-24 flex items-center justify-center opacity-90 group-hover:opacity-100 transition-opacity">
+            <button onClick={onGoToLanding} className="flex items-center space-x-4 group">
+                 <div className="w-24 h-24 flex items-center justify-center opacity-90 group-hover:opacity-100 transition-opacity">
                     <img src={images.HERO_ALT} alt="Mini Logo" className="w-full h-full object-contain" />
                  </div>
-                 <span className={`text-sm md:text-lg font-bold tracking-[0.2em] uppercase transition-colors hidden sm:block
+                 <span className={`text-lg font-bold tracking-[0.2em] uppercase transition-colors
                                   ${isDarkMode ? 'text-white group-hover:text-yellow-400' : 'text-zinc-900 group-hover:text-blue-600'}`}>
                     WING MENTOR
                  </span>
@@ -124,7 +123,7 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
 
             <button 
               onClick={onGoToHub} 
-              className={`hidden md:block ml-6 text-[11px] font-medium uppercase tracking-widest transition-colors
+              className={`ml-6 text-[11px] font-medium uppercase tracking-widest transition-colors
                          ${isDarkMode ? 'text-white hover:text-yellow-400' : 'text-black hover:text-blue-600'}`}
               aria-label="Go to Wing Mentor Airport"
             >
@@ -132,9 +131,9 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
             </button>
         </div>
 
-        <div className="flex items-center space-x-2 md:space-x-8">
+        <div className="flex items-center space-x-8">
             
-            <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
+            <div className="flex items-center space-x-6">
                 {GENERAL_MENU.map((item) => (
                     <button
                         key={item.name}
@@ -149,32 +148,31 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
                 ))}
             </div>
 
-            <div className={`hidden lg:block w-px h-8 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}></div>
+            <div className={`w-px h-8 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}></div>
 
-            <div className="relative flex items-center space-x-2 md:space-x-6">
+            <div className="relative flex items-center space-x-6">
                 
-                <div className="hidden lg:flex items-center">
+                <div className="flex items-center">
                     <EpauletBars count={userLevel} size="small" />
                 </div>
 
-                <div className={`hidden md:flex items-center 
-                                ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                <div className={`${isDarkMode ? 'text-white' : 'text-black'}`}>
                      <i className="far fa-user text-sm"></i>
                 </div>
 
                 {/* Master Switch Container with Popup */}
                 <div className="relative">
-                    <div className="scale-[0.55] md:scale-90 origin-right transition-transform">
+                    <div className="scale-90 origin-right transition-transform">
                         <MasterSwitch isLoggedIn={isLoggedIn} onToggle={handleSwitchClick} />
                     </div>
 
                     {/* LOGIN POPUP */}
                     {showLoginPopup && !isLoggedIn && (
-                        <div className={`absolute top-full right-0 mt-2 md:mt-4 w-64 md:w-72 p-6 rounded-xl shadow-2xl border z-50 animate-in fade-in slide-in-from-top-2 origin-top-right
+                        <div className={`absolute top-full right-0 mt-4 w-72 p-6 rounded-xl shadow-2xl border z-50 animate-in fade-in slide-in-from-top-2 origin-top-right
                                         ${isDarkMode ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-zinc-200'}`}>
                             
                             {/* Arrow Pointer */}
-                            <div className={`absolute -top-2 right-4 md:right-8 w-4 h-4 transform rotate-45 border-l border-t 
+                            <div className={`absolute -top-2 right-8 w-4 h-4 transform rotate-45 border-l border-t 
                                             ${isDarkMode ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-zinc-200'}`}></div>
 
                             <form onSubmit={handleLoginSubmit} className="space-y-4 relative z-10">
@@ -245,13 +243,13 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
 
             <button
               onClick={toggleTheme}
-              className={`ml-1 md:ml-4 flex items-center space-x-2 p-1.5 md:p-2 rounded-full backdrop-blur-md border transition-all
+              className={`ml-4 flex items-center space-x-2 p-2 rounded-full backdrop-blur-md border transition-all
                           ${isDarkMode 
                             ? 'bg-zinc-800/60 hover:bg-zinc-700/80 border-zinc-700 text-white hover:text-yellow-400' 
                             : 'bg-zinc-200/80 hover:bg-300/80 border-zinc-300 text-black hover:text-blue-600'}`}
               aria-label="Toggle Dark/Light Mode"
             >
-              <i className={`fas ${isDarkMode ? 'fa-moon' : 'fa-sun'} text-xs md:text-sm`}></i>
+              <i className={`fas ${isDarkMode ? 'fa-moon' : 'fa-sun'} text-sm`}></i>
             </button>
         </div>
       </nav>
@@ -269,8 +267,8 @@ export const Navigation: React.FC<NavigationProps> = ({ isLoggedIn, toggleLogin,
         onGoToLandingAndScroll={onGoToLandingAndScroll} 
         onGoToOperatingHandbook={onGoToOperatingHandbook}
         onGoToTeamPage={onGoToTeamPage} 
-        onGoToHub={onGoToHub} // Passed prop
-        onGoToLanding={onGoToLanding} // Passed prop
+        onGoToHub={onGoToHub} 
+        onGoToLanding={onGoToLanding}
       />
     </>
   );
