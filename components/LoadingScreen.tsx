@@ -1,5 +1,6 @@
 import React from 'react';
 import { useConfig } from '../context/ConfigContext';
+import { EpauletBars } from './EpauletBars';
 
 export const LoadingScreen: React.FC = () => {
   const { config } = useConfig();
@@ -7,15 +8,34 @@ export const LoadingScreen: React.FC = () => {
 
   return (
     <div 
-      className="fixed inset-0 bg-black z-50 flex items-center justify-center"
+      className="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center space-y-12"
       style={{ animation: 'startup-fade-in 1s ease-out forwards' }}
     >
-      <img 
-          src={images.LOGO} 
-          alt="WingMentor Logo" 
-          className="w-64 h-64 object-contain" 
-          style={{ animation: 'logo-glow-pulse 3s infinite ease-in-out' }}
-      />
+      <div className="relative">
+        <img 
+            src={images.LOGO} 
+            alt="WingMentor Logo" 
+            className="w-48 h-48 md:w-64 md:h-64 object-contain relative z-10" 
+            style={{ animation: 'logo-glow-pulse 3s infinite ease-in-out' }}
+        />
+        {/* Glow effect behind logo */}
+        <div className="absolute inset-0 bg-yellow-500/10 blur-3xl rounded-full scale-150 animate-pulse"></div>
+      </div>
+
+      <div className="flex flex-col items-center space-y-6">
+        <EpauletBars count={4} size="xl" animated={true} />
+        
+        <div className="text-center">
+            <p className="text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em] animate-pulse">
+                Initializing Flight Systems
+            </p>
+            <div className="mt-2 flex justify-center space-x-1">
+                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            </div>
+        </div>
+      </div>
     </div>
   );
 };

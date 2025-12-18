@@ -132,7 +132,6 @@ export const BlackBoxPage: React.FC<BlackBoxPageProps> = ({ onBackToLanding, isL
             src={images.LOGO} 
             alt="Wing Mentor Logo" 
             className="w-24 h-auto object-contain mx-auto mb-6" 
-            style={{ filter: isDarkMode ? 'invert(1)' : 'none' }} 
           />
           <h1 className={`text-5xl md:text-7xl font-bold brand-font leading-tight mb-2 
                           ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>

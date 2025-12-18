@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { LoadingStage } from './types';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -11,25 +10,31 @@ import { ShopPage } from './components/ShopPage';
 import { LowTimerGapPage } from './components/LowTimerGapPage';
 import { BlackBoxPage } from './components/BlackBoxPage'; 
 import { LatestNewsPage } from './components/LatestNewsPage'; 
-import { ImageEditorPage } from './components/ImageEditorPage'; // Import Editor
-import { OperatingHandbookPage } from './components/OperatingHandbookPage'; // Import OperatingHandbookPage
-import { WingMentorTeamPage } from './components/WingMentorTeamPage'; // NEW: Import WingMentorTeamPage
-import { ExaminationTerminalPage } from './components/ExaminationTerminalPage'; // NEW: Import ExaminationTerminalPage
-import { LoginPage } from './components/LoginPage'; // NEW: Import LoginPage
+import { ImageEditorPage } from './components/ImageEditorPage'; 
+import { OperatingHandbookPage } from './components/OperatingHandbookPage'; 
+import { WingMentorTeamPage } from './components/WingMentorTeamPage'; 
+import { ExaminationTerminalPage } from './components/ExaminationTerminalPage'; 
+import { LoginPage } from './components/LoginPage'; 
+import { WingMentorshipProgramPage } from './components/WingMentorshipProgramPage'; 
 import { ConfigProvider, useConfig } from './context/ConfigContext';
 import { ThemeProvider } from './context/ThemeContext';
 
-// Inner component to access config context for preloading
 const AppContent: React.FC = () => {
   const [stage, setStage] = useState<LoadingStage>(LoadingStage.LOGO);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false); // Used only for Hub navigation LOGIN option now
+  const [showLoginModal, setShowLoginModal] = useState(false); 
   const [isVideoWarm, setIsVideoWarm] = useState(false);
   const [scrollToSection, setScrollToSection] = useState<string | null>(null);
   const { config } = useConfig();
 
+  // Reset scroll to top on every page transition
   useEffect(() => {
-    // Stage 0: Logo Splash (3 seconds)
+    if (stage !== LoadingStage.LOGO) {
+      window.scrollTo(0, 0);
+    }
+  }, [stage]);
+
+  useEffect(() => {
     if (stage === LoadingStage.LOGO) {
       const timer = setTimeout(() => {
         setStage(LoadingStage.LANDING);
@@ -39,12 +44,9 @@ const AppContent: React.FC = () => {
   }, [stage]);
 
   const handleToggleLogin = () => {
-    // Simplified: Navigation component handles the popup and validation. 
-    // This just flips the state.
     setIsLoggedIn(!isLoggedIn);
   };
 
-  // Handler for successful login from Hub Terminal
   const handleLoginSuccess = () => {
     setIsLoggedIn(true); 
     setShowLoginModal(false);
@@ -72,6 +74,10 @@ const AppContent: React.FC = () => {
     setStage(LoadingStage.PROGRAM_DETAIL);
   };
 
+  const goToProgramOverview = () => {
+    setStage(LoadingStage.PROGRAM_OVERVIEW);
+  };
+
   const goToEnrollment = () => {
     setStage(LoadingStage.ENROLLMENT);
   };
@@ -92,19 +98,19 @@ const AppContent: React.FC = () => {
     setStage(LoadingStage.LATEST_NEWS);
   };
 
-  const goToDeveloperEditor = () => { // New function
+  const goToDeveloperEditor = () => { 
     setStage(LoadingStage.DEVELOPER_EDITOR);
   };
 
-  const goToOperatingHandbook = () => { // Function to navigate to OperatingHandbookPage
+  const goToOperatingHandbook = () => { 
     setStage(LoadingStage.OPERATING_HANDBOOK);
   };
 
-  const goToTeamPage = () => { // NEW: Function to navigate to Team Page
+  const goToTeamPage = () => { 
     setStage(LoadingStage.TEAM_PAGE);
   };
 
-  const goToExaminationTerminal = () => { // NEW: Function to navigate to Examination Terminal
+  const goToExaminationTerminal = () => { 
     setStage(LoadingStage.EXAMINATION_TERMINAL);
   };
 
@@ -117,7 +123,7 @@ const AppContent: React.FC = () => {
     if (destination === 'LANDING') {
       goToLanding();
     } else if (destination === 'PROGRAM') {
-      goToProgramDetail();
+      goToProgramOverview();
     } else if (destination === 'EXAMINATION') {
       goToExaminationTerminal();
     } else if (destination === 'SHOP') {
@@ -131,11 +137,11 @@ const AppContent: React.FC = () => {
     } else if (destination === 'DEVELOPER') { 
       goToDeveloperEditor();
     } else if (destination === 'PASSPORT') {
-      goToOperatingHandbook(); // Direct to handbook for passport info
+      goToOperatingHandbook(); 
     } else if (destination === 'LOGS') {
-      goToOperatingHandbook(); // Direct to handbook for logs info
+      goToOperatingHandbook(); 
     } else if (destination === 'LOGIN') {
-      setStage(LoadingStage.LOGIN); // Use stage for full page login from Hub
+      setStage(LoadingStage.LOGIN); 
     } else {
       if (destination === 'TOOLS') {
          goToLanding();
@@ -151,7 +157,7 @@ const AppContent: React.FC = () => {
           toggleLogin={handleToggleLogin} 
           onGoToLanding={goToLanding}
           onGoToHub={goToHub}
-          onGoToProgramDetail={goToProgramDetail}
+          onGoToProgramDetail={goToProgramOverview}
           onGoToShop={goToShop}
           onGoToGapPage={goToGapPage}
           onGoToBlackBox={goToBlackBox} 
@@ -159,11 +165,10 @@ const AppContent: React.FC = () => {
           onGoToLandingAndScroll={goToLandingAndScroll}
           onGoToOperatingHandbook={goToOperatingHandbook}
           onGoToTeamPage={goToTeamPage} 
-          onGoToEnrollment={goToEnrollment} // NEW: Passed for the popup "Sign Up" button
+          onGoToEnrollment={goToEnrollment} 
         />
       )}
 
-      {/* Render Login Modal (for Hub/Terminal access or manual trigger if needed, though Nav uses popup now) */}
       {stage === LoadingStage.LOGIN && (
         <LoginPage onLoginSuccess={handleLoginSuccess} onCancel={handleLoginCancel} />
       )}
@@ -172,22 +177,28 @@ const AppContent: React.FC = () => {
         <LandingPage 
           isVideoWarm={isVideoWarm} 
           setIsVideoWarm={setIsVideoWarm}
-          onGoToProgramDetail={goToProgramDetail}
+          onGoToProgramDetail={goToProgramOverview}
           onGoToGapPage={goToGapPage}
           onGoToOperatingHandbook={goToOperatingHandbook}
           onGoToBlackBox={goToBlackBox}
           onGoToExaminationTerminal={goToExaminationTerminal}
           scrollToSection={scrollToSection}
           onScrollComplete={() => setScrollToSection(null)}
-          onGoToEnrollment={goToEnrollment} // NEW: Added prop
+          onGoToEnrollment={goToEnrollment} 
         />
       )}
       {stage === LoadingStage.HUB && (
         <Hub onNavigate={handleHubNavigation} />
       )}
+      {stage === LoadingStage.PROGRAM_OVERVIEW && (
+        <WingMentorshipProgramPage 
+          onBackToLanding={goToLanding}
+          onGoToProgramDetail={goToProgramDetail}
+        />
+      )}
       {stage === LoadingStage.PROGRAM_DETAIL && (
         <ProgramDetailPage 
-          onBackToLanding={goToLanding}
+          onBackToLanding={goToProgramOverview}
           onGoToEnrollment={goToEnrollment}
         />
       )}
@@ -204,7 +215,7 @@ const AppContent: React.FC = () => {
       {stage === LoadingStage.LOW_TIMER_GAP && (
         <LowTimerGapPage
           onBackToLanding={goToLanding}
-          onGoToProgram={goToProgramDetail}
+          onGoToProgram={goToProgramOverview}
           isLoggedIn={isLoggedIn}
         />
       )}
@@ -220,28 +231,28 @@ const AppContent: React.FC = () => {
           onBackToLanding={goToLanding}
         />
       )}
-      {stage === LoadingStage.DEVELOPER_EDITOR && ( // Render Editor
+      {stage === LoadingStage.DEVELOPER_EDITOR && ( 
         <ImageEditorPage
           onBackToHub={goToHub}
         />
       )}
-      {stage === LoadingStage.OPERATING_HANDBOOK && ( // Render OperatingHandbookPage
+      {stage === LoadingStage.OPERATING_HANDBOOK && ( 
         <OperatingHandbookPage
           onBackToLanding={goToLanding}
           onGoToEnrollment={goToEnrollment}
           onGoToDeveloper={goToDeveloperEditor}
         />
       )}
-      {stage === LoadingStage.TEAM_PAGE && ( // NEW: Render Team Page
+      {stage === LoadingStage.TEAM_PAGE && ( 
         <WingMentorTeamPage
           onBackToLanding={goToLanding}
         />
       )}
-      {stage === LoadingStage.EXAMINATION_TERMINAL && ( // NEW: Render Examination Terminal Page
+      {stage === LoadingStage.EXAMINATION_TERMINAL && ( 
         <ExaminationTerminalPage
           onNavigate={(destination) => {
             if (destination === 'PROGRAM') {
-              goToProgramDetail();
+              goToProgramOverview();
             } else if (destination === 'HUB') {
               goToHub();
             }
@@ -272,7 +283,7 @@ const AppContent: React.FC = () => {
         <LoadingScreen />
       )}
 
-      {(stage === LoadingStage.HUB || stage === LoadingStage.LANDING || stage === LoadingStage.PROGRAM_DETAIL || stage === LoadingStage.ENROLLMENT || stage === LoadingStage.SHOP || stage === LoadingStage.LOW_TIMER_GAP || stage === LoadingStage.BLACK_BOX || stage === LoadingStage.LATEST_NEWS || stage === LoadingStage.DEVELOPER_EDITOR || stage === LoadingStage.OPERATING_HANDBOOK || stage === LoadingStage.TEAM_PAGE || stage === LoadingStage.EXAMINATION_TERMINAL || stage === LoadingStage.LOGIN) && ( 
+      {(stage === LoadingStage.HUB || stage === LoadingStage.LANDING || stage === LoadingStage.PROGRAM_DETAIL || stage === LoadingStage.PROGRAM_OVERVIEW || stage === LoadingStage.ENROLLMENT || stage === LoadingStage.SHOP || stage === LoadingStage.LOW_TIMER_GAP || stage === LoadingStage.BLACK_BOX || stage === LoadingStage.LATEST_NEWS || stage === LoadingStage.DEVELOPER_EDITOR || stage === LoadingStage.OPERATING_HANDBOOK || stage === LoadingStage.TEAM_PAGE || stage === LoadingStage.EXAMINATION_TERMINAL || stage === LoadingStage.LOGIN) && ( 
         renderAppContent()
       )}
     </div>

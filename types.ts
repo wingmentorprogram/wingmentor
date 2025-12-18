@@ -1,7 +1,5 @@
-
-
 export enum LoadingStage {
-    LOGIN = -1, // New initial stage
+    LOGIN = -1,
     LOGO = 0,
     LANDING = 2,
     HUB = 3,
@@ -14,6 +12,7 @@ export enum LoadingStage {
     DEVELOPER_EDITOR = 10, 
     OPERATING_HANDBOOK = 11, 
     TEAM_PAGE = 12,
+    PROGRAM_OVERVIEW = 13,
     EXAMINATION_TERMINAL = 14
   }
   

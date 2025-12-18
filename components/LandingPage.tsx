@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { useConfig } from '../context/ConfigContext';
 import { DeveloperConsole } from './DeveloperConsole';
@@ -89,20 +88,15 @@ const APPROACH_STEPS = [
 
 export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete, onGoToEnrollment }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const programPageRef = useRef<HTMLDivElement>(null); 
   const { config } = useConfig();
-  const { images } = config; // Use dynamic images
+  const { images } = config; 
   const { isDarkMode } = useTheme(); 
   
   const [isDevConsoleOpen, setDevConsoleOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(!isVideoWarm);
-  const [programPageVisible, setProgramPageVisible] = useState(false); 
   
-  // State for hover effect on apps
   const [hoveredApp, setHoveredApp] = useState<string | null>(null);
-  
-  // State for App Loading Overlay
   const [loadingApp, setLoadingApp] = useState<string | null>(null);
 
   useEffect(() => {
@@ -119,7 +113,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
     }
   }, [scrollToSection, onScrollComplete]);
 
-  // Autoplay Logic
   useEffect(() => {
     const attemptPlay = async () => {
         if (!videoRef.current) return;
@@ -143,33 +136,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
     }
   }, [isLoading, isMuted, isVideoWarm]);
 
-  // Observer for Program Page Background Overlay
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setProgramPageVisible(true);
-          observer.disconnect(); 
-        }
-      },
-      { root: null, rootMargin: '0px', threshold: 0.1 }
-    );
-
-    if (programPageRef.current) {
-      observer.observe(programPageRef.current);
-    }
-
-    return () => {
-      if (programPageRef.current) {
-        observer.disconnect();
-      }
-    };
-  }, []);
-
   const handleScrollClick = (e: React.MouseEvent) => {
-    const programSection = document.getElementById('program-section');
-    if (programSection) {
-      programSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const aboutSection = document.getElementById('about-program-overview-section');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -198,10 +168,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   };
 
   const handleIconClick = (target: string) => {
-    setLoadingApp(target); // Start loading state
+    setLoadingApp(target); 
     
     setTimeout(() => {
-        setLoadingApp(null); // Clear loading state
+        setLoadingApp(null); 
         switch (target) {
             case 'handbook':
                 onGoToOperatingHandbook();
@@ -218,15 +188,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             default:
                 break;
         }
-    }, 2000); // 2 second delay for loading animation
+    }, 2000); 
   };
 
   const textHighlight = isDarkMode ? 'text-blue-400' : 'text-blue-600';
 
+  const appSuiteData = [
+    {
+        title: "WingMentor App",
+        desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.",
+        image: images.WINGMENTOR_PASSPORT_APP_IMG
+    },
+    {
+        title: "WingLogs",
+        desc: "Your verifiable proof of experience. A digital logbook designed to meticulously document every consultation session, providing a credible record of your skills for future employers.",
+        image: images.LOGBOOK_IMG
+    },
+    {
+        title: "The Pilot Gap Forum",
+        desc: "The intelligence hub of our community. Engage in critical discussions, share real-world insights, and connect with peers and senior mentors to navigate industry challenges.",
+        image: images.PILOT_GAP_FORUM_APP_IMG
+    },
+    {
+        title: "The Black Box",
+        desc: "The ultimate knowledge vault. Gain exclusive access to a comprehensive library of study materials, checkride preparations, and deeply guarded industry information for all pilot ratings.",
+        image: images.BLACK_BOX_APP_IMG
+    }
+  ];
+
   return (
     <div className="relative pt-32 min-h-screen bg-white dark:bg-black flex flex-col animate-in fade-in duration-700 transition-colors">
       
-      {/* App Loading Overlay */}
       {loadingApp && (
         <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center animate-in fade-in duration-300">
             {(() => {
@@ -263,12 +255,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
       <DeveloperConsole isOpen={isDevConsoleOpen} onClose={() => setDevConsoleOpen(false)} />
 
       <div className="relative z-10 flex flex-col items-center pb-8 px-4 pointer-events-none text-center space-y-2">
-        {/* Fix: Simplified class name for text color based on dark mode */}
         <h2 className={`text-3xl md:text-6xl font-['Raleway'] font-extrabold uppercase tracking-[0.1em] drop-shadow-2xl
                         ${isDarkMode ? 'text-white' : 'text-black'}`}>
             Become a Wing Mentor
         </h2>
-        {/* Fix: Simplified class name for text color based on dark mode */}
         <h2 className={`text-xl md:text-4xl font-['Raleway'] font-[200] uppercase tracking-widest drop-shadow-xl
                         ${isDarkMode ? 'text-white' : 'text-black'}`}>
             Bridging the experience gap <br />
@@ -302,7 +292,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         )}
 
-        <div className="absolute inset-0 overflow-hidden bg-black flex items-center justify-center ${isMuted ? 'pointer-events-none' : 'pointer-events-auto'}">
+        <div className={`absolute inset-0 overflow-hidden bg-black flex items-center justify-center ${isMuted ? 'pointer-events-none' : 'pointer-events-auto'}`}>
             <video 
                 ref={videoRef}
                 className="w-full h-full object-cover scale-[1.35]" 
@@ -351,8 +341,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             className="cursor-pointer flex flex-col items-center justify-center space-y-4 select-none mb-20" 
             onClick={handleScrollClick}
         >
-            <div className="w-full flex justify-center">
-                 <span className="text-center text-[10px] md:text-xs font-bold text-zinc-400 uppercase tracking-[0.3em] font-['Raleway'] mr-[-0.3em]">
+            <div className="w-full flex flex-col items-center justify-center text-center">
+                <span className="text-[14px] md:text-lg font-bold text-yellow-500 uppercase tracking-[0.15em]">
+                    wingmentor apps for pilots made by pilots
+                </span>
+                <span className="text-[10px] md:text-xs font-bold text-zinc-400 uppercase tracking-[0.3em] font-['Raleway'] mr-[-0.3em] mt-3">
                     Learn more about the program
                 </span>
             </div>
@@ -365,7 +358,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
         
-        {/* App Grid */}
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8">
           {ACTION_ICONS.map((feature, index) => {
             const isHovered = hoveredApp === feature.target;
@@ -395,7 +387,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                               <i className={`fas ${feature.icon} text-5xl md:text-6xl transition-transform duration-300 group-hover:rotate-12`}></i>
                           )}
                         </div>
-                        {/* Title removed, keeping only description */}
                         <p className={`text-xs font-bold uppercase tracking-widest transition-colors duration-300
                                       ${isHovered ? 'text-white' : 'text-zinc-500'}`}>
                             {feature.description}
@@ -408,10 +399,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
         </div>
       </div>
 
-      {/* NEW SECTION: About WingMentor Program - Replaced with PilotsStory Scroll */}
       <PilotsStory />
 
-      {/* NEW SECTION: About WingMentor Program (MOVED UP) */}
       <div 
         id="about-program-overview-section"
         className={`w-full relative py-24 px-6 flex flex-col items-center justify-center transition-colors duration-500
@@ -421,23 +410,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
           <div className={`absolute inset-0 z-0 ${isDarkMode ? 'bg-black/80' : 'bg-zinc-100/80'}`}></div>
 
 
-          <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <div className="relative z-10 w-full max-w-7xl mx-auto text-center">
               <RevealOnScroll>
                   <div className="flex justify-center mb-6">
-                      <img src={images.LOGO} alt="Wing Mentor Logo" className={`w-32 h-auto object-contain ${isDarkMode ? 'filter brightness-0 invert' : ''}`} />
+                      <img src={images.LOGO} alt="Wing Mentor Logo" className="w-64 md:w-[450px] h-auto object-contain" />
                   </div>
                   <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest mb-4 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                      WingMentor Program & Apps
+                      About Program & Apps
                   </h2>
                   <p className={`text-xl md:text-2xl leading-relaxed mb-12 ${textHighlight}`}>
                       Transforming Low-Time Pilots into Verifiable Assets.
                   </p>
               </RevealOnScroll>
 
-              {/* REPLACED: Benefit Cards with Detailed Description & Image */}
               <RevealOnScroll delay={100} className="max-w-4xl mx-auto mb-16 text-left">
-                  
-                  {/* Moved Image to top of section as requested */}
                   <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-zinc-700/50 relative group mb-10">
                       <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
                       <img 
@@ -460,15 +446,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW SECTION: Differentiation Image & Text */}
+              <RevealOnScroll delay={150} className="flex justify-center mb-16">
+                  <button 
+                      onClick={onGoToProgramDetail}
+                      className="px-10 py-5 bg-red-700 hover:bg-red-600 text-white font-bold uppercase tracking-widest rounded-full shadow-2xl transform transition-all hover:scale-105 active:scale-95 flex items-center gap-3 group"
+                  >
+                      <i className="fas fa-info-circle text-xl group-hover:rotate-12 transition-transform"></i>
+                      Learn more about the program
+                  </button>
+              </RevealOnScroll>
+
               <RevealOnScroll delay={200} className="max-w-4xl mx-auto mb-16 text-left">
-                  {/* Title */}
                   <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-6 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
                       Differentiation: Flight Instructor vs Wing Mentor Consultancy Approach
                   </h3>
 
-                  {/* The Image */}
-                  <div className="w-full rounded-xl overflow-hidden shadow-2xl border border-zinc-700/50 mb-8 group relative">
+                  <div className="w-full rounded-xl overflow-hidden shadow-2xl mb-8 group relative">
                       <img 
                           src={images.INSTRUCTION_VS_CONSULTANCY_IMG}
                           alt="Instruction vs Consultancy" 
@@ -476,7 +469,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                       />
                   </div>
 
-                  {/* The Text Content - Box Removed */}
                   <div className={`text-lg leading-relaxed space-y-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-800'}`}>
                       <p>
                           It is crucial to understand the distinction: <span className="font-bold text-yellow-500">We do not teach lectures or seminars.</span> It is not our role to teach initial concepts or replace your flight school's curriculum. Instead, our mission is to <span className="font-bold">support and consult</span> based on your specific performance within your education and flight training in the aviation industry.
@@ -487,7 +479,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW SECTION: The Wing Mentor Approach Chart - Simplified Bullet Design */}
               <RevealOnScroll delay={300} className="max-w-4xl mx-auto mb-16">
                   <div className={`p-6 md:p-8 rounded-xl border ${isDarkMode ? 'border-zinc-800 bg-zinc-900/30' : 'border-zinc-200 bg-white/50'}`}>
                       <div className="text-left mb-6">
@@ -524,8 +515,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              {/* NEW BECOMING A WING MENTOR SECTION */}
-              <RevealOnScroll delay={450} className="max-w-4xl mx-auto mb-16">
+              {/* NEW BECOMING A WING MENTOR SECTION (FOR MENTORS) */}
+              <RevealOnScroll delay={450} className="max-w-4xl mx-auto mb-12">
                   <div className={`p-8 border-l-4 border-red-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-red-600' : 'bg-white border-red-600'}`}>
                         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
                         
@@ -541,7 +532,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                                     onClick={onGoToEnrollment}
                                     className="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold uppercase tracking-widest rounded-md shadow-lg transition-all transform hover:translate-x-2 flex items-center"
                                 >
-                                    Enroll Now <i className="fas fa-plane-departure ml-3"></i>
+                                    Enroll As Mentor <i className="fas fa-plane-departure ml-3"></i>
                                 </button>
                             </div>
                             <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 hidden md:block shadow-md border border-zinc-500/20 transform rotate-2 group-hover:rotate-0 transition-transform duration-500">
@@ -551,60 +542,120 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </div>
               </RevealOnScroll>
 
-              <RevealOnScroll delay={500}>
+              {/* NEW ENROLL AS MENTEE SECTION */}
+              <RevealOnScroll delay={500} className="max-w-4xl mx-auto mb-16">
+                  <div className={`p-8 border-l-4 border-blue-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-blue-600' : 'bg-white border-blue-600'}`}>
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
+                        
+                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                            <div className="flex-1 text-left">
+                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-3 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                                    Enroll Now As Mentee
+                                </h3>
+                                <p className={`text-sm md:text-base leading-relaxed mb-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
+                                    Gain a decisive advantage in your flight training. Receive personalized guidance, unlock the Black Box Knowledge Vault, and connect with experienced mentors who have already walked the path to the cockpit. Your career trajectory starts with the right support.
+                                </p>
+                                <button 
+                                    onClick={onGoToEnrollment}
+                                    className="px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold uppercase tracking-widest rounded-md shadow-lg transition-all transform hover:translate-x-2 flex items-center"
+                                >
+                                    Enroll As Mentee <i className="fas fa-graduation-cap ml-3"></i>
+                                </button>
+                            </div>
+                            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 hidden md:block shadow-md border border-zinc-500/20 transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
+                                <img src={images.STORY_STUDENT} alt="Wing Mentee" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                  </div>
+              </RevealOnScroll>
+
+              {/* MENTEE DESCRIPTION PARAGRAPH MOVED BELOW CTA */}
+              <RevealOnScroll delay={550}>
                   <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>
                       <p>
                           For the <strong className={textHighlight}>Mentee</strong>, your path is one of guided growth. Your mission is to absorb, learn, and overcome challenges with the support of a dedicated mentor. Upon successful enrollment and a vetting interview, you gain access to the <strong>Wing Mentor Knowledge Vault</strong>—our comprehensive library of resources including study materials for PPL, CPL, IR, and ME ratings. This is about building a deep, practical understanding that prepares you for your next lesson and instills the confidence to command a career.
                       </p>
                   </div>
+              </RevealOnScroll>
 
-                  {/* New iPad Apps Section */}
+              {/* NEW APPS HEADER */}
+              <RevealOnScroll delay={575}>
+                  <h2 className={`text-3xl md:text-5xl font-bold brand-font uppercase tracking-widest text-center mt-20 mb-10 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                      Apps for pilots made by pilots
+                  </h2>
+              </RevealOnScroll>
+
+              <RevealOnScroll delay={600}>
+                  {/* Restructured iPad Apps Section - Alternating Rows */}
                   <div className="my-16">
-                    <img src={images.IPAD_APPS_IMG} alt="WingMentor App Suite" className="max-w-3xl mx-auto w-full h-auto object-contain rounded-xl shadow-2xl" />
-                    <p className={`text-lg leading-relaxed mt-8 max-w-3xl mx-auto ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                    <p className={`text-lg leading-relaxed mt-8 max-w-3xl mx-auto text-center ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
                       Your digital command center. The WingMentor suite of applications provides seamless access to all program resources, from logging mentorship hours to accessing critical flight knowledge, all from a single, integrated platform.
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto">
-                        <div className={`p-6 rounded-lg border text-left ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800' : 'bg-white/70 border-zinc-200'} flex items-center gap-x-6`}>
-                            <img src={images.WINGMENTOR_PASSPORT_APP_IMG} alt="WingMentor App Icon" className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg brand-font uppercase mb-2">WingMentor App</h4>
-                                <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.</p>
+
+                    <div className="mt-20 max-w-6xl mx-auto space-y-16 md:space-y-32">
+                        {appSuiteData.map((app, idx) => (
+                            <RevealOnScroll key={idx} delay={idx * 150}>
+                                <div className={`flex flex-col md:flex-row items-center gap-8 md:gap-20 ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
+                                    {/* Image Segment - Expanded Container for specific indices */}
+                                    <div className="w-full md:w-1/2 flex justify-center items-center">
+                                        <div className={`relative group transition-all duration-500 aspect-square w-full 
+                                                        ${idx < 2 ? 'md:w-[600px] md:h-[600px]' : 'md:w-[480px] md:h-[480px]'} 
+                                                        flex items-center justify-center
+                                                        ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
+                                            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500 z-10 rounded-2xl"></div>
+                                            <img 
+                                                src={app.image} 
+                                                alt={app.title} 
+                                                className={`w-full h-full transform transition-transform duration-1000 object-contain 
+                                                          ${idx < 2 ? '' : 'group-hover:scale-110'} 
+                                                          ${idx >= 2 ? 'p-8' : 'p-0'}`} 
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Writing Segment */}
+                                    <div className="w-full md:w-1/2 text-left space-y-4">
+                                        <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                                            {app.title}
+                                        </h3>
+                                        <div className="w-16 h-1 bg-yellow-500"></div>
+                                        <p className={`text-lg md:text-xl leading-relaxed font-light ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                                            {app.desc}
+                                        </p>
+                                    </div>
+                                </div>
+                            </RevealOnScroll>
+                        ))}
+
+                        {/* Featured iPad Image - Moved to Bottom */}
+                        <RevealOnScroll delay={300} className="pt-20">
+                            <div className="w-full">
+                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-10 text-center ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                                    WingMentor App Suite
+                                </h3>
+                                <div className={`rounded-3xl overflow-hidden shadow-2xl max-w-4xl mx-auto ${isDarkMode ? 'bg-zinc-900/50' : 'bg-white'} group`}>
+                                    <img 
+                                        src={images.IPAD_APPS_IMG} 
+                                        alt="WingMentor Digital Command Center" 
+                                        className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105" 
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className={`p-6 rounded-lg border text-left ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800' : 'bg-white/70 border-zinc-200'} flex items-center gap-x-6`}>
-                            <img src={images.LOGBOOK_IMG} alt="WingLogs App Icon" className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg brand-font uppercase mb-2">WingLogs</h4>
-                                <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Your verifiable proof of experience. A digital logbook designed to meticulously document every consultation session, providing a credible record of your skills for future employers.</p>
-                            </div>
-                        </div>
-                        <div className={`p-6 rounded-lg border text-left ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800' : 'bg-white/70 border-zinc-200'} flex items-center gap-x-6`}>
-                            <img src={images.PILOT_GAP_FORUM_APP_IMG} alt="The Pilot Gap Forum App Icon" className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
-                            <div>
-                                <h4 className="font-bold text-lg brand-font uppercase mb-2">The Pilot Gap Forum</h4>
-                                <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>The intelligence hub of our community. Engage in critical discussions, share real-world insights, and connect with peers and senior mentors to navigate industry challenges.</p>
-                            </div>
-                        </div>
-                        <div className={`p-6 rounded-lg border text-left ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800' : 'bg-white/70 border-zinc-200'} flex items-center gap-x-6`}>
-                             <img src={images.BLACK_BOX_APP_IMG} alt="The Black Box App Icon" className="w-24 h-24 rounded-lg object-cover flex-shrink-0" />
-                             <div>
-                                <h4 className="font-bold text-lg brand-font uppercase mb-2">The Black Box</h4>
-                                <p className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>The ultimate knowledge vault. Gain exclusive access to a comprehensive library of study materials, checkride preparations, and deeply guarded industry information for all pilot ratings.</p>
-                             </div>
-                        </div>
+                        </RevealOnScroll>
                     </div>
                   </div>
 
-                  <button 
-                      onClick={onGoToOperatingHandbook}
-                      className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl
-                                  ${isDarkMode 
-                                      ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20' 
-                                      : 'bg-blue-700 hover:bg-blue-600 text-white shadow-blue-200'}`}
-                  >
-                      Read The Handbook <i className="fas fa-book-open ml-3"></i>
-                  </button>
+                  <div className="flex justify-center mt-20">
+                      <button 
+                          onClick={onGoToOperatingHandbook}
+                          className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl
+                                      ${isDarkMode 
+                                          ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20' 
+                                          : 'bg-blue-700 hover:bg-blue-600 text-white shadow-blue-200'}`}
+                      >
+                          Read The Handbook <i className="fas fa-book-open ml-3"></i>
+                      </button>
+                  </div>
               </RevealOnScroll>
           </div>
       </div>
@@ -614,7 +665,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
         id="how-we-fill-gap-section"
         className="w-full bg-black"
       >
-        {/* Black Strip for Titles and instructions */}
         <div className="w-full relative pt-24 pb-16 px-6 flex flex-col items-center justify-center">
             <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
                 <RevealOnScroll delay={100}>
@@ -633,12 +683,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
 
-        {/* MindMap Section - background is now handled inside MindMap component */}
         <div className="w-full relative pb-24 px-6 flex flex-col items-center justify-center">
             <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
-                {/* New Vertical Branching MindMap */}
                 <MindMap />
-                {/* End of MindMap integration */}
 
                 <RevealOnScroll delay={700}>
                     <button 
@@ -657,111 +704,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
       </div>
 
       <div 
-        ref={programPageRef} 
-        id="program-section"
-        className="w-full min-h-[180vh] relative flex flex-col items-center py-24 px-6 border-b border-zinc-200 dark:border-zinc-900 bg-cover bg-center" 
-        style={{ backgroundImage: `url(${images.PROGRAM_BG})` }}
-      >
-        <div className={`absolute inset-0 z-0 transition-opacity duration-1000 ease-out 
-                           ${isDarkMode ? 'bg-black' : 'bg-white'}
-                           ${programPageVisible ? 'opacity-70 dark:opacity-70' : 'opacity-100 dark:opacity-100'}`}></div> 
-        
-        <div className={`relative z-10 w-full max-w-6xl mx-auto p-8 md:p-12 lg:p-16 rounded-3xl shadow-2xl transition-all duration-500
-                        ${isDarkMode ? 'bg-black/70 border border-zinc-700' : 'bg-white/80 border border-zinc-300 backdrop-blur-lg'}`}>
-
-            {/* Fixed: Added RevealOnScroll component */}
-            <RevealOnScroll className="max-w-5xl mx-auto text-center mb-16 pt-8">
-                <div className={`flex justify-center mb-8 backdrop-blur-sm p-4 rounded-xl shadow-lg ${isDarkMode ? 'bg-black/50' : 'bg-white/70 border border-zinc-200'}`}>
-                    <img 
-                        src={images.PROGRAM_HEADER_IMAGE} 
-                        alt="Program Header Graphic" 
-                        className="w-64 md:w-80 h-auto object-contain" 
-                    />
-                </div>
-                
-                <div className={`p-6 rounded-xl shadow-lg backdrop-blur-sm ${isDarkMode ? 'bg-black/50' : 'bg-white/70 border border-zinc-200'}`}> 
-                    <h2 className={`text-4xl md:text-6xl font-bold brand-font leading-none mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}> 
-                        Wing Mentorship Program
-                    </h2>
-                    <h3 className={`text-xl md:text-2xl font-light uppercase tracking-widest ${isDarkMode ? 'text-red-400' : 'text-red-700'}`}> 
-                        Bridging the experience gap <br />
-                        <span className="inline-flex items-center gap-x-2 align-middle mt-2">
-                            Low timer
-                            <img 
-                                src={images.RUNWAY_HOLDING_POINT} 
-                                alt="to"
-                                className="w-8 h-8 md:w-10 md:h-10 object-contain"
-                                style={{ filter: isDarkMode ? 'invert(0)' : 'brightness(0.5)' }} 
-                            />
-                            wing mentor
-                        </span>
-                    </h3>
-                </div>
-            </RevealOnScroll>
-
-            {/* Fixed: Added RevealOnScroll component */}
-            <RevealOnScroll delay={100} className="mb-12 flex flex-col items-center justify-center space-y-4 text-center">
-                <button 
-                  onClick={onGoToProgramDetail}
-                  className={`
-                    w-48 h-48 p-4
-                    border-4 rounded-2xl 
-                    flex flex-col items-center justify-center
-                    transition-all duration-300 
-                    bg-red-700 hover:bg-red-600
-                    text-white uppercase font-black text-center
-                    animate-master-switch-pulse
-                    ${isDarkMode ? 'border-zinc-300' : 'border-zinc-400'}
-                  `}
-                  aria-label="Become a Wing Mentor or Mentee and Start Now"
-                >
-                    <span className="block text-base leading-tight tracking-wider">
-                        Become Wing Mentor/Mentee
-                    </span>
-                    <div className="w-3/4 h-px bg-white/50 my-3"></div>
-                    <span className="block text-2xl leading-none tracking-widest">
-                        Start Now
-                    </span>
-                </button>
-                <p className={`text-xs uppercase tracking-wider ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                    Press the red master switch to learn more about the program
-                </p>
-            </RevealOnScroll>
-
-            {/* Fixed: Added RevealOnScroll component */}
-            <RevealOnScroll delay={200} className="max-w-4xl mx-auto text-center mb-20">
-                <p className={`text-xl md:text-2xl font-light leading-relaxed notam-font 
-                               ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                    The Wing Mentorship Program is specifically designed for newly commercial and low-timer pilots seeking direction in their careers. Recognizing the aviation industry's need for experience where pilot-centric internships are scarce, we offer a unique peer-to-peer consultation and preparation platform. Our core mission is to help mentees assess and address specific flight-related challenges, refining their skills for upcoming lessons, rather than providing traditional instruction. Mentors, all commercially licensed ground instructors, gain invaluable, verifiable experience through a comprehensive logbook system, providing documented proof of their support across various pilot levels. This program is your pathway to building essential communication and leadership skills, setting you apart in the aviation industry.
-                </p>
-            </RevealOnScroll>
-
-            {/* Fixed: Added RevealOnScroll component */}
-            <RevealOnScroll delay={300} className="max-w-5xl mx-auto mt-16 mb-20">
-              <div className={`w-full aspect-video rounded-xl overflow-hidden shadow-2xl border transition-colors duration-300
-                              ${isDarkMode ? 'border-zinc-700 bg-black/50' : 'border-zinc-300 bg-white/70'}`}>
-                <video 
-                    className="w-full h-full object-cover" 
-                    src={images.HERO_VIDEO} 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline 
-                    poster={images.HERO_POSTER}
-                >
-                    Your browser does not support the video tag.
-                </video>
-              </div>
-            </RevealOnScroll>
-
-        </div>
-      </div>
-
-      <div 
         id="why-wing-mentor-section"
         className={`w-full relative py-24 px-6 flex flex-col items-center justify-center transition-colors duration-500
                     ${isDarkMode ? 'bg-zinc-950 text-white' : 'bg-zinc-50 text-black'}`}>
-        {/* Fixed: Added RevealOnScroll component */}
         <RevealOnScroll delay={100} className="max-w-4xl mx-auto text-center">
           <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest mb-8 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
             Why Wing Mentor?
@@ -802,13 +747,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             <div className="max-w-4xl mx-auto text-center space-y-12 mb-16">
                 
                 <RevealOnScroll className="mb-4">
-                  {/* About Us Page Header Image */}
                   <div className={`flex justify-center mb-8 backdrop-blur-sm p-4 rounded-xl shadow-lg ${isDarkMode ? 'bg-black/50' : 'bg-white/70 border border-zinc-200'}`}>
                       <img 
                           src={images.ABOUT_US_HEADER_IMAGE} 
                           alt="About Us Header Graphic" 
                           className="w-64 md:w-80 h-auto object-contain" 
-                          /* Removed the style filter for dark mode */
                       />
                   </div>
                   <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest
@@ -820,7 +763,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
 
             <div className="mb-24">
-                {/* Fixed: Added RevealOnScroll component */}
                 <RevealOnScroll className="mb-16">
                   <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase text-center tracking-widest
                                 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
@@ -830,9 +772,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
                     
-                    {/* Fixed: Added RevealOnScroll component */}
                     <RevealOnScroll delay={100} className={`flex flex-col items-center text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 border
-                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border-zinc-200 hover:border-blue-400'}`}>
+                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border border-zinc-200 hover:border-blue-400'}`}>
                         <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-yellow-500 shadow-xl mb-6 relative group">
                             <img 
                                 src={images.BENJAMIN_BOWLER_PORTRAIT} 
@@ -851,9 +792,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                         </p>
                     </RevealOnScroll>
 
-                    {/* Fixed: Added RevealOnScroll component */}
                     <RevealOnScroll delay={200} className={`flex flex-col items-center text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 border
-                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border-zinc-200 hover:border-blue-400'}`}>
+                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border border-zinc-200 hover:border-blue-400'}`}>
                         <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-yellow-500 shadow-xl mb-6 relative group">
                              <img 
                                 src={images.KARL_VOGT_PORTRAIT} 
@@ -876,11 +816,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
          </div>
       </div>
 
-      {/* Footer Section */}
       <footer id="contact-us-section" className="bg-black border-t border-zinc-900 pt-16 pb-8 px-6 relative z-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-            
-            {/* Brand Column */}
             <div className="space-y-6">
                 <div className="flex items-center space-x-3">
                     <img src={images.LOGO} alt="Wing Mentor Logo" className="w-12 h-12 object-contain filter brightness-0 invert opacity-90" />
@@ -902,7 +839,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </div>
             </div>
 
-            {/* Contact Column */}
             <div className="space-y-6">
                 <h4 className="text-sm font-bold uppercase tracking-widest text-white border-b border-zinc-800 pb-2 inline-block">Flight Operations</h4>
                 <ul className="space-y-4 text-xs text-zinc-400">
@@ -921,7 +857,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </ul>
             </div>
 
-            {/* Status Column */}
             <div className="space-y-6">
                 <h4 className="text-sm font-bold uppercase tracking-widest text-white border-b border-zinc-800 pb-2 inline-block">System Status</h4>
                 <div className="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800/50">
