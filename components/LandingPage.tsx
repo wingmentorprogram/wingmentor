@@ -2,11 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useConfig } from '../context/ConfigContext';
 import { DeveloperConsole } from './DeveloperConsole';
 import { useTheme } from '../context/ThemeContext'; 
-// Import RevealOnScroll component
 import { RevealOnScroll } from './RevealOnScroll';
-import { EpauletBars } from './EpauletBars'; // Import EpauletBars
-import { MindMap } from './MindMap'; // Import the new MindMap component
-import { PilotsStory } from './PilotsStory'; // Import the new PilotsStory component
+import { EpauletBars } from './EpauletBars'; 
+import { MindMap } from './MindMap'; 
+import { PilotsStory } from './PilotsStory'; 
 
 interface LandingPageProps {
   isVideoWarm?: boolean;
@@ -51,40 +50,6 @@ const ACTION_ICONS = [
       image: 'https://lh3.googleusercontent.com/d/18in9LNCamnoxyJATd4qxioMSgb4V8zVv' 
     },
 ];
-
-const APPROACH_STEPS = [
-  {
-      num: "01",
-      title: "THE DEBRIEF: PROBLEM IDENTIFIED",
-      desc: "Following a lesson with your Certified Flight Instructor (CFI), you receive a grading sheet highlighting areas needing improvement. This document becomes the mission objective."
-  },
-  {
-      num: "02",
-      title: "THE CONSULTATION: SUPPORT REQUESTED",
-      desc: "You submit the grading sheet and relevant notes through the Wing Mentor platform to schedule a session with a qualified mentor."
-  },
-  {
-      num: "03",
-      title: "THE ASSESSMENT: MENTOR ANALYSIS",
-      desc: "Your Wing Mentor reviews the data, diagnoses the root cause of the issue, and prepares a tailored consultation plan. This is the 'Doctor's' preparation phase."
-  },
-  {
-      num: "04",
-      title: "THE SESSION: GUIDANCE PROVIDED",
-      desc: "In a one-on-one session (online or in-person), the mentor guides you through the problem, utilizing diagrams, simulators, and practical examples to build deep understanding."
-  },
-  {
-      num: "05",
-      title: "THE LOGBOOK: EXPERIENCE VERIFIED",
-      desc: "The session is meticulously documented in the official Wing Mentor logbook, detailing the issue, consultation provided, and duration, signed by the mentee. This creates a verifiable record of experience for the mentor."
-  },
-  {
-      num: "06",
-      title: "THE PRE-FLIGHT: PROFICIENCY APPLIED",
-      desc: "Armed with new insights and strategies, you are fully prepared for your next flight with your CFI, ready to demonstrate mastery and turn a weakness into a strength."
-  }
-];
-
 
 export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete, onGoToEnrollment }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -200,45 +165,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
   };
 
   const textHighlight = isDarkMode ? 'text-blue-400' : 'text-blue-600';
-
-  const appSuiteData = [
-    {
-        title: "WingMentor Passport",
-        desc: "The central hub for your mentorship journey. Access your digital passport, track milestones, and navigate all program features from one intuitive interface.",
-        image: images.WINGMENTOR_PASSPORT_APP_IMG,
-        isLarge: true
-    },
-    {
-        title: "Examination Terminal",
-        desc: "Your tactical preparation hub. Access simulated checkrides, Knowledge & Skills Verification (KSV) exams, and comprehensive study reviewers to ensure you are always flight-ready and industry-competitive.",
-        image: "https://lh3.googleusercontent.com/d/11j7ZHv874EBZZ6O36etvuHC6rRWWm8kF",
-        isLarge: false
-    },
-    {
-        title: "WingLogs",
-        desc: "Your verifiable proof of experience. A digital logbook designed to meticulously document every consultation session, providing a credible record of your skills for future employers.",
-        image: images.LOGBOOK_IMG,
-        isLarge: true
-    },
-    {
-        title: "The Pilot Gap Forum",
-        desc: "The intelligence hub of our community. Engage in critical discussions, share real-world insights, and connect with peers and senior mentors to navigate industry challenges.",
-        image: images.PILOT_GAP_FORUM_APP_IMG,
-        isLarge: false
-    },
-    {
-        title: "The Black Box",
-        desc: "The ultimate knowledge vault. Gain exclusive access to a comprehensive library of study materials, checkride preparations, and deeply guarded industry information for all pilot ratings.",
-        image: images.BLACK_BOX_APP_IMG,
-        isLarge: false
-    },
-    {
-        title: "The Program Handbook",
-        desc: "The definitive operational manual. Access the complete Wing Mentor Program Operating Handbook (POH) featuring mission-critical protocols, legal frameworks, and sketched real-life pilot scenarios to guide your professional conduct.",
-        image: "https://lh3.googleusercontent.com/d/1GbUopHNGyXMhzi5sW1Ybo5gZMh2_YSKN",
-        isLarge: false
-    }
-  ];
 
   return (
     <div className="relative pt-32 min-h-screen bg-white dark:bg-black flex flex-col animate-in fade-in duration-700 transition-colors">
@@ -422,7 +348,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
           })}
         </div>
 
-        {/* Unified Link positioned on the border of the section */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-20 flex justify-center">
             <button 
                 onClick={handleLearnMoreApps}
@@ -434,6 +359,88 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
       </div>
 
       <PilotsStory />
+
+      {/* NEW: Mobile Flight Deck Experience Section */}
+      <div 
+        id="pilot-apps-made-by-pilots-section"
+        className={`w-full py-24 px-6 relative overflow-hidden transition-colors duration-500
+                    ${isDarkMode ? 'bg-zinc-950 text-white' : 'bg-zinc-50 text-zinc-900'}`}
+      >
+        <div className="max-w-7xl mx-auto relative z-10">
+          <RevealOnScroll className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold brand-font uppercase tracking-widest mb-6">
+                Mobile Flight Deck
+            </h2>
+            <div className="w-24 h-1 bg-yellow-500 mx-auto mb-8"></div>
+            <p className="max-w-3xl mx-auto text-lg md:text-xl font-light leading-relaxed text-zinc-500 italic">
+                Optimized for operational excellence. Experience the WingMentor suite with seamless screen adjustments for every device in your flight bag.
+            </p>
+          </RevealOnScroll>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
+            {/* iPhone 11 Pro Mockup */}
+            <RevealOnScroll delay={100} className="flex flex-col items-center">
+              <div className="relative group">
+                {/* Glow Effect */}
+                <div className="absolute -inset-4 bg-blue-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                {/* Phone Body */}
+                <div className={`relative w-[280px] h-[580px] md:w-[320px] md:h-[660px] rounded-[3rem] border-[8px] shadow-2xl overflow-hidden transform group-hover:scale-[1.02] transition-transform duration-500
+                                 ${isDarkMode ? 'bg-zinc-900 border-zinc-800 shadow-zinc-900/50' : 'bg-zinc-200 border-zinc-300 shadow-zinc-300/50'}`}>
+                   {/* Screen Notch */}
+                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-zinc-900 rounded-b-2xl z-30"></div>
+                   
+                   {/* Image Content */}
+                   <img 
+                      src={images.IPHONE_11_PRO_IMG} 
+                      alt="App on iPhone 11 Pro" 
+                      className="w-full h-full object-cover"
+                   />
+                </div>
+                
+                <div className="mt-8 text-center">
+                    <h3 className="text-xl font-bold brand-font uppercase tracking-widest text-zinc-500">iPhone 11 Pro</h3>
+                    <p className="text-xs font-mono mt-1 opacity-60">Classic Compact Profile</p>
+                </div>
+              </div>
+            </RevealOnScroll>
+
+            {/* iPhone 16 Pro Mockup */}
+            <RevealOnScroll delay={300} className="flex flex-col items-center">
+              <div className="relative group">
+                {/* Glow Effect */}
+                <div className="absolute -inset-4 bg-yellow-500/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                {/* Phone Body */}
+                <div className={`relative w-[300px] h-[620px] md:w-[340px] md:h-[700px] rounded-[3.5rem] border-[4px] shadow-2xl overflow-hidden transform group-hover:scale-[1.02] transition-transform duration-500
+                                 ${isDarkMode ? 'bg-zinc-900 border-zinc-800 shadow-zinc-900/50' : 'bg-zinc-100 border-zinc-200 shadow-zinc-200/50'}`}>
+                   {/* Island Camera */}
+                   <div className="absolute top-8 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-30"></div>
+                   
+                   {/* Image Content */}
+                   <img 
+                      src={images.IPHONE_16_PRO_IMG} 
+                      alt="App on iPhone 16 Pro" 
+                      className="w-full h-full object-cover"
+                   />
+                </div>
+                
+                <div className="mt-8 text-center">
+                    <h3 className="text-xl font-bold brand-font uppercase tracking-widest text-yellow-500">iPhone 16 Pro</h3>
+                    <p className="text-xs font-mono mt-1 opacity-60">Ultra-Thin Bezel Experience</p>
+                </div>
+              </div>
+            </RevealOnScroll>
+          </div>
+
+          <RevealOnScroll delay={500} className="mt-24 p-8 rounded-2xl border border-zinc-800 bg-zinc-900/20 text-center backdrop-blur-sm">
+             <h4 className="text-sm font-bold uppercase tracking-[0.2em] mb-4 text-zinc-400">Tactical Advantage</h4>
+             <p className="max-w-2xl mx-auto text-base notam-font opacity-80 leading-relaxed">
+                Our dynamic layout engine automatically adjusts typography, navigation reachability, and touch targets to ensure your "Black Box" data is readable whether you're in the hangar or at 10,000 feet.
+             </p>
+          </RevealOnScroll>
+        </div>
+      </div>
 
       <div 
         id="about-program-overview-section"
@@ -490,7 +497,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                   </button>
               </RevealOnScroll>
 
-              {/* NEW SECTION: Milestones & Achievements */}
               <RevealOnScroll delay={200} className="max-w-4xl mx-auto mb-24 text-center">
                   <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase tracking-widest mb-12 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
                       Milestones & Achievements
@@ -551,406 +557,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                       </button>
                   </div>
               </RevealOnScroll>
-
-              <RevealOnScroll delay={300} className="max-w-4xl mx-auto mb-16">
-                  <div className={`p-6 md:p-8 rounded-xl border ${isDarkMode ? 'border-zinc-800 bg-zinc-900/30' : 'border-zinc-200 bg-white/50'}`}>
-                      <div className="text-left mb-6">
-                          <h3 className={`text-xl md:text-2xl font-bold brand-font uppercase ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                              The Wing Mentor Approach Chart
-                          </h3>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-left">
-                          {APPROACH_STEPS.map((step, index) => (
-                              <div key={index} className="flex items-start space-x-3">
-                                  <span className="text-yellow-500 font-bold font-mono text-lg shrink-0 mt-0.5">{step.num}.</span>
-                                  <div>
-                                      <h4 className={`text-xs md:text-sm font-bold uppercase mb-1 ${isDarkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>{step.title}</h4>
-                                      <p className={`text-xs leading-relaxed ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>{step.desc}</p>
-                                  </div>
-                              </div>
-                          ))}
-                      </div>
-
-                      <div className={`mt-8 pt-4 border-t ${isDarkMode ? 'border-zinc-800 text-zinc-500' : 'border-zinc-200 text-zinc-500'}`}>
-                          <p className="text-xs italic">
-                              "Within your first 20 hours, you will be supervised by one of our Wing Mentor team members. Once completed, your Wing Mentor passport will be stamped, marking your first milestone."
-                          </p>
-                      </div>
-                  </div>
-              </RevealOnScroll>
-
-              <RevealOnScroll delay={400}>
-                  <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>
-                      <p>
-                          The Wing Mentor program is not a flight school; we provide the solution to the 'experience paradox' for low-timer pilots. For mentors, this is your opportunity to gain hands-on CRM and consultation experience, building a verifiable logbook that sets you apart. We have watched too many talented pilots give up due to industry standards and market saturation. Our handbook details not just the program, but the unfiltered reality that recent commercial pilots face.
-                      </p>
-                  </div>
-              </RevealOnScroll>
-
-              {/* NEW BECOMING A WING MENTOR SECTION (FOR MENTORS) */}
-              <RevealOnScroll delay={450} className="max-w-4xl mx-auto mb-12">
-                  <div className={`p-8 border-l-4 border-red-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-red-600' : 'bg-white border-red-600'}`}>
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-red-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
-                        
-                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                            <div className="flex-1 text-left">
-                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-3 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                    Becoming a Wing Mentor
-                                </h3>
-                                <p className={`text-sm md:text-base leading-relaxed mb-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                                    Walk into an interview not just with a license, but with the leverage to say, <span className="italic font-semibold">'I have supported and guided pilots.'</span> Transform your flight hours into verifiable leadership experience. Join our team of qualified mentors and build a professional portfolio that airlines respect.
-                                </p>
-                                <button 
-                                    onClick={onGoToEnrollment}
-                                    className="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold uppercase tracking-widest rounded-md shadow-lg transition-all transform hover:translate-x-2 flex items-center"
-                                >
-                                    Enroll As Mentor <i className="fas fa-plane-departure ml-3"></i>
-                                </button>
-                            </div>
-                            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 hidden md:block shadow-md border border-zinc-500/20 transform rotate-2 group-hover:rotate-0 transition-transform duration-500">
-                                <img src={images.STORY_CPL} alt="Wing Mentor" className="w-full h-full object-cover" />
-                            </div>
-                        </div>
-                  </div>
-              </RevealOnScroll>
-
-              {/* NEW ENROLL AS MENTEE SECTION */}
-              <RevealOnScroll delay={500} className="max-w-4xl mx-auto mb-16">
-                  <div className={`p-8 border-l-4 border-blue-600 rounded-r-xl shadow-xl relative overflow-hidden group ${isDarkMode ? 'bg-zinc-900/80 border-blue-600' : 'bg-white border-blue-600'}`}>
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-600/10 rounded-full blur-xl group-hover:bg-red-600/20 transition-all duration-500"></div>
-                        
-                        <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                            <div className="flex-1 text-left">
-                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-3 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                    Enroll Now As Mentee
-                                </h3>
-                                <p className={`text-sm md:text-base leading-relaxed mb-6 font-light ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                                    Gain a decisive advantage in your flight training. Receive personalized guidance, unlock the Black Box Knowledge Vault, and connect with experienced mentors who have already walked the path to the cockpit. Your career trajectory starts with the right support.
-                                </p>
-                                <button 
-                                    onClick={onGoToEnrollment}
-                                    className="px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold uppercase tracking-widest rounded-md shadow-lg transition-all transform hover:translate-x-2 flex items-center"
-                                >
-                                    Enroll As Mentee <i className="fas fa-graduation-cap ml-3"></i>
-                                </button>
-                            </div>
-                            <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden shrink-0 hidden md:block shadow-md border border-zinc-500/20 transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
-                                <img src={images.STORY_STUDENT} alt="Wing Mentee" className="w-full h-full object-cover" />
-                            </div>
-                        </div>
-                  </div>
-              </RevealOnScroll>
-
-              {/* MENTEE DESCRIPTION PARAGRAPH MOVED BELOW CTA */}
-              <RevealOnScroll delay={550}>
-                  <div className={`text-lg md:text-xl font-light leading-relaxed notam-font mb-12 max-w-4xl mx-auto ${isDarkMode ? 'text-white' : 'text-zinc-900'} space-y-6`}>
-                      <p>
-                          For the <strong className={textHighlight}>Mentee</strong>, your path is one of guided growth. Your mission is to absorb, learn, and overcome challenges with the support of a dedicated mentor. Upon successful enrollment and a vetting interview, you gain access to the <strong>Wing Mentor Knowledge Vault</strong>—our comprehensive library of resources including study materials for PPL, CPL, IR, and ME ratings. This is about building a deep, practical understanding that prepares you for your next lesson and instills the confidence to command a career.
-                      </p>
-                  </div>
-              </RevealOnScroll>
-
-              {/* NEW APPS HEADER */}
-              <RevealOnScroll delay={575}>
-                  <div id="pilot-apps-made-by-pilots-section" className="mt-20 mb-10 text-center">
-                    <h2 className={`text-3xl md:text-5xl font-bold brand-font uppercase tracking-widest transition-colors duration-500
-                                  ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                        pilot apps <br />
-                        <span className="text-yellow-500">made by pilots</span>
-                    </h2>
-                  </div>
-              </RevealOnScroll>
-
-              <RevealOnScroll delay={600}>
-                  {/* Restructured iPad Apps Section - Alternating Rows */}
-                  <div className="my-16">
-                    <p className={`text-lg leading-relaxed mt-8 max-w-3xl mx-auto text-center ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                      Your digital command center. The WingMentor suite of applications provides seamless access to all program resources, from logging mentorship hours to accessing critical flight knowledge, all from a single, integrated platform.
-                    </p>
-
-                    <div className="mt-20 max-w-6xl mx-auto space-y-16 md:space-y-32">
-                        {appSuiteData.map((app, idx) => (
-                            <RevealOnScroll key={idx} delay={idx * 150}>
-                                <div className={`flex flex-col md:flex-row items-center gap-8 md:gap-20 ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
-                                    {/* Image Segment */}
-                                    <div className="w-full md:w-1/2 flex justify-center items-center">
-                                        <div className={`relative group transition-all duration-500 aspect-square w-full 
-                                                        ${app.isLarge ? 'md:w-[600px] md:h-[600px]' : 'md:w-[480px] md:h-[480px]'} 
-                                                        flex items-center justify-center
-                                                        ${isDarkMode ? 'bg-transparent' : 'bg-transparent'}`}>
-                                            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500 z-10 rounded-2xl"></div>
-                                            <img 
-                                                src={app.image} 
-                                                alt={app.title} 
-                                                className={`w-full h-full transform transition-transform duration-1000 object-contain 
-                                                          ${app.isLarge ? '' : 'group-hover:scale-110'} 
-                                                          ${!app.isLarge ? 'p-8' : 'p-0'}`} 
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Writing Segment */}
-                                    <div className="w-full md:w-1/2 text-left space-y-4">
-                                        <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                            {app.title}
-                                        </h3>
-                                        <div className="w-16 h-1 bg-yellow-500"></div>
-                                        <p className={`text-lg md:text-xl leading-relaxed font-light ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                                            {app.desc}
-                                        </p>
-                                    </div>
-                                </div>
-                            </RevealOnScroll>
-                        ))}
-
-                        {/* Featured iPad Image - Moved to Bottom */}
-                        <RevealOnScroll delay={300} className="pt-20">
-                            <div className="w-full">
-                                <h3 className={`text-2xl md:text-3xl font-bold brand-font uppercase mb-10 text-center ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                    WingMentor App Suite
-                                </h3>
-                                <div className={`rounded-3xl overflow-hidden shadow-2xl max-w-4xl mx-auto ${isDarkMode ? 'bg-zinc-900/50' : 'bg-white'} group`}>
-                                    <img 
-                                        src={images.IPAD_APPS_IMG} 
-                                        alt="WingMentor Digital Command Center" 
-                                        className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105" 
-                                    />
-                                </div>
-                            </div>
-                        </RevealOnScroll>
-                    </div>
-                  </div>
-              </RevealOnScroll>
           </div>
       </div>
-
-      {/* NEW SECTION: How We Fill The Aviation Low Timer Pilot Gap (MOVED DOWN) */}
-      <div 
-        id="how-we-fill-gap-section"
-        className="w-full bg-black"
-      >
-        <div className="w-full relative pt-24 pb-16 px-6 flex flex-col items-center justify-center">
-            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
-                <RevealOnScroll delay={100}>
-                    <h2 className="text-4xl md:text-6xl font-bold brand-font uppercase tracking-wider mb-6 text-white">
-                        How We Filled The Aviation Low Timer Pilot Gap
-                    </h2>
-                    <h3 className="text-xl md:text-3xl font-light leading-relaxed uppercase tracking-widest text-zinc-300">
-                        Visualizing the Pilot's Journey: Bridging the Red Gap
-                    </h3>
-                </RevealOnScroll>
-                <RevealOnScroll delay={200}>
-                  <p className="text-center text-zinc-500 text-xs mt-12 uppercase tracking-widest animate-pulse relative z-10">
-                    Hover over nodes to reveal details • Click nodes to unfold the story
-                  </p>
-                </RevealOnScroll>
-            </div>
-        </div>
-
-        <div className="w-full relative pb-24 px-6 flex flex-col items-center justify-center">
-            <div className="relative z-10 w-full max-w-6xl mx-auto text-center">
-                <MindMap />
-
-                <RevealOnScroll delay={700}>
-                    <button 
-                    onClick={onGoToGapPage}
-                    className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl mt-16
-                                bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20`}
-                    >
-                    Access Our Pilot Gap Forum For More Information <i className="fas fa-arrow-right ml-3"></i>
-                    </button>
-                    <p className="mt-4 text-sm max-w-xl mx-auto text-zinc-400">
-                    Insight into previous pilot investments so that you don’t have to experience and avoid hardship and loss.
-                    </p>
-                </RevealOnScroll>
-            </div>
-        </div>
-      </div>
-
-      <div 
-        id="why-wing-mentor-section"
-        className={`w-full relative py-24 px-6 flex flex-col items-center justify-center transition-colors duration-500
-                    ${isDarkMode ? 'bg-zinc-950 text-white' : 'bg-zinc-50 text-black'}`}>
-        <RevealOnScroll delay={100} className="max-w-4xl mx-auto text-center">
-          <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest mb-8 ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-            Why Wing Mentor?
-          </h2>
-          <p className={`text-xl md:text-2xl leading-relaxed mb-12 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-            We exist to solve the industry's toughest challenge: the "experience paradox." Wing Mentor is the innovative bridge for low-time pilots, offering verifiable mentorship, crucial skill refinement, and a supportive community. It's not just about getting hours; it's about gaining the confidence and documented experience that truly sets you apart.
-          </p>
-          <button 
-            onClick={onGoToProgramDetail}
-            className={`px-10 py-4 rounded-full tracking-widest text-lg font-bold transition-all shadow-xl
-                        ${isDarkMode 
-                            ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/20' 
-                            : 'bg-blue-700 hover:bg-blue-600 text-white shadow-blue-200'}`}
-          >
-            Explore Our Program <i className="fas fa-arrow-right ml-3"></i>
-          </button>
-        </RevealOnScroll>
-      </div>
-
-      <div 
-        id="about-us-section"
-        className="w-full min-h-screen relative flex flex-col items-center justify-center py-32 md:py-48 overflow-hidden" 
-      >
-         <div className="absolute inset-0 z-0 overflow-hidden">
-            <img 
-                src={images.ABOUT_BG} 
-                alt="About Page Background" 
-                className="w-full h-full object-cover object-center scale-150 sm:scale-100" 
-                style={{
-                    filter: isDarkMode ? 'grayscale(0.6) blur(2px)' : 'grayscale(0.2) blur(2px) opacity(0.6)', 
-                    pointerEvents: 'none'
-                }} 
-            />
-            <div className={`absolute inset-0 z-10 ${isDarkMode ? 'bg-black/60' : 'bg-white/80'}`}></div> 
-         </div>
-
-         <div className="w-full max-w-7xl mx-auto px-6 relative z-10">
-            <div className="max-w-4xl mx-auto text-center space-y-12 mb-16">
-                
-                <RevealOnScroll className="mb-4">
-                  <div className={`flex justify-center mb-8 backdrop-blur-sm p-4 rounded-xl shadow-lg ${isDarkMode ? 'bg-black/50' : 'bg-white/70 border border-zinc-200'}`}>
-                      <img 
-                          src={images.ABOUT_US_HEADER_IMAGE} 
-                          alt="About Us Header Graphic" 
-                          className="w-64 md:w-80 h-auto object-contain" 
-                      />
-                  </div>
-                  <h2 className={`text-4xl md:text-5xl font-bold brand-font uppercase tracking-widest
-                                  ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                      About Wing Mentor
-                  </h2>
-                </RevealOnScroll>
-                <div className={`w-32 h-1 mx-auto ${isDarkMode ? 'bg-red-600' : 'bg-red-50'}`}></div>
-            </div>
-
-            <div className="mb-24">
-                <RevealOnScroll className="mb-16">
-                  <h3 className={`text-3xl md:text-4xl font-bold brand-font uppercase text-center tracking-widest
-                                ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-                      Meet The Founders
-                  </h3>
-                </RevealOnScroll>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-                    
-                    <RevealOnScroll delay={100} className={`flex flex-col items-center text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 border
-                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border border-zinc-200 hover:border-blue-400'}`}>
-                        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-yellow-500 shadow-xl mb-6 relative group">
-                            <img 
-                                src={images.BENJAMIN_BOWLER_PORTRAIT} 
-                                alt="Benjamin Tiger Bowler" 
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                        </div>
-                        <h4 className={`text-2xl font-bold brand-font uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                            Benjamin Tiger Bowler
-                        </h4>
-                        <span className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 ${isDarkMode ? 'text-red-500' : 'text-red-600'}`}>
-                            Founder
-                        </span>
-                        <p className={`text-sm md:text-base leading-relaxed notam-font ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                            "We couldn't stand by and watch qualified pilots give up. Wing Mentor is our answer to the 'experience paradox'—providing a structured environment where pilots can prove their worth and keep their dreams alive."
-                        </p>
-                    </RevealOnScroll>
-
-                    <RevealOnScroll delay={200} className={`flex flex-col items-center text-center p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 border
-                                    ${isDarkMode ? 'bg-zinc-900/60 border-zinc-800 hover:border-yellow-600/50' : 'bg-white/70 border border-zinc-200 hover:border-blue-400'}`}>
-                        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-yellow-500 shadow-xl mb-6 relative group">
-                             <img 
-                                src={images.KARL_VOGT_PORTRAIT} 
-                                alt="Karl Brian Vogt" 
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                        </div>
-                        <h4 className={`text-2xl font-bold brand-font uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                            Karl Brian Vogt
-                        </h4>
-                        <span className={`text-sm font-bold uppercase tracking-[0.2em] mb-4 ${isDarkMode ? 'text-red-500' : 'text-red-600'}`}>
-                            Founder
-                        </span>
-                        <p className={`text-sm md:text-base leading-relaxed notam-font ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                            "The aviation industry demands more than just hours; it demands leadership, critical thinking, and adaptability. Wing Mentor cultivates these essential qualities, preparing pilots to not just fill a seat, but to command a career. We're building aviators of influence."
-                        </p>
-                    </RevealOnScroll>
-                </div>
-            </div>
-         </div>
-      </div>
-
-      <footer id="contact-us-section" className="bg-black border-t border-zinc-900 pt-16 pb-8 px-6 relative z-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-            <div className="space-y-6">
-                <div className="flex items-center space-x-3">
-                    <img src={images.LOGO} alt="Wing Mentor Logo" className="w-12 h-12 object-contain filter brightness-0 invert opacity-90" />
-                    <span className="text-xl font-bold brand-font text-white uppercase tracking-widest">Wing Mentor</span>
-                </div>
-                <p className="text-zinc-500 text-xs leading-relaxed max-sm">
-                    Bridging the gap between license and career. A dedicated platform for low-timer pilots to build verifiable experience, command authority, and professional industry connections.
-                </p>
-                <div className="flex items-center space-x-4">
-                    <a href="#" className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
-                        <i className="fab fa-facebook-f text-xs"></i>
-                    </a>
-                    <a href="#" className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
-                        <i className="fab fa-instagram text-xs"></i>
-                    </a>
-                    <a href="#" className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-400 hover:bg-zinc-800 hover:text-white transition-all">
-                        <i className="fab fa-twitter text-xs"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div className="space-y-6">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-white border-b border-zinc-800 pb-2 inline-block">Flight Operations</h4>
-                <ul className="space-y-4 text-xs text-zinc-400">
-                    <li className="flex items-start space-x-3">
-                        <i className="fas fa-map-marker-alt mt-1 text-yellow-600"></i>
-                        <span>Manila, Philippines<br/>Global Remote Operations</span>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                        <i className="fas fa-envelope mt-1 text-yellow-600"></i>
-                        <a href="mailto:wingmentorprogram@gmail.com" className="hover:text-white transition-colors">wingmentorprogram@gmail.com</a>
-                    </li>
-                    <li className="flex items-start space-x-3">
-                        <i className="fas fa-headset mt-1 text-yellow-600"></i>
-                        <span>Support Frequency: 123.45</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div className="space-y-6">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-white border-b border-zinc-800 pb-2 inline-block">System Status</h4>
-                <div className="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800/50">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-[10px] uppercase font-bold text-zinc-500">Mentor Level</span>
-                        <span className="text-[10px] uppercase font-bold text-green-500">Active</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <EpauletBars count={4} size="small" />
-                        <span className="text-xs font-bold text-white uppercase tracking-wider">Captain / Mentor</span>
-                    </div>
-                    <div className="w-full h-px bg-zinc-800 my-3"></div>
-                    <p className="text-[10px] text-zinc-600">
-                        Authorized Personnel Only. <br/>
-                        System ID: WM-2024-ALPHA
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] text-zinc-600 uppercase tracking-wider">
-            <p>&copy; 2024 WingMentor. All Rights Reserved.</p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-                <a href="#" className="hover:text-zinc-400">Privacy Policy</a>
-                <a href="#" className="hover:text-zinc-400">Terms of Service</a>
-                <a href="#" className="hover:text-zinc-400">POH Reference</a>
-            </div>
-        </div>
-      </footer>
     </div>
   );
 };
