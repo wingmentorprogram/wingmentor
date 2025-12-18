@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useConfig } from '../context/ConfigContext';
 
@@ -204,12 +203,10 @@ export const MindMap: React.FC = () => {
   const { config } = useConfig();
   const { images } = config;
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  // Fix: Corrected useState initialization for Set
   const [visibleNodes, setVisibleNodes] = useState<Set<string>>(() => new Set(['student']));
   
   const deepestY = Math.max(...Array.from(visibleNodes).map(nodeId => NODES.find(n => n.id === nodeId)?.y || 0));
   const containerHeight = Math.max(300, deepestY + 300);
-  // Removed fullMapHeight as it's now dynamic
 
   const lineColor = 'white';
 
@@ -223,7 +220,6 @@ export const MindMap: React.FC = () => {
     if (children.length === 0) return;
 
     const newVisible = new Set(visibleNodes);
-    // Fix: Corrected 'string' type to 'Set<string>' for checking children visibility
     const areChildrenVisible = children.every(id => newVisible.has(id));
 
     if (areChildrenVisible) {
@@ -270,7 +266,7 @@ export const MindMap: React.FC = () => {
     } else if (node.color === 'gold') {
         border = "border-2 border-yellow-500";
         text = "text-yellow-400";
-        shadow = "shadow-[0_0_25px_rgba(234,179,8,0.6)] animate-glow-light-text";
+        shadow = "shadow-[0_0_25px_rgba(234,179,8,0.6)]";
     }
 
     return `${base} ${zIndex} ${scale} ${bg} ${border} ${text} ${shadow}`;
@@ -284,12 +280,12 @@ export const MindMap: React.FC = () => {
                     ${hoveredNodeId ? 'opacity-100' : 'opacity-0'}`}
       ></div>
 
+      {/* Removed min-w-[900px] to ensure centering within the 680px root */}
       <div 
-        className="relative min-w-[900px] md:min-w-0 overflow-hidden transition-all duration-1000 ease-in-out border-b border-zinc-800/50 rounded-b-3xl" 
+        className="relative w-full overflow-hidden transition-all duration-1000 ease-in-out border-b border-zinc-800/50 rounded-b-3xl" 
         style={{ height: `${containerHeight}px` }}
       >
         
-        {/* Section background applied here */}
         <div
             className="absolute top-12 left-0 right-0 bottom-0 bg-top bg-no-repeat z-0"
             style={{ 
@@ -300,7 +296,6 @@ export const MindMap: React.FC = () => {
             <div className="absolute inset-0 bg-black/80"></div>
         </div>
 
-        {/* SVG overlay also scales with the dynamic container height */}
         <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
             <defs>
             <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -312,7 +307,6 @@ export const MindMap: React.FC = () => {
                 const parent = NODES.find(n => n.id === node.parent);
                 if (!parent) return null;
 
-                // Fix: Corrected 'string' type to 'Set<string>' for checking node visibility
                 if (!visibleNodes.has(node.id) || !visibleNodes.has(parent.id)) return null;
 
                 return (
@@ -333,12 +327,10 @@ export const MindMap: React.FC = () => {
         </svg>
 
         {NODES.map((node) => {
-            // Fix: Corrected 'string' type to 'Set<string>' for checking node visibility
             if (!visibleNodes.has(node.id)) return null;
 
             const isParent = hasChildren(node.id);
             const children = getChildrenIds(node.id);
-            // Fix: Corrected 'string' type to 'Set<string>' for checking children visibility
             const isExpanded = children.length > 0 && children.every(id => visibleNodes.has(id));
             const isHovered = hoveredNodeId === node.id;
             
@@ -346,7 +338,6 @@ export const MindMap: React.FC = () => {
                 <div 
                     key={node.id}
                     id={`node-${node.id}`}
-                    data-node-id={node.id}
                     className={`animate-in zoom-in fade-in slide-in-from-top-4 duration-700 ease-out fill-mode-forwards`} 
                 >
                     <div 
@@ -371,24 +362,24 @@ export const MindMap: React.FC = () => {
                         )}
                         
                         {isHovered && (
-                            <div className={`absolute top-[calc(100%+20px)] left-1/2 -translate-x-1/2 w-80 p-6 rounded-xl border-2 shadow-2xl bg-zinc-950/95 z-50 animate-in fade-in zoom-in-95 duration-300 pointer-events-none
+                            <div className={`absolute top-[calc(100%+20px)] left-1/2 -translate-x-1/2 w-64 p-5 rounded-xl border-2 shadow-2xl bg-zinc-950/95 z-50 animate-in fade-in zoom-in-95 duration-300 pointer-events-none
                                             ${node.color === 'red' ? 'border-red-600' : 
                                               node.color === 'green' ? 'border-green-500' : 
                                               node.color === 'blue' ? 'border-blue-500' :
                                               node.color === 'gold' ? 'border-yellow-500' : 'border-white'}
                                             `}>
-                                <h3 className={`text-xl font-bold brand-font uppercase mb-3 text-left
+                                <h3 className={`text-lg font-bold brand-font uppercase mb-2 text-left
                                             ${node.color === 'red' ? 'text-red-500' : 
                                                 node.color === 'green' ? 'text-green-400' : 
                                                 node.color === 'blue' ? 'text-blue-400' :
                                                 node.color === 'gold' ? 'text-yellow-400' : 'text-white'}`}>
                                     {node.title}
                                 </h3>
-                                <p className="text-zinc-300 text-xs md:text-sm font-sans text-left leading-relaxed mb-4">
+                                <p className="text-zinc-300 text-xs font-sans text-left leading-relaxed mb-4">
                                     {node.description}
                                 </p>
                                 {node.image && (
-                                     <div className="w-full h-32 rounded-lg overflow-hidden border border-white/10 mt-2">
+                                     <div className="w-full h-24 rounded-lg overflow-hidden border border-white/10 mt-2">
                                         <img src={node.image} alt="Detail" className="w-full h-full object-cover" />
                                      </div>
                                 )}
@@ -396,25 +387,22 @@ export const MindMap: React.FC = () => {
                         )}
                         
                         {node.supported && (
-                            <div className="absolute top-[calc(100%+32px)] left-1/2 transform -translate-x-1/2 flex items-center justify-center bg-[#00b14f] rounded-md px-2 py-0.5 whitespace-nowrap shadow-lg">
-                                <i className="fas fa-check-circle text-[9px] text-white mr-1.5"></i>
-                                <span className="text-[8px] font-bold text-white uppercase tracking-wider">Eligible for Wing Mentorship Program</span>
+                            <div className="absolute top-[calc(100%+28px)] left-1/2 transform -translate-x-1/2 flex items-center justify-center bg-[#00b14f] rounded-md px-2 py-0.5 whitespace-nowrap shadow-lg">
+                                <i className="fas fa-check-circle text-[8px] text-white mr-1"></i>
+                                <span className="text-[7px] font-bold text-white uppercase tracking-wider">Eligible for Wing Mentorship</span>
                             </div>
                         )}
 
                         {isParent && (
-                            <div 
-                                className={`absolute top-full left-1/2 transform -translate-x-1/2 flex flex-col items-center z-30`}
-                            >
+                            <div className={`absolute top-full left-1/2 transform -translate-x-1/2 flex flex-col items-center z-30`}>
                                 <button
                                     style={{ pointerEvents: 'none' }}
-                                    className={`w-7 h-7 rounded-full flex items-center justify-center border-2 shadow-lg transition-all duration-300
+                                    className={`w-6 h-6 rounded-full flex items-center justify-center border-2 shadow-lg transition-all duration-300
                                               ${isExpanded 
-                                                ? 'bg-zinc-700/80 border-zinc-600 text-zinc-400 rotate-180 -mt-3' 
-                                                : 'bg-zinc-800/80 border-zinc-700 text-zinc-400 mt-0'}`}
-                                    title={isExpanded ? "Collapse Branch" : "Expand Branch"}
+                                                ? 'bg-zinc-700/80 border-zinc-600 text-zinc-400 rotate-180 -mt-2' 
+                                                : 'bg-zinc-800/80 border-zinc-700 text-zinc-400 mt-1'}`}
                                 >
-                                    <i className="fas fa-chevron-up text-[10px]"></i>
+                                    <i className="fas fa-chevron-up text-[9px]"></i>
                                 </button>
                             </div>
                         )}
@@ -424,12 +412,12 @@ export const MindMap: React.FC = () => {
         })}
       </div>
       
-      <div className="mt-20 text-center max-w-3xl mx-auto px-4 animate-in fade-in duration-1000 delay-500">
-        <div className="w-24 h-1 bg-yellow-500 mx-auto mb-8"></div>
-        <h3 className="text-3xl md:text-4xl font-bold brand-font uppercase tracking-widest text-white mb-6">
+      <div className="mt-20 text-center max-w-2xl mx-auto px-4 animate-in fade-in duration-1000 delay-500">
+        <div className="w-20 h-1 bg-yellow-500 mx-auto mb-8"></div>
+        <h3 className="text-2xl md:text-3xl font-bold brand-font uppercase tracking-widest text-white mb-6">
           The Competitive Advantage
         </h3>
-        <p className="text-lg md:text-xl font-light leading-relaxed text-zinc-400 notam-font">
+        <p className="text-base md:text-lg font-light leading-relaxed text-zinc-400 notam-font">
           "You walk into an interview not just with a license, but with a portfolio of success. You have proven you can solve problems, support a team, and maintain professional standards during the 'Gap'. You are no longer a liability; you are a proven asset."
         </p>
       </div>

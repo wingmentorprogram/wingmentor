@@ -19,14 +19,14 @@ export const EpauletBars: React.FC<EpauletBarsProps> = ({
   const barWidth = 
     size === 'small' ? 'w-1' : 
     size === 'medium' ? 'w-3' : 
-    size === 'large' ? 'w-4' : 'w-14'; // XL width increased significantly for thickness
+    size === 'large' ? 'w-4' : 'w-16'; // Increased XL width for loading screen impact
     
   const barHeight = 
     size === 'small' ? 'h-4' : 
     size === 'medium' ? 'h-16' : 
-    size === 'large' ? 'h-24' : 'h-40'; // XL height increased for solid blocky look
+    size === 'large' ? 'h-24' : 'h-48'; // Increased XL height for blockier aesthetic
 
-  const spacing = size === 'small' ? 'gap-0.5' : size === 'xl' ? 'gap-6' : 'gap-2'; 
+  const spacing = size === 'small' ? 'gap-0.5' : size === 'xl' ? 'gap-8' : 'gap-2'; 
 
   const bars = Array.from({ length: count }, (_, i) => i);
 
