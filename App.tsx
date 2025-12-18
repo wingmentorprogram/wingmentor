@@ -16,103 +16,57 @@ import { WingMentorTeamPage } from './components/WingMentorTeamPage';
 import { ExaminationTerminalPage } from './components/ExaminationTerminalPage'; 
 import { LoginPage } from './components/LoginPage'; 
 import { WingMentorshipProgramPage } from './components/WingMentorshipProgramPage'; 
+import { MailSystem } from './components/MailSystem';
 import { ConfigProvider, useConfig } from './context/ConfigContext';
 import { ThemeProvider } from './context/ThemeContext';
 
 const AppContent: React.FC = () => {
   const [stage, setStage] = useState<LoadingStage>(LoadingStage.LOGO);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false); 
   const [isVideoWarm, setIsVideoWarm] = useState(false);
   const [scrollToSection, setScrollToSection] = useState<string | null>(null);
   const { config } = useConfig();
 
-  // Reset scroll to top on every page transition
-  useEffect(() => {
-    if (stage !== LoadingStage.LOGO) {
-      window.scrollTo(0, 0);
-    }
-  }, [stage]);
-
+  // Handle Startup Sequence: LOGO (2.5s) -> LOADING (3.5s) -> LANDING
   useEffect(() => {
     if (stage === LoadingStage.LOGO) {
       const timer = setTimeout(() => {
+        setStage(LoadingStage.LOADING);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+    if (stage === LoadingStage.LOADING) {
+      const timer = setTimeout(() => {
+        // App starts on Landing Page as requested
         setStage(LoadingStage.LANDING);
-      }, 3000);
+      }, 3500);
       return () => clearTimeout(timer);
     }
   }, [stage]);
 
-  const handleToggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-  };
-
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true); 
-    setShowLoginModal(false);
-    if (stage === LoadingStage.LOGIN) {
-        setStage(LoadingStage.HUB);
+  // Reset scroll to top on every page transition
+  useEffect(() => {
+    if (stage !== LoadingStage.LOGO && stage !== LoadingStage.LOADING) {
+      window.scrollTo(0, 0);
     }
-  };
+  }, [stage]);
 
-  const handleLoginCancel = () => {
-    setShowLoginModal(false);
-    if (stage === LoadingStage.LOGIN) {
-        setStage(LoadingStage.HUB);
-    }
-  };
+  const handleToggleLogin = () => setIsLoggedIn(!isLoggedIn);
 
-  const goToLanding = () => {
-    setStage(LoadingStage.LANDING);
-  };
-
-  const goToHub = () => {
-    setStage(LoadingStage.HUB);
-  };
-
-  const goToProgramDetail = () => {
-    setStage(LoadingStage.PROGRAM_DETAIL);
-  };
-
-  const goToProgramOverview = () => {
-    setStage(LoadingStage.PROGRAM_OVERVIEW);
-  };
-
-  const goToEnrollment = () => {
-    setStage(LoadingStage.ENROLLMENT);
-  };
-
-  const goToShop = () => { 
-    setStage(LoadingStage.SHOP);
-  };
-  
-  const goToGapPage = () => {
-    setStage(LoadingStage.LOW_TIMER_GAP);
-  };
-
-  const goToBlackBox = () => { 
-    setStage(LoadingStage.BLACK_BOX);
-  };
-
-  const goToLatestNews = () => { 
-    setStage(LoadingStage.LATEST_NEWS);
-  };
-
-  const goToDeveloperEditor = () => { 
-    setStage(LoadingStage.DEVELOPER_EDITOR);
-  };
-
-  const goToOperatingHandbook = () => { 
-    setStage(LoadingStage.OPERATING_HANDBOOK);
-  };
-
-  const goToTeamPage = () => { 
-    setStage(LoadingStage.TEAM_PAGE);
-  };
-
-  const goToExaminationTerminal = () => { 
-    setStage(LoadingStage.EXAMINATION_TERMINAL);
-  };
+  const goToLanding = () => setStage(LoadingStage.LANDING);
+  const goToHub = () => setStage(LoadingStage.HUB);
+  const goToProgramDetail = () => setStage(LoadingStage.PROGRAM_DETAIL);
+  const goToProgramOverview = () => setStage(LoadingStage.PROGRAM_OVERVIEW);
+  const goToEnrollment = () => setStage(LoadingStage.ENROLLMENT);
+  const goToShop = () => setStage(LoadingStage.SHOP);
+  const goToGapPage = () => setStage(LoadingStage.LOW_TIMER_GAP);
+  const goToBlackBox = () => setStage(LoadingStage.BLACK_BOX);
+  const goToLatestNews = () => setStage(LoadingStage.LATEST_NEWS);
+  const goToDeveloperEditor = () => setStage(LoadingStage.DEVELOPER_EDITOR);
+  const goToOperatingHandbook = () => setStage(LoadingStage.OPERATING_HANDBOOK);
+  const goToTeamPage = () => setStage(LoadingStage.TEAM_PAGE);
+  const goToExaminationTerminal = () => setStage(LoadingStage.EXAMINATION_TERMINAL);
+  const goToMailSystem = () => setStage(LoadingStage.MESSAGING);
 
   const goToLandingAndScroll = (sectionId: string) => {
     setStage(LoadingStage.LANDING);
@@ -120,171 +74,107 @@ const AppContent: React.FC = () => {
   };
 
   const handleHubNavigation = (destination: string) => {
-    if (destination === 'LANDING') {
-      goToLanding();
-    } else if (destination === 'PROGRAM') {
-      goToProgramOverview();
-    } else if (destination === 'EXAMINATION') {
-      goToExaminationTerminal();
-    } else if (destination === 'SHOP') {
-      goToShop();
-    } else if (destination === 'GAP') {
-      goToGapPage();
-    } else if (destination === 'BLACK_BOX') { 
-      goToBlackBox();
-    } else if (destination === 'LATEST_NEWS') { 
-      goToLatestNews();
-    } else if (destination === 'DEVELOPER') { 
-      goToDeveloperEditor();
-    } else if (destination === 'PASSPORT') {
-      goToOperatingHandbook(); 
-    } else if (destination === 'LOGS') {
-      goToOperatingHandbook(); 
-    } else if (destination === 'LOGIN') {
-      setStage(LoadingStage.LOGIN); 
-    } else {
-      if (destination === 'TOOLS') {
-         goToLanding();
-      }
+    const navMap: Record<string, () => void> = {
+      LANDING: goToLanding,
+      PROGRAM: goToProgramOverview,
+      EXAMINATION: goToExaminationTerminal,
+      SHOP: goToShop,
+      GAP: goToGapPage,
+      BLACK_BOX: goToBlackBox,
+      LATEST_NEWS: goToLatestNews,
+      DEVELOPER: goToDeveloperEditor,
+      PASSPORT: goToOperatingHandbook,
+      LOGS: goToOperatingHandbook,
+      MAIL: goToMailSystem,
+      LOGIN: () => setStage(LoadingStage.LOGIN),
+      TOOLS: goToLanding
+    };
+    if (navMap[destination]) navMap[destination]();
+  };
+
+  const renderCurrentPage = () => {
+    switch (stage) {
+      case LoadingStage.LOGIN:
+        return <LoginPage onLoginSuccess={() => { setIsLoggedIn(true); goToHub(); }} onCancel={goToHub} />;
+      case LoadingStage.LANDING:
+        return (
+          <LandingPage 
+            isVideoWarm={isVideoWarm} 
+            setIsVideoWarm={setIsVideoWarm}
+            onGoToProgramDetail={goToProgramOverview}
+            onGoToGapPage={goToGapPage}
+            onGoToOperatingHandbook={goToOperatingHandbook}
+            onGoToBlackBox={goToBlackBox}
+            onGoToExaminationTerminal={goToExaminationTerminal}
+            scrollToSection={scrollToSection}
+            onScrollComplete={() => setScrollToSection(null)}
+            onGoToEnrollment={goToEnrollment} 
+          />
+        );
+      case LoadingStage.HUB:
+        return <Hub onNavigate={handleHubNavigation} />;
+      case LoadingStage.MESSAGING:
+        return <MailSystem onBackToHub={goToHub} />;
+      case LoadingStage.PROGRAM_OVERVIEW:
+        return <WingMentorshipProgramPage onBackToLanding={goToLanding} onGoToProgramDetail={goToProgramDetail} />;
+      case LoadingStage.PROGRAM_DETAIL:
+        return <ProgramDetailPage onBackToLanding={goToProgramOverview} onGoToEnrollment={goToEnrollment} />;
+      case LoadingStage.ENROLLMENT:
+        return <EnrollmentPage onBackToProgramDetail={goToProgramDetail} isLoggedIn={isLoggedIn} onLogin={handleToggleLogin} />;
+      case LoadingStage.SHOP:
+        return <ShopPage onBackToHub={goToHub} />;
+      case LoadingStage.LOW_TIMER_GAP:
+        return <LowTimerGapPage onBackToLanding={goToLanding} onGoToProgram={goToProgramOverview} isLoggedIn={isLoggedIn} />;
+      case LoadingStage.BLACK_BOX:
+        return <BlackBoxPage onBackToLanding={goToLanding} isLoggedIn={isLoggedIn} onLogin={handleToggleLogin} />;
+      case LoadingStage.LATEST_NEWS:
+        return <LatestNewsPage onBackToLanding={goToLanding} />;
+      case LoadingStage.DEVELOPER_EDITOR:
+        return <ImageEditorPage onBackToHub={goToHub} />;
+      case LoadingStage.OPERATING_HANDBOOK:
+        return <OperatingHandbookPage onBackToLanding={goToLanding} onGoToEnrollment={goToEnrollment} onGoToDeveloper={goToDeveloperEditor} />;
+      case LoadingStage.TEAM_PAGE:
+        return <WingMentorTeamPage onBackToLanding={goToLanding} />;
+      case LoadingStage.EXAMINATION_TERMINAL:
+        return (
+          <ExaminationTerminalPage
+            onNavigate={(dest) => dest === 'PROGRAM' ? goToProgramOverview() : goToHub()}
+            onBackToHub={goToHub}
+          />
+        );
+      default:
+        return null;
     }
   };
 
-  const renderAppContent = () => (
-    <>
-      {(stage !== LoadingStage.LOGIN && stage !== LoadingStage.LOGO && stage !== LoadingStage.HUB && stage !== LoadingStage.DEVELOPER_EDITOR && stage !== LoadingStage.EXAMINATION_TERMINAL) && (
-        <Navigation 
-          isLoggedIn={isLoggedIn} 
-          toggleLogin={handleToggleLogin} 
-          onGoToLanding={goToLanding}
-          onGoToHub={goToHub}
-          onGoToProgramDetail={goToProgramOverview}
-          onGoToShop={goToShop}
-          onGoToGapPage={goToGapPage}
-          onGoToBlackBox={goToBlackBox} 
-          onGoToLatestNews={goToLatestNews} 
-          onGoToLandingAndScroll={goToLandingAndScroll}
-          onGoToOperatingHandbook={goToOperatingHandbook}
-          onGoToTeamPage={goToTeamPage} 
-          onGoToEnrollment={goToEnrollment} 
-        />
-      )}
-
-      {stage === LoadingStage.LOGIN && (
-        <LoginPage onLoginSuccess={handleLoginSuccess} onCancel={handleLoginCancel} />
-      )}
-
-      {stage === LoadingStage.LANDING && (
-        <LandingPage 
-          isVideoWarm={isVideoWarm} 
-          setIsVideoWarm={setIsVideoWarm}
-          onGoToProgramDetail={goToProgramOverview}
-          onGoToGapPage={goToGapPage}
-          onGoToOperatingHandbook={goToOperatingHandbook}
-          onGoToBlackBox={goToBlackBox}
-          onGoToExaminationTerminal={goToExaminationTerminal}
-          scrollToSection={scrollToSection}
-          onScrollComplete={() => setScrollToSection(null)}
-          onGoToEnrollment={goToEnrollment} 
-        />
-      )}
-      {stage === LoadingStage.HUB && (
-        <Hub onNavigate={handleHubNavigation} />
-      )}
-      {stage === LoadingStage.PROGRAM_OVERVIEW && (
-        <WingMentorshipProgramPage 
-          onBackToLanding={goToLanding}
-          onGoToProgramDetail={goToProgramDetail}
-        />
-      )}
-      {stage === LoadingStage.PROGRAM_DETAIL && (
-        <ProgramDetailPage 
-          onBackToLanding={goToProgramOverview}
-          onGoToEnrollment={goToEnrollment}
-        />
-      )}
-      {stage === LoadingStage.ENROLLMENT && (
-        <EnrollmentPage
-          onBackToProgramDetail={goToProgramDetail}
-          isLoggedIn={isLoggedIn}
-          onLogin={handleToggleLogin}
-        />
-      )}
-      {stage === LoadingStage.SHOP && (
-        <ShopPage onBackToHub={goToHub} />
-      )}
-      {stage === LoadingStage.LOW_TIMER_GAP && (
-        <LowTimerGapPage
-          onBackToLanding={goToLanding}
-          onGoToProgram={goToProgramOverview}
-          isLoggedIn={isLoggedIn}
-        />
-      )}
-      {stage === LoadingStage.BLACK_BOX && ( 
-        <BlackBoxPage 
-          onBackToLanding={goToLanding}
-          isLoggedIn={isLoggedIn} 
-          onLogin={handleToggleLogin} 
-        />
-      )}
-      {stage === LoadingStage.LATEST_NEWS && ( 
-        <LatestNewsPage
-          onBackToLanding={goToLanding}
-        />
-      )}
-      {stage === LoadingStage.DEVELOPER_EDITOR && ( 
-        <ImageEditorPage
-          onBackToHub={goToHub}
-        />
-      )}
-      {stage === LoadingStage.OPERATING_HANDBOOK && ( 
-        <OperatingHandbookPage
-          onBackToLanding={goToLanding}
-          onGoToEnrollment={goToEnrollment}
-          onGoToDeveloper={goToDeveloperEditor}
-        />
-      )}
-      {stage === LoadingStage.TEAM_PAGE && ( 
-        <WingMentorTeamPage
-          onBackToLanding={goToLanding}
-        />
-      )}
-      {stage === LoadingStage.EXAMINATION_TERMINAL && ( 
-        <ExaminationTerminalPage
-          onNavigate={(destination) => {
-            if (destination === 'PROGRAM') {
-              goToProgramOverview();
-            } else if (destination === 'HUB') {
-              goToHub();
-            }
-          }}
-          onBackToHub={goToHub}
-        />
-      )}
-    </>
-  );
+  const isBooting = stage === LoadingStage.LOGO || stage === LoadingStage.LOADING;
+  const hideNavigation = isBooting || stage === LoadingStage.LOGIN || stage === LoadingStage.HUB || stage === LoadingStage.DEVELOPER_EDITOR || stage === LoadingStage.EXAMINATION_TERMINAL || stage === LoadingStage.MESSAGING;
 
   return (
-    <div className="min-h-screen overflow-x-hidden font-['Raleway'] transition-colors duration-300
-                    dark:bg-black dark:text-white
-                    light:bg-white light:text-black">
-      
-      <div className="hidden">
-        <video 
-            src={config.heroVideoUrl} 
-            preload="auto" 
-            muted 
-            playsInline
-            width="0" 
-            height="0"
-        />
-      </div>
-
-      {stage === LoadingStage.LOGO && (
-        <LoadingScreen />
-      )}
-
-      {(stage === LoadingStage.HUB || stage === LoadingStage.LANDING || stage === LoadingStage.PROGRAM_DETAIL || stage === LoadingStage.PROGRAM_OVERVIEW || stage === LoadingStage.ENROLLMENT || stage === LoadingStage.SHOP || stage === LoadingStage.LOW_TIMER_GAP || stage === LoadingStage.BLACK_BOX || stage === LoadingStage.LATEST_NEWS || stage === LoadingStage.DEVELOPER_EDITOR || stage === LoadingStage.OPERATING_HANDBOOK || stage === LoadingStage.TEAM_PAGE || stage === LoadingStage.EXAMINATION_TERMINAL || stage === LoadingStage.LOGIN) && ( 
-        renderAppContent()
+    <div className="min-h-screen overflow-x-hidden font-['Raleway'] transition-colors duration-300 dark:bg-black dark:text-white light:bg-white light:text-black">
+      {isBooting ? (
+        <LoadingScreen showBars={stage === LoadingStage.LOADING} />
+      ) : (
+        <>
+          {!hideNavigation && (
+            <Navigation 
+              isLoggedIn={isLoggedIn} 
+              toggleLogin={handleToggleLogin} 
+              onGoToLanding={goToLanding}
+              onGoToHub={goToHub}
+              onGoToProgramDetail={goToProgramOverview}
+              onGoToShop={goToShop}
+              onGoToGapPage={goToGapPage}
+              onGoToBlackBox={goToBlackBox} 
+              onGoToLatestNews={goToLatestNews} 
+              onGoToLandingAndScroll={goToLandingAndScroll}
+              onGoToOperatingHandbook={goToOperatingHandbook}
+              onGoToTeamPage={goToTeamPage} 
+              onGoToEnrollment={goToEnrollment} 
+            />
+          )}
+          {renderCurrentPage()}
+        </>
       )}
     </div>
   );

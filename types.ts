@@ -1,6 +1,7 @@
 export enum LoadingStage {
     LOGIN = -1,
     LOGO = 0,
+    LOADING = 1,
     LANDING = 2,
     HUB = 3,
     PROGRAM_DETAIL = 4, 
@@ -13,7 +14,8 @@ export enum LoadingStage {
     OPERATING_HANDBOOK = 11, 
     TEAM_PAGE = 12,
     PROGRAM_OVERVIEW = 13,
-    EXAMINATION_TERMINAL = 14
+    EXAMINATION_TERMINAL = 14,
+    MESSAGING = 15
   }
   
   export enum PilotLevel {

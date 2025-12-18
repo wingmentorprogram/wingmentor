@@ -2,9 +2,14 @@ import React from 'react';
 import { useConfig } from '../context/ConfigContext';
 import { EpauletBars } from './EpauletBars';
 
-export const LoadingScreen: React.FC = () => {
+interface LoadingScreenProps {
+  showBars?: boolean;
+}
+
+export const LoadingScreen: React.FC<LoadingScreenProps> = ({ showBars = false }) => {
   const { config } = useConfig();
-  const { images } = config;
+  // Using the exact logo URL provided by the user for the startup sequence
+  const STARTUP_LOGO = "https://lh3.googleusercontent.com/d/1U7pwMY1-ZsvNYC0Np3fVw5OhW3rTD5DR";
 
   return (
     <div 
@@ -13,8 +18,8 @@ export const LoadingScreen: React.FC = () => {
     >
       <div className="relative">
         <img 
-            src={images.LOGO} 
-            alt="WingMentor Logo" 
+            src={STARTUP_LOGO} 
+            alt="WingMentor Startup Logo" 
             className="w-48 h-48 md:w-64 md:h-64 object-contain relative z-10" 
             style={{ animation: 'logo-glow-pulse 3s infinite ease-in-out' }}
         />
@@ -22,19 +27,23 @@ export const LoadingScreen: React.FC = () => {
         <div className="absolute inset-0 bg-yellow-500/10 blur-3xl rounded-full scale-150 animate-pulse"></div>
       </div>
 
-      <div className="flex flex-col items-center space-y-6">
-        <EpauletBars count={4} size="xl" animated={true} />
-        
-        <div className="text-center">
-            <p className="text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em] animate-pulse">
-                Initializing Flight Systems
-            </p>
-            <div className="mt-2 flex justify-center space-x-1">
-                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+      <div className={`flex flex-col items-center space-y-6 transition-all duration-1000 ${showBars ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        {showBars && (
+          <>
+            <EpauletBars count={4} size="xl" animated={true} />
+            
+            <div className="text-center">
+                <p className="text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em] animate-pulse">
+                    Initializing Flight Systems
+                </p>
+                <div className="mt-2 flex justify-center space-x-1">
+                    <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                    <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-1 h-1 bg-yellow-600 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                </div>
             </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

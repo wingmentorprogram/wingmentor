@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useConfig } from '../context/ConfigContext';
 
-type Destination = 'LANDING' | 'TOOLS' | 'PROGRAM' | 'LOGS' | 'SHOP' | 'GAP' | 'BLACK_BOX' | 'LATEST_NEWS' | 'DEVELOPER' | 'PASSPORT' | 'EXAMINATION' | 'LOGIN';
+type Destination = 'LANDING' | 'TOOLS' | 'PROGRAM' | 'LOGS' | 'SHOP' | 'GAP' | 'BLACK_BOX' | 'LATEST_NEWS' | 'DEVELOPER' | 'PASSPORT' | 'EXAMINATION' | 'LOGIN' | 'MAIL';
 
 interface HubProps {
   onNavigate: (destination: Destination) => void;
@@ -13,7 +12,8 @@ const BOARD_ITEMS: { id: string; label: string; time: string; target: Destinatio
   { id: 'landing', label: 'HOME PAGE', time: '06:00', target: 'LANDING' },
   { id: 'gap', label: 'THE PILOT GAP FORUM', time: '08:30', target: 'GAP' },
   { id: 'program', label: 'PROGRAM DETAILS', time: '09:00', target: 'PROGRAM' },
-  { id: 'examination', label: 'EXAMINATION TERMINAL', time: '09:45', target: 'EXAMINATION' },
+  { id: 'mail', label: 'FLIGHT DISPATCH MAIL', time: '10:15', target: 'MAIL' },
+  { id: 'examination', label: 'EXAMINATION TERMINAL', time: '11:45', target: 'EXAMINATION' },
   { id: 'blackbox', label: 'THE BLACK BOX', time: '12:15', target: 'BLACK_BOX' },
   { id: 'passport', label: 'WINGMENTOR PASSPORT', time: '14:20', target: 'PASSPORT' },
   { id: 'logs', label: 'WING LOGS', time: '16:50', target: 'LOGS' },
@@ -23,8 +23,6 @@ const BOARD_ITEMS: { id: string; label: string; time: string; target: Destinatio
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 -_.:";
 
-// Individual Split Flap Character Tile
-// Minimalist styling: Background blends with page, no heavy borders.
 const SplitFlapChar: React.FC<{ targetChar: string; delay: number; trigger: boolean }> = ({ targetChar, delay, trigger }) => {
   const [char, setChar] = useState(" ");
   
@@ -51,15 +49,12 @@ const SplitFlapChar: React.FC<{ targetChar: string; delay: number; trigger: bool
   }, [trigger, targetChar, delay]);
 
   return (
-    // Background is black to blend with the page, creating an "invisible box" effect
     <div className="relative w-[1.8vh] h-[3vh] md:w-[2.2vh] md:h-[4vh] bg-black overflow-hidden m-[1px] flex flex-col box-border group-hover:bg-zinc-900 transition-colors duration-300">
-      {/* Top Half */}
       <div className="h-1/2 w-full bg-black border-b border-zinc-800/50 relative overflow-hidden">
         <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[50%] text-zinc-300 font-mono font-normal text-[2vh] md:text-[2.5vh] leading-none">
           {char}
         </span>
       </div>
-      {/* Bottom Half */}
       <div className="h-1/2 w-full bg-black relative overflow-hidden">
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-[50%] text-zinc-300 font-mono font-normal text-[2vh] md:text-[2.5vh] leading-none">
           {char}
@@ -69,12 +64,10 @@ const SplitFlapChar: React.FC<{ targetChar: string; delay: number; trigger: bool
   );
 };
 
-// Row of Split Flap Characters
 const SplitFlapBoard: React.FC<{ label: string; maxLength: number; trigger: boolean }> = ({ label, maxLength, trigger }) => {
   const paddedLabel = label.toUpperCase().padEnd(maxLength, ' ');
   const chars = paddedLabel.split('').slice(0, maxLength);
 
-  // Removed container styling to make it purely text-focused
   return (
     <div className="flex items-center">
       {chars.map((char, i) => (
@@ -94,19 +87,16 @@ export const Hub: React.FC<HubProps> = ({ onNavigate }) => {
   }, []);
 
   const handleNavigationClick = (target: Destination) => {
-    if (isDeparting) return; // Prevent multiple clicks during animation
+    if (isDeparting) return; 
     setIsDeparting(true);
     setTimeout(() => {
       onNavigate(target);
-      // Component will unmount, so no need to reset state, but it's good practice
       setIsDeparting(false);
-    }, 800); // Match animation duration
+    }, 800);
   };
 
   return (
     <div className="relative w-full min-h-screen bg-black select-none font-sans flex flex-col items-center justify-center p-8">
-      
-      {/* Modern, Concise Header */}
       <div className="relative z-10 w-full max-w-6xl mb-16 flex flex-col items-start border-b border-zinc-800/50 pb-4">
           <div className="flex items-baseline space-x-4">
             <h1 className="text-xl md:text-2xl font-mono text-zinc-100 tracking-tight font-bold">
@@ -123,7 +113,6 @@ export const Hub: React.FC<HubProps> = ({ onNavigate }) => {
           </div>
       </div>
 
-      {/* Board Items */}
       <div className="relative z-10 flex flex-col gap-4 w-full max-w-6xl">
           {BOARD_ITEMS.map((item) => (
             <button
@@ -131,12 +120,9 @@ export const Hub: React.FC<HubProps> = ({ onNavigate }) => {
               onClick={() => handleNavigationClick(item.target)}
               className="flex flex-row items-center justify-between group focus:outline-none w-full opacity-70 hover:opacity-100 transition-all duration-300 hover:pl-2"
             >
-              {/* Destination Column */}
               <div className="flex-1 text-left">
                  <SplitFlapBoard label={item.label} maxLength={30} trigger={trigger} />
               </div>
-
-              {/* Time Column */}
               <div className="w-auto text-right pl-4 hidden md:block">
                  <SplitFlapBoard label={item.time} maxLength={5} trigger={trigger} />
               </div>
@@ -144,11 +130,9 @@ export const Hub: React.FC<HubProps> = ({ onNavigate }) => {
           ))}
       </div>
       
-      {/* Minimal Footer */}
       <div className="fixed bottom-8 left-8 text-zinc-800 text-[10px] font-mono tracking-widest uppercase">
           SYSTEM: ONLINE_
       </div>
-
     </div>
   );
 };

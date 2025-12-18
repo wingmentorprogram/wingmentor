@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useConfig } from '../context/ConfigContext'; // Import useConfig
+import { useConfig } from '../context/ConfigContext';
 import { useTheme } from '../context/ThemeContext';
+import { EpauletBars } from './EpauletBars';
 
 interface EnrollmentPageProps {
   onBackToProgramDetail: () => void;
@@ -8,479 +9,231 @@ interface EnrollmentPageProps {
   onLogin: () => void;
 }
 
-const RevealOnScroll: React.FC<{ children: React.ReactNode; className?: string; delay?: number }> = ({ 
-  children, 
-  className = "", 
-  delay = 0 
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+interface PilotEntry {
+  id: string;
+  callsign: string;
+  rank: string;
+  school: string;
+  country: string;
+  status: 'VERIFIED' | 'PENDING' | 'IN_VETTING';
+  date: string;
+}
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.disconnect();
-      }
-    };
-  }, [delay]);
-
-  return (
-    <div 
-      ref={ref} 
-      className={`transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'} ${className}`}
-    >
-      {children}
-    </div>
-  );
-};
-
-const TermsModal: React.FC<{ onClose: () => void, isDarkMode: boolean }> = ({ onClose, isDarkMode }) => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
-        <div className={`w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]
-                         ${isDarkMode ? 'bg-zinc-900 border border-zinc-700' : 'bg-white'}`}>
-            <div className={`p-6 border-b flex justify-between items-center
-                            ${isDarkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-200 bg-zinc-50'}`}>
-                <h3 className="text-xl font-bold brand-font text-red-700 uppercase tracking-wider">Terms & Conditions</h3>
-                <button onClick={onClose} className={`transition-colors ${isDarkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>
-                    <i className="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div className={`p-8 overflow-y-auto notam-font text-sm leading-relaxed space-y-4
-                            ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                <p className="font-bold">Please read carefully before enrolling.</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>1. Nature of Service</h4>
-                <p>Wing Mentorship is strictly a peer-to-peer support, guidance, and consultation community. We are <span className="font-bold text-red-600">NOT</span> a flight school, Approved Training Organization (ATO), or certified flight training provider. We do not provide flight instruction, ground school credit, or endorsements for any aviation licenses (FAA, ICAO, etc.).</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>2. Consultation Only - No Instruction</h4>
-                <p>All information, guidance, and advice provided by Wing Mentors is for mentorship and supplemental understanding only. It does not replace, supersede, or constitute official instruction from a Certified Flight Instructor (CFI/FI) or an authorized training facility. Users are responsible for verifying all information with their official flight instructors.</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>3. Limitation of Liability</h4>
-                <p>Wing Mentorship, its founders, mentors, and affiliates are not liable for any academic failures, flight test failures, incidents, accidents, regulatory violations, or financial losses incurred by the member. The user assumes full responsibility for the safety and legality of their flight operations.</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>4. Non-Interference with Flight Schools</h4>
-                <p>This program is designed to supplement your existing training. We respect the authority of your current flight school and instructors. Our guidance is intended to help you prepare for your official lessons, not to contradict them.</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>5. Mentor Accountability</h4>
-                <p>Junior Wing Mentors are trainees in a supervised program. While we verify logs and assess performance, Wing Mentorship does not guarantee the teaching proficiency of any mentor beyond the scope of peer support.</p>
-                
-                <h4 className={`font-bold uppercase border-b pb-1 mt-4 ${isDarkMode ? 'text-white border-zinc-700' : 'text-zinc-800 border-zinc-200'}`}>6. Indemnification</h4>
-                <p>By enrolling, you agree to indemnify, defend, and hold harmless Wing Mentorship from any claims, damages, lawsuits, or legal actions arising out of your participation in this program or reliance on information provided herein.</p>
-            </div>
-            <div className={`p-6 border-t text-right ${isDarkMode ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-200 bg-zinc-50'}`}>
-                <button 
-                    onClick={onClose}
-                    className="px-6 py-2 bg-black text-white font-bold rounded hover:bg-zinc-800 transition-colors uppercase tracking-wider text-sm"
-                >
-                    I Understand
-                </button>
-            </div>
-        </div>
-    </div>
-);
+const MOCK_ROSTER: PilotEntry[] = [
+    { id: 'WM-742', callsign: 'GHOST', rank: 'CPL / IR', school: 'Alpha Aviation', country: 'PH', status: 'VERIFIED', date: '12 NOV 2024' },
+    { id: 'WM-109', callsign: 'MAVERICK', rank: 'PPL', school: 'Omni Aviation', country: 'PH', status: 'VERIFIED', date: '10 NOV 2024' },
+    { id: 'WM-882', callsign: 'VIPER', rank: 'CPL / ME', school: 'Airworks', country: 'PH', status: 'IN_VETTING', date: '14 NOV 2024' },
+    { id: 'WM-331', callsign: 'PHOENIX', rank: 'SPL', school: 'WCC', country: 'PH', status: 'PENDING', date: '15 NOV 2024' },
+    { id: 'WM-552', callsign: 'ICEMAN', rank: 'CPL / IR', school: 'AAA', country: 'PH', status: 'VERIFIED', date: '08 NOV 2024' },
+];
 
 export const EnrollmentPage: React.FC<EnrollmentPageProps> = ({ onBackToProgramDetail, isLoggedIn, onLogin }) => {
   const { isDarkMode } = useTheme();
   const { config } = useConfig();
   const { images } = config;
+  
+  const [activeTab, setActiveTab] = useState<'FORM' | 'ROSTER'>('FORM');
+  const [isUplinking, setIsUplinking] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  
+  // UPDATED: Form responder link from user request
+  const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfvMOvZfFfOUtWr2Oa2tioMPYqftJszKHhR6D__TC0tn0my4A/viewform?embedded=true";
 
-  const [selectedRole, setSelectedRole] = useState<'mentee' | 'mentor' | null>(null);
-  const [flightSchool, setFlightSchool] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState(''); 
-  const [password, setPassword] = useState('');
-  const [agreedToTerms, setAgreedToTerms] = useState(false); 
-  const [showTerms, setShowTerms] = useState(false); 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  useEffect(() => {
+    setIsUplinking(true);
+    const timer = setTimeout(() => setIsUplinking(false), 1200);
+    return () => clearTimeout(timer);
+  }, [activeTab, refreshKey]);
 
-  const countries = [
-    "Philippines",
-    "Germany",
-    "Mauritius",
-    "United Arab Emirates",
-    "United Kingdom"
-  ];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!agreedToTerms) return;
-
-    setIsSubmitting(true);
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowSuccess(true);
-      if (!isLoggedIn) {
-        onLogin(); 
-      }
-    }, 1500);
+  const handleRefreshForm = () => {
+    setRefreshKey(prev => prev + 1);
   };
 
-  if (showSuccess) {
-    return (
-      <div className={`relative min-h-screen animate-in fade-in duration-700 flex items-center justify-center
-                       ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-         <div className="absolute inset-0 z-0 overflow-hidden">
-            <img 
-              src={images.ABOUT_BG} 
-              alt="Background" 
-              className="w-full h-full object-cover object-center" 
-              style={{ filter: 'brightness(60%) blur(2px)' }} 
-            />
-            <div className={`absolute inset-0 z-10 ${isDarkMode ? 'bg-black/60' : 'bg-white/80'}`}></div>
-         </div>
-         
-         <div className={`relative z-20 max-w-2xl mx-auto p-12 rounded-xl shadow-2xl text-center border
-                          ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-white'}`}>
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6
-                             ${isDarkMode ? 'bg-green-900/30' : 'bg-green-100'}`}>
-                <i className="fas fa-check text-4xl text-green-600"></i>
-            </div>
-            <h2 className={`text-3xl md:text-4xl font-bold brand-font mb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}>Application Received</h2>
-            <h3 className={`text-xl font-bold text-red-600 uppercase tracking-widest mb-4`}>Next Step: The Vetting Interview</h3>
-            <p className={`text-lg notam-font mb-8 leading-relaxed ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                To unlock the <strong>Wing Mentor Knowledge Vault</strong> and receive full support (including free access to PPL, CPL, IR, & ME resources), you must complete a vetting interview. We grant access only to those truly dedicated to the craft. Expect a call shortly.
-            </p>
-            <button 
-                onClick={onBackToProgramDetail}
-                className="px-8 py-3 bg-black text-white font-bold rounded hover:bg-zinc-800 transition-colors uppercase tracking-widest"
-            >
-                Return to Program Details
-            </button>
-         </div>
-      </div>
-    );
-  }
+  const panelBg = isDarkMode ? 'bg-zinc-950/90 border-zinc-800' : 'bg-white/90 border-zinc-200';
 
   return (
-    <div className={`relative min-h-screen animate-in fade-in duration-700 ${isDarkMode ? 'bg-black' : 'bg-white'}`}>
-      {showTerms && <TermsModal onClose={() => setShowTerms(false)} isDarkMode={isDarkMode} />}
+    <div className={`relative min-h-screen pt-32 pb-16 px-4 md:px-8 transition-colors duration-500 bg-cover bg-center overflow-x-hidden`}
+         style={{ backgroundImage: `url(${images.PROGRAM_BG})` }}>
+      
+      {/* Background Overlay */}
+      <div className={`absolute inset-0 z-0 ${isDarkMode ? 'bg-black/80' : 'bg-zinc-100/90'}`}></div>
 
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <img 
-          src={images.ABOUT_BG} 
-          alt="Enrollment Background" 
-          className="w-full h-full object-cover object-center" 
-          style={{
-            filter: 'brightness(60%) blur(2px)', 
-            pointerEvents: 'none'
-          }} 
-        />
-        <div className={`absolute inset-0 z-10 ${isDarkMode ? 'bg-black/60' : 'bg-white/80'}`}></div>
-      </div>
-
-      <div className="relative z-20 w-full max-w-7xl mx-auto pt-32 pb-16 px-6 lg:px-12">
-        <RevealOnScroll className="mb-12 text-center">
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col h-[calc(100vh-160px)] min-h-[700px]">
+        
+        {/* Navigation Header */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 shrink-0">
             <button 
                 onClick={onBackToProgramDetail}
-                className={`flex items-center mx-auto space-x-3 px-6 py-3 rounded-md uppercase tracking-widest text-sm font-bold transition-all shadow-md
-                            border ${isDarkMode ? 'bg-zinc-800 text-white hover:bg-zinc-700 border-zinc-600' : 'bg-white text-zinc-800 hover:bg-zinc-100 border-zinc-300'}`}>
+                className={`flex items-center space-x-3 px-6 py-2 rounded-md uppercase tracking-widest text-xs font-bold transition-all shadow-md border
+                            ${isDarkMode ? 'bg-zinc-900 text-white border-zinc-700 hover:bg-zinc-800' : 'bg-white text-zinc-800 border-zinc-300 hover:bg-zinc-50'}`}>
                 <i className="fas fa-arrow-left"></i>
-                <span>Back to Program Details</span>
+                <span>Return to Briefing</span>
             </button>
-        </RevealOnScroll>
 
-        <RevealOnScroll className="text-center mb-16">
-          <h1 className={`text-5xl md:text-7xl font-bold brand-font leading-tight mb-4
-                          ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
-            Enroll in Wing Mentorship
-          </h1>
-          <p className={`text-xl md:text-3xl font-light leading-relaxed
-                         ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
-            Your Journey to Aviation Excellence Starts Here.
-          </p>
-        </RevealOnScroll>
-
-        <div className={`space-y-16 mt-20 p-8 md:p-12 rounded-xl shadow-md transition-all duration-500 border
-                        ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-white'}`}>
-          
-          <RevealOnScroll delay={100}>
-            <h2 className={`text-3xl md:text-4xl font-bold brand-font mb-6 text-center
-                           ${isDarkMode ? 'text-red-500' : 'text-red-700'}`}>
-              Choose Your Path
-            </h2>
-            <p className={`text-lg md:text-xl leading-relaxed notam-font
-                           ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-              The Wing Mentorship Program offers two distinct pathways to participate, whether you're seeking guidance as a mentee or looking to build your verifiable experience as a junior mentor. Both paths are designed to elevate your aviation career through unique support and development opportunities.
-            </p>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={200}>
-            <h2 className={`text-3xl md:text-4xl font-bold brand-font mb-6 text-center
-                           ${isDarkMode ? 'text-red-500' : 'text-red-700'}`}>
-              Pathway 1: Enroll as a Mentee
-            </h2>
-            <div className="space-y-6">
-                <p className={`text-lg md:text-xl leading-relaxed notam-font
-                               ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                  As a mentee, you will gain access to our network of commercially licensed and ground instructor-certified Wing Mentors. Our program is tailored to help you:
-                </p>
-                <ul className={`list-disc list-inside ml-4 space-y-2 notam-font
-                               ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                    <li>Receive one-on-one consultation on specific flight-related challenges.</li>
-                    <li>Prepare for upcoming lessons and flights with certified instructors.</li>
-                    <li>Overcome knowledge gaps and refine your practical understanding.</li>
-                    <li>Connect with experienced aviators who understand your journey.</li>
-                </ul>
-                <p className={`text-lg md:text-xl leading-relaxed notam-font
-                               ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                  You'll benefit from personalized guidance that focuses on problem-solving and strategic preparation, ensuring you approach your training with enhanced confidence and proficiency.
-                </p>
+            {/* Tab Controls */}
+            <div className={`flex p-1 rounded-lg border ${isDarkMode ? 'bg-black border-zinc-800' : 'bg-zinc-200 border-zinc-300'}`}>
+                <button 
+                    onClick={() => setActiveTab('FORM')}
+                    className={`px-6 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all
+                                ${activeTab === 'FORM' 
+                                    ? 'bg-red-700 text-white shadow-lg' 
+                                    : 'text-zinc-500 hover:text-zinc-700'}`}
+                >
+                    <i className="fas fa-file-contract mr-2"></i> Application Form
+                </button>
+                <button 
+                    onClick={() => setActiveTab('ROSTER')}
+                    className={`px-6 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all
+                                ${activeTab === 'ROSTER' 
+                                    ? 'bg-blue-700 text-white shadow-lg' 
+                                    : 'text-zinc-500 hover:text-zinc-700'}`}
+                >
+                    <i className="fas fa-list-ol mr-2"></i> Flight Roster
+                </button>
             </div>
-          </RevealOnScroll>
-
-          <RevealOnScroll delay={300}>
-            <h2 className={`text-3xl md:text-4xl font-bold brand-font mb-6 text-center
-                           ${isDarkMode ? 'text-red-500' : 'text-red-700'}`}>
-              Pathway 2: Become a Junior Wing Mentor
-            </h2>
-            <div className="space-y-6">
-                <p className={`text-lg md:text-xl leading-relaxed notam-font
-                               ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                  For low-timer commercial pilots and aspiring flight instructors, becoming a junior Wing Mentor offers an unparalleled opportunity. This pathway provides the "experience without experience" sought by the industry:
-                </p>
-                <ul className={`list-disc list-inside ml-4 space-y-2 notam-font
-                               ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                    <li>Gain verifiable, logged experience in a supervised mentorship setting.</li>
-                    <li>Develop crucial communication, guidance, and problem-solving skills.</li>
-                    <li>Enhance your resume for flight school applications and interviews.</li>
-                    <li>Contribute to the aviation community by supporting fellow pilots.</li>
-                    <li>Receive assessment and feedback from Official Mentor Team Personnel during your initial program pathway.</li>
-                </ul>
+            
+            <div className="hidden md:flex items-center space-x-3">
+                <div className="text-right">
+                    <p className={`text-[10px] font-mono font-bold ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>UPLINK STATUS</p>
+                    <p className={`text-[10px] font-mono font-bold text-green-500 animate-pulse`}>SECURE_ENCRYPTED</p>
+                </div>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 border-green-500/30 ${isDarkMode ? 'bg-green-900/10' : 'bg-green-50'}`}>
+                    <i className="fas fa-satellite-dish text-green-500"></i>
+                </div>
             </div>
-          </RevealOnScroll>
+        </div>
 
-          <RevealOnScroll delay={400}>
-            <h2 className={`text-3xl md:text-4xl font-bold brand-font mb-6 text-center
-                           ${isDarkMode ? 'text-red-500' : 'text-red-700'}`}>
-              Enrollment Package Benefits
-            </h2>
-            <p className={`text-lg md:text-xl leading-relaxed notam-font
-                           ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-              Upon joining the Wing Mentorship Program (for both mentees and junior mentors), your enrollment package includes essential tools and resources designed to support your aviation journey:
-            </p>
-            <ul className={`list-disc list-inside ml-4 space-y-2 notam-font
-                           ${isDarkMode ? 'text-zinc-300' : 'text-black'}`}>
-                <li><span className="font-bold">Exclusive Wing Mentor Apparel:</span> Show your pride and belonging.</li>
-                <li><span className="font-bold">Access to Specialized Aviation Apps:</span> Enhance your flight planning, weather analysis, and navigation.</li>
-                <li><span className="font-bold">Quizlet Study Materials:</span> Curated content for various pilot certifications and ratings.</li>
-                <li><span className="font-bold">Examination Preparation:</span> Tailored knowledge prep based on your tier level.</li>
-                <li><span className="font-bold">Simulation Support:</span> Ideal for Instrument Flight Rules (IFR) guidance and complex scenario practice.</li>
-                <li><span className="font-bold">Community Support & Guidance:</span> Connect with a vibrant network of pilots at all levels.</li>
-            </ul>
-          </RevealOnScroll>
+        {/* Main Terminal Container */}
+        <div className={`flex-1 rounded-2xl border-2 shadow-2xl overflow-hidden flex flex-col relative ${panelBg}`}>
+            
+            {/* Terminal Header */}
+            <div className={`p-4 border-b flex items-center justify-between shrink-0 ${isDarkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
+                <div className="flex items-center space-x-3">
+                    <img src={images.LOGO} alt="WM" className="w-8 h-8 object-contain" />
+                    <div>
+                        <h2 className={`text-xs font-black uppercase tracking-[0.2em] ${isDarkMode ? 'text-white' : 'text-black'}`}>
+                            {activeTab === 'FORM' ? 'MENTORSHIP ENROLLMENT TERMINAL' : 'CENTRAL PILOT ROSTER'}
+                        </h2>
+                        <p className="text-[9px] font-mono text-zinc-500 uppercase">System ID: WM-ALPHA-9</p>
+                    </div>
+                </div>
 
-          <RevealOnScroll delay={500}>
-            <div className={`mt-16 pt-16 border-t-2 ${isDarkMode ? 'border-zinc-800' : 'border-zinc-100'}`}>
-                <h2 className={`text-3xl md:text-5xl font-bold brand-font mb-8 text-center uppercase
-                                ${isDarkMode ? 'text-white' : 'text-black'}`}>
-                    Begin Your Enrollment
-                </h2>
-                
-                <form onSubmit={handleSubmit} className={`max-w-3xl mx-auto space-y-8 p-8 md:p-12 rounded-xl shadow-lg border
-                                                          ${isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-zinc-50 border-zinc-200'}`}>
-                    
-                    {!isLoggedIn && (
-                        <div className="space-y-6">
-                            <h3 className={`text-xl font-bold text-red-700 brand-font uppercase tracking-wider border-b pb-2
-                                            ${isDarkMode ? 'border-zinc-700' : 'border-zinc-200'}`}>
-                                1. Create Account
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Username</label>
-                                    <input 
-                                        type="text" 
-                                        required 
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors
-                                                    ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                        placeholder="Pilot123"
-                                    />
-                                </div>
-                                <div>
-                                    <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Email Address</label>
-                                    <input 
-                                        type="email" 
-                                        required 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors
-                                                    ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                        placeholder="pilot@example.com"
-                                    />
-                                </div>
-                                <div className="md:col-span-2">
-                                    <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Phone Number</label>
-                                    <input 
-                                        type="tel" 
-                                        required 
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors
-                                                    ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                        placeholder="+1 (555) 000-0000"
-                                    />
-                                </div>
-                                <div className="md:col-span-2">
-                                    <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Password</label>
-                                    <input 
-                                        type="password" 
-                                        required 
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors
-                                                    ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                        placeholder="••••••••"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                <div className="flex items-center space-x-6">
+                    {activeTab === 'FORM' && (
+                        <button 
+                            onClick={handleRefreshForm}
+                            title="Reload Application Data"
+                            className={`flex items-center space-x-2 px-3 py-1.5 rounded border font-mono text-[9px] uppercase tracking-wider transition-all
+                                      ${isDarkMode 
+                                        ? 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-700' 
+                                        : 'bg-zinc-100 border-zinc-300 text-zinc-600 hover:bg-zinc-200'}`}
+                        >
+                            <i className={`fas fa-sync-alt ${isUplinking ? 'fa-spin' : ''}`}></i>
+                            <span className="font-bold">[REFRESH_LINK]</span>
+                        </button>
                     )}
 
-                    <div className="space-y-6">
-                        <h3 className={`text-xl font-bold text-red-700 brand-font uppercase tracking-wider border-b pb-2
-                                        ${isDarkMode ? 'border-zinc-700' : 'border-zinc-200'}`}>
-                            {isLoggedIn ? '1. Program Details' : '2. Program Details'}
-                        </h3>
-                        
-                        <div>
-                            <label className={`block text-sm font-bold uppercase tracking-wider mb-4 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Select Your Pathway</label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <label 
-                                    className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
-                                    ${selectedRole === 'mentee' 
-                                        ? 'border-red-600 bg-red-900/20' 
-                                        : isDarkMode ? 'border-zinc-700 hover:border-red-800 bg-zinc-900' : 'border-zinc-200 hover:border-red-300 bg-white'}`}
-                                >
-                                    <input 
-                                        type="radio" 
-                                        name="role" 
-                                        value="mentee" 
-                                        checked={selectedRole === 'mentee'}
-                                        onChange={() => setSelectedRole('mentee')}
-                                        className="w-5 h-5 text-red-600 focus:ring-red-500"
-                                    />
-                                    <div className="ml-3">
-                                        <span className={`block font-bold uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Mentee</span>
-                                        <span className={`block text-xs ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>I am seeking guidance & support</span>
-                                    </div>
-                                </label>
-
-                                <label 
-                                    className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all
-                                    ${selectedRole === 'mentor' 
-                                        ? 'border-red-600 bg-red-900/20' 
-                                        : isDarkMode ? 'border-zinc-700 hover:border-red-800 bg-zinc-900' : 'border-zinc-200 hover:border-red-300 bg-white'}`}
-                                >
-                                    <input 
-                                        type="radio" 
-                                        name="role" 
-                                        value="mentor" 
-                                        checked={selectedRole === 'mentor'}
-                                        onChange={() => setSelectedRole('mentor')}
-                                        className="w-5 h-5 text-red-600 focus:ring-red-500"
-                                    />
-                                    <div className="ml-3">
-                                        <span className={`block font-bold uppercase ${isDarkMode ? 'text-white' : 'text-black'}`}>Junior Wing Mentor</span>
-                                        <span className={`block text-xs ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>I want to build experience supporting others</span>
-                                    </div>
-                                </label>
-                            </div>
+                    {isUplinking && (
+                        <div className="flex items-center space-x-2 text-green-500 font-mono text-[9px] uppercase animate-pulse">
+                            <i className="fas fa-spinner fa-spin"></i>
+                            <span>Syncing Data Stream...</span>
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Current Flight School</label>
-                                <input 
-                                    type="text" 
-                                    required 
-                                    value={flightSchool}
-                                    onChange={(e) => setFlightSchool(e.target.value)}
-                                    className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors
-                                                ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                    placeholder="e.g. Alpha Aviation Academy"
-                                />
-                            </div>
-                            <div>
-                                <label className={`block text-sm font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>Country</label>
-                                <div className="relative">
-                                    <select 
-                                        required
-                                        value={selectedCountry}
-                                        onChange={(e) => setSelectedCountry(e.target.value)}
-                                        className={`w-full border p-4 rounded focus:outline-none focus:border-red-600 transition-colors appearance-none
-                                                    ${isDarkMode ? 'bg-zinc-900 border-zinc-700 text-white' : 'bg-white border-zinc-300 text-black'}`}
-                                    >
-                                        <option value="" disabled>Select Country</option>
-                                        {countries.map(country => (
-                                            <option key={country} value={country}>{country}</option>
-                                        ))}
-                                    </select>
-                                    <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>
-                                        <i className="fas fa-chevron-down text-xs"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="pt-4 pb-2">
-                        <label className="flex items-start space-x-3 cursor-pointer">
-                            <input 
-                                type="checkbox" 
-                                checked={agreedToTerms}
-                                onChange={(e) => setAgreedToTerms(e.target.checked)}
-                                className="mt-1 w-5 h-5 text-red-600 border-zinc-300 rounded focus:ring-red-500"
-                            />
-                            <span className={`text-sm leading-tight ${isDarkMode ? 'text-zinc-400' : 'text-zinc-700'}`}>
-                                I agree to the <button type="button" onClick={() => setShowTerms(true)} className="text-red-700 font-bold hover:underline">Terms and Conditions</button>. I acknowledge that Wing Mentorship is a consultation and support community, not a flight training organization, and does not provide legal flight instruction.
-                            </span>
-                        </label>
-                    </div>
-
-                    <div className="pt-8 text-center">
-                        <button 
-                            type="submit"
-                            disabled={isSubmitting || !selectedRole || !agreedToTerms}
-                            className={`px-12 py-5 rounded-full uppercase tracking-widest text-lg font-bold transition-all shadow-xl
-                                      ${isSubmitting || !selectedRole || !agreedToTerms 
-                                        ? 'bg-zinc-400 cursor-not-allowed' 
-                                        : 'bg-red-700 text-white hover:bg-red-600'}`}
-                        >
-                            {isSubmitting ? (
-                                <span className="flex items-center space-x-2">
-                                    <i className="fas fa-spinner fa-spin"></i>
-                                    <span>Processing...</span>
-                                </span>
-                            ) : (
-                                "Complete Enrollment"
-                            )}
-                        </button>
-                    </div>
-
-                </form>
+                    )}
+                </div>
             </div>
-          </RevealOnScroll>
 
+            {/* Content Area */}
+            <div className="flex-1 relative overflow-hidden flex flex-col bg-zinc-800">
+                
+                {/* Loading Overlay */}
+                {isUplinking && (
+                    <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-center space-y-4">
+                        <EpauletBars count={4} size="medium" animated={true} />
+                        <p className="text-yellow-500 font-mono text-[10px] uppercase tracking-[0.4em] animate-pulse">Establishing Satellite Handshake</p>
+                    </div>
+                )}
+
+                {activeTab === 'FORM' ? (
+                    <div className="flex-1 bg-white relative overflow-hidden flex flex-col">
+                        <iframe 
+                            key={refreshKey}
+                            src={GOOGLE_FORM_URL} 
+                            className="absolute inset-0 w-full h-full border-none"
+                            title="Enrollment Form"
+                        >
+                            Loading Application...
+                        </iframe>
+                    </div>
+                ) : (
+                    <div className="flex-1 overflow-auto bg-zinc-950 custom-scrollbar">
+                         <table className="w-full border-collapse font-mono text-[10px]">
+                            <thead className={`sticky top-0 z-10 bg-zinc-900 text-zinc-500 border-b border-zinc-800`}>
+                                <tr>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest border-r border-zinc-800">Pilot UID</th>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest border-r border-zinc-800">Callsign</th>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest border-r border-zinc-800">License</th>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest border-r border-zinc-800">Operational Base</th>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest border-r border-zinc-800">Status</th>
+                                    <th className="p-4 text-left font-bold uppercase tracking-widest">Enrollment</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-zinc-300">
+                                {MOCK_ROSTER.map((pilot, i) => (
+                                    <tr key={pilot.id} className={`${i % 2 === 0 ? 'bg-zinc-900/30' : ''} border-b border-zinc-900 hover:bg-blue-500/5 transition-colors`}>
+                                        <td className="p-4 border-r border-zinc-900 text-zinc-500">{pilot.id}</td>
+                                        <td className="p-4 border-r border-zinc-900 font-bold text-blue-400">{pilot.callsign}</td>
+                                        <td className="p-4 border-r border-zinc-900">{pilot.rank}</td>
+                                        <td className="p-4 border-r border-zinc-900">{pilot.school}, {pilot.country}</td>
+                                        <td className="p-4 border-r border-zinc-900">
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black
+                                                            ${pilot.status === 'VERIFIED' ? 'bg-green-500/20 text-green-500 border border-green-500/30' : 
+                                                              pilot.status === 'IN_VETTING' ? 'bg-yellow-500/20 text-yellow-500 border border-yellow-500/30' : 
+                                                              'bg-zinc-700/20 text-zinc-500 border border-zinc-700/30'}`}>
+                                                {pilot.status}
+                                            </span>
+                                        </td>
+                                        <td className="p-4 text-zinc-500">{pilot.date}</td>
+                                    </tr>
+                                ))}
+                                {/* User's Pending Entry Placeholder */}
+                                <tr className="bg-red-900/10 border-b border-red-900/30 animate-pulse">
+                                    <td className="p-4 border-r border-zinc-900 text-red-500">WM-PENDING</td>
+                                    <td className="p-4 border-r border-zinc-900 font-bold text-red-400">YOU_CURRENT_USER</td>
+                                    <td className="p-4 border-r border-zinc-900">PENDING_SYNC</td>
+                                    <td className="p-4 border-r border-zinc-900">PENDING_SYNC</td>
+                                    <td className="p-4 border-r border-zinc-900">
+                                        <span className="px-2 py-0.5 rounded text-[8px] font-black bg-red-500/20 text-red-500 border border-red-500/30">AWAITING_APPLICATION</span>
+                                    </td>
+                                    <td className="p-4 text-red-500">SYSTEM_DATE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+
+            {/* Terminal Footer */}
+            <div className={`px-6 py-3 border-t flex flex-col md:flex-row justify-between items-center gap-4 shrink-0 ${isDarkMode ? 'bg-zinc-900/80 text-zinc-500' : 'bg-zinc-50 text-zinc-400'}`}>
+                <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                        <span className="text-[8px] font-bold uppercase tracking-wider">Form Server Active</span>
+                    </div>
+                    <div className="h-3 w-px bg-zinc-700"></div>
+                    <span className="text-[8px] font-mono">LAT: 14.5995° N / LON: 120.9842° E</span>
+                </div>
+                <div className="text-[8px] uppercase tracking-widest font-bold">
+                    Property of Wing Mentor Operations Command • v2.4.0
+                </div>
+            </div>
+        </div>
+
+        {/* Informational Note */}
+        <div className="mt-4 text-center max-w-2xl mx-auto shrink-0 pb-2">
+            <p className={`text-[10px] uppercase tracking-widest leading-relaxed opacity-60 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                <i className="fas fa-info-circle mr-1"></i> Ensure all flight hours and license details are accurate. 
+                Inaccurate data in the mission application may result in immediate revocation of system access.
+            </p>
         </div>
       </div>
     </div>
