@@ -469,14 +469,6 @@ export const PilotsStory: React.FC = () => {
                             </textPath>
                             <textPath
                                 href="#flight-path-curve"
-                                startOffset="20%"
-                                className="fill-black font-['Playfair_Display',_serif] text-sm md:text-lg font-bold tracking-[0.2em]"
-                                style={{ opacity: storyState.progress > 0.15 ? 0.7 : 0, transition: 'opacity 0.5s ease-in-out' }}
-                            >
-                                • First Solo
-                            </textPath>
-                            <textPath
-                                href="#flight-path-curve"
                                 startOffset="28%"
                                 className="fill-black font-['Playfair_Display',_serif] text-sm md:text-base font-semibold tracking-wider"
                                 style={{ opacity: storyState.progress > 0.23 ? 0.7 : 0, transition: 'opacity 0.5s ease-in-out' }}
