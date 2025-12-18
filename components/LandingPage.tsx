@@ -383,7 +383,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             </div>
         </div>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 px-8 mb-16">
+        {/* Adjusted to grid-cols-2 consistently for 2x2 layout */}
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-8 md:gap-16 px-8 mb-16">
           {ACTION_ICONS.map((feature, index) => {
             const isHovered = hoveredApp === feature.target;
             const isBlurred = hoveredApp !== null && hoveredApp !== feature.target;
@@ -402,7 +403,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                         onClick={() => handleIconClick(feature.target)}
                         className="w-full h-full p-4 md:p-6 text-center rounded-xl transition-all duration-300 focus:outline-none group relative flex flex-col items-center"
                       >
-                        <div className={`flex items-center justify-center w-28 h-28 md:w-40 md:h-40 mx-auto mb-4 
+                        <div className={`flex items-center justify-center w-28 h-28 md:w-44 md:h-44 mx-auto mb-4 
                                         ${feature.image ? 'rounded-3xl border-0 shadow-2xl' : 'rounded-full border border-zinc-800'} 
                                         bg-zinc-900 text-yellow-500 transition-all duration-500 overflow-hidden relative shadow-lg
                                         ${!feature.image ? 'group-hover:bg-yellow-500 group-hover:text-black' : ''}`}>
