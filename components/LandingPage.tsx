@@ -322,13 +322,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </div>
 
                 wing mentor
-                {/* Sliding Icon on underline - Synchronized at 5.5s loop with intensified glow */}
+                {/* Corrected Airplane Icon on underline - Using correct icon URL and ensuring robust display */}
                 <img 
-                    src="https://lh3.googleusercontent.com/d/1i9gQqjVWESQsafz3ARNO1zupAQ_Xu6K4"
+                    src="https://lh3.googleusercontent.com/d/1LBUmOl-u3czx1hLf1NTgPrTnc9Gf1d1z"
                     alt=""
-                    className="absolute -bottom-[18px] md:-bottom-[22px] w-10 h-10 md:w-12 md:h-12 object-contain pointer-events-none z-20 animate-icon-glow"
+                    className="absolute -bottom-[20px] md:-bottom-[24px] w-12 h-12 md:w-16 md:h-16 object-contain pointer-events-none z-30"
                     style={{ 
                         animation: 'underline-slide 5.5s linear infinite, icon-pulse-glow 2s ease-in-out infinite',
+                        display: 'block'
                     }}
                 />
             </span>
