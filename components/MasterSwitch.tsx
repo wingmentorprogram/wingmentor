@@ -28,7 +28,7 @@ export const MasterSwitch: React.FC<MasterSwitchProps> = ({ isLoggedIn, onToggle
       </button>
       <div className="mt-2 text-center">
         <span className={`text-[10px] uppercase font-bold tracking-wider ${isLoggedIn ? 'text-green-400' : 'text-zinc-500'}`}>
-          {isLoggedIn ? 'Sign In Account' : 'Signed Out Account'}
+          {isLoggedIn ? 'Signed In' : 'Signed Out'}
         </span>
       </div>
     </div>
