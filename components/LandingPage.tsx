@@ -85,7 +85,6 @@ const APPROACH_STEPS = [
   }
 ];
 
-
 export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, setIsVideoWarm, onGoToProgramDetail, onGoToGapPage, onGoToOperatingHandbook, onGoToBlackBox, onGoToExaminationTerminal, scrollToSection, onScrollComplete, onGoToEnrollment }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { config } = useConfig();
@@ -312,7 +311,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             <span className={`relative inline-flex items-center gap-x-2 md:gap-x-4 align-middle border-b-2 pb-0.5 ${isDarkMode ? 'border-white/50' : 'border-black/50'}`}>
                 Low timer
                 
-                {/* Mechanical VOR Revolve - Total Loop 5.5s (5s + 0.5s hold) */}
+                {/* Mechanical VOR Revolve - Total Loop 5.5s (Synced with plane in index.html CSS) */}
                 <div className="revolve-container">
                   <div className="revolve-inner" style={{ animation: 'to-fr-revolve 5.5s linear infinite' }}>
                     <span className="revolve-face face-to">TO</span>
@@ -322,16 +321,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </div>
 
                 wing mentor
-                {/* Fixed Airplane Icon on underline - Using requested URL and ensuring robust display/z-index */}
+                
+                {/* Specifically requested airplane icon, facing towards the right (direction of travel) */}
                 <img 
-                    src="https://lh3.googleusercontent.com/d/1i9gQqjVWESQsafz3ARNO1zupAQ_Xu6K4"
-                    alt=""
+                    src="https://lh3.googleusercontent.com/d/1XGp7XKF4Pzsq9KoO-QHsMUaPDdUo_B-6"
+                    alt="Airplane Icon"
                     className="absolute -bottom-[22px] md:-bottom-[26px] w-12 h-12 md:w-16 md:h-16 object-contain pointer-events-none z-[60]"
                     style={{ 
                         animation: 'underline-slide 5.5s linear infinite, icon-pulse-glow 2s ease-in-out infinite',
-                        display: 'block',
-                        visibility: 'visible',
-                        opacity: 1
+                        transform: 'rotate(90deg)'
                     }}
                 />
             </span>
@@ -825,7 +823,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                                         onClick={() => setSelectedAppIndex(index)}
                                     >
                                         <div className="w-full h-full relative group">
-                                            <div className="absolute inset-0 bg-yellow-500/0 group-hover:bg-yellow-500/5 transition-colors rounded-2xl"></div>
+                                            <div className="absolute inset-0 bg-yellow-500/0 group-hover:bg-yellow-500/10 transition-colors rounded-2xl"></div>
                                             <img 
                                                 src={app.image} 
                                                 alt={app.title} 

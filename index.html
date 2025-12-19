@@ -127,14 +127,16 @@
 
       /* 
          VOR Mechanical Revolve 
-         Loop duration adjusted for 5.5s total (5s active + 0.5s extension)
-         Transitions scaled by 5.0/5.5 factor
+         Loop duration 5.5s total.
+         Synced to plane position:
+         - Starts 'TO'
+         - Flips to FLAG at 30% (passing towards box)
+         - Flips to FR at 58% (reaching 'N' in wing)
       */
       @keyframes to-fr-revolve {
-        0%, 18.2% { transform: rotateX(0deg); }           /* ~1s Static TO */
-        40.9%, 63.6% { transform: rotateX(-90deg); }      /* flip, ~1.25s Static FLAG */
-        86.4%, 90.9% { transform: rotateX(-180deg); }    /* flip, conclude at 5s */
-        100% { transform: rotateX(-180deg); }             /* 0.5s pause before loop */
+        0%, 30% { transform: rotateX(0deg); }           /* Static TO */
+        33%, 58% { transform: rotateX(-90deg); }        /* Static FLAG (Crosshatch) */
+        61%, 100% { transform: rotateX(-180deg); }      /* Static FR */
       }
 
       .revolve-container {
