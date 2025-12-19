@@ -312,9 +312,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
             <span className={`relative inline-flex items-center gap-x-2 md:gap-x-4 align-middle border-b-2 pb-0.5 ${isDarkMode ? 'border-white/50' : 'border-black/50'}`}>
                 Low timer
                 
-                {/* Mechanical VOR Revolve - Total Loop 5s */}
+                {/* Mechanical VOR Revolve - Total Loop 5.5s (5s + 0.5s hold) */}
                 <div className="revolve-container">
-                  <div className="revolve-inner" style={{ animation: 'to-fr-revolve 5s linear infinite' }}>
+                  <div className="revolve-inner" style={{ animation: 'to-fr-revolve 5.5s linear infinite' }}>
                     <span className="revolve-face face-to">TO</span>
                     <span className="revolve-face face-flag"></span>
                     <span className="revolve-face face-fr">FR</span>
@@ -322,13 +322,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isVideoWarm = false, s
                 </div>
 
                 wing mentor
-                {/* Sliding Icon on underline - Synchronized at 5s loop with intensified glow */}
+                {/* Sliding Icon on underline - Synchronized at 5.5s loop with intensified glow */}
                 <img 
                     src="https://lh3.googleusercontent.com/d/1i9gQqjVWESQsafz3ARNO1zupAQ_Xu6K4"
                     alt=""
                     className="absolute -bottom-[18px] md:-bottom-[22px] w-10 h-10 md:w-12 md:h-12 object-contain pointer-events-none z-20 animate-icon-glow"
                     style={{ 
-                        animation: 'underline-slide 5s linear infinite, icon-pulse-glow 2s ease-in-out infinite',
+                        animation: 'underline-slide 5.5s linear infinite, icon-pulse-glow 2s ease-in-out infinite',
                     }}
                 />
             </span>
