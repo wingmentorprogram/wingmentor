@@ -45,16 +45,26 @@ export const BottomAppBar: React.FC<BottomAppBarProps> = ({ onNavigate, isVisibl
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Drawer Handle / Multi-Chevron Arrows */}
-      <div 
-        className={`mx-auto w-20 h-10 flex flex-col items-center justify-end pb-1 cursor-pointer pointer-events-auto transition-all duration-500 transform ${isOpen ? 'translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}
-        onClick={() => setIsOpen(true)}
-      >
-        <div className="flex flex-col items-center justify-center -space-y-2">
-            <i className="fas fa-chevron-up text-xs text-yellow-500 animate-bounce" style={{ animationDelay: '0s' }}></i>
-            <i className="fas fa-chevron-up text-xs text-yellow-500 animate-bounce" style={{ animationDelay: '0.1s' }}></i>
-            <i className="fas fa-chevron-up text-xs text-yellow-500 animate-bounce" style={{ animationDelay: '0.2s' }}></i>
+      {/* Drawer Handle / Custom Icon - Aligned with Gap Forum (Item 3) and sized for readability */}
+      <div className="w-full px-6 flex justify-between items-end pointer-events-none h-14">
+        {/* Placeholders to match 5-item bar alignment */}
+        <div className="w-12 invisible"></div>
+        <div className="w-12 invisible"></div>
+        
+        {/* The Custom Image Trigger in the 3rd slot (Middle) - Scaled up to match brand icon sizes */}
+        <div 
+          className={`w-12 h-14 flex flex-col items-center justify-end cursor-pointer pointer-events-auto transition-all duration-500 transform ${isOpen ? 'translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}
+          onClick={() => setIsOpen(true)}
+        >
+          <img 
+            src="https://lh3.googleusercontent.com/d/1tCo2sdP7ZOSdgHBfo_fveQDsm_35pDeJ" 
+            alt="Open Terminal"
+            className="w-12 h-12 object-contain animate-bounce mb-[-4px] filter drop-shadow-[0_0_8px_rgba(234,179,8,0.4)]" 
+          />
         </div>
+
+        <div className="w-12 invisible"></div>
+        <div className="w-12 invisible"></div>
       </div>
 
       {/* The Actual Bar */}

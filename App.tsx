@@ -176,7 +176,7 @@ const AppContent: React.FC = () => {
             />
           )}
           {renderCurrentPage()}
-          {!isBooting && <BottomAppBar isVisible={!isBooting} onNavigate={handleHubNavigation} />}
+          <BottomAppBar isVisible={stage === LoadingStage.LANDING} onNavigate={handleHubNavigation} />
         </>
       )}
     </div>

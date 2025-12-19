@@ -40,16 +40,28 @@ export const ProgramDetailPage: React.FC<ProgramDetailPageProps> = ({ onBackToLa
           <h2 className={`text-xl md:text-3xl font-light leading-relaxed uppercase tracking-widest
                          ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
             Bridging the experience gap <br /> 
-            <span className="inline-flex items-center gap-x-2 align-middle mt-2">
-                Low timer
-                <img 
-                    src={images.RUNWAY_HOLDING_POINT}
-                    alt="to"
-                    className="w-10 h-10 md:w-12 md:h-12 object-contain"
-                    style={{ filter: isDarkMode ? 'invert(0)' : 'brightness(0.5)' }} 
-                />
-                wing mentor
-            </span>
+            <div className="relative inline-block mt-4">
+              <span className="inline-flex items-center gap-x-2 md:gap-x-4 align-middle relative z-10 px-2">
+                  Low timer
+                  <div className="vor-indicator text-yellow-500 font-black">
+                    <div className="vor-flag">
+                      <div className="vor-side vor-front">TO</div>
+                      <div className="vor-side vor-hatch"></div>
+                      <div className="vor-side vor-back">FR</div>
+                    </div>
+                  </div>
+                  wing mentor
+              </span>
+              {/* Animated Underline Container - Increased Plane Size */}
+              <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-yellow-500/20 pointer-events-none">
+                 <img 
+                    src={images.RUNWAY_HOLDING_POINT} 
+                    className="animate-plane-underline h-10 w-10 -top-5 object-contain"
+                    alt="Underline Plane" 
+                    style={{ filter: isDarkMode ? 'brightness(1.5) drop-shadow(0 0 8px rgba(234,179,8,0.9))' : 'brightness(0.8)' }}
+                 />
+              </div>
+            </div>
           </h2>
         </RevealOnScroll>
 

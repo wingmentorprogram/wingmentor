@@ -57,16 +57,28 @@ export const WingMentorshipProgramPage: React.FC<WingMentorshipProgramPageProps>
                     </h2>
                     <h3 className={`text-xl md:text-2xl font-light uppercase tracking-widest ${isDarkMode ? 'text-red-400' : 'text-red-700'}`}> 
                         Bridging the experience gap <br />
-                        <span className="inline-flex items-center gap-x-2 align-middle mt-2">
-                            Low timer
-                            <img 
-                                src={images.RUNWAY_HOLDING_POINT} 
-                                alt="to"
-                                className="w-8 h-8 md:w-10 md:h-10 object-contain"
-                                style={{ filter: isDarkMode ? 'invert(0)' : 'brightness(0.5)' }} 
-                            />
-                            wing mentor
-                        </span>
+                        <div className="relative inline-block mt-4">
+                            <span className="inline-flex items-center gap-x-2 md:gap-x-4 align-middle relative z-10 px-2">
+                                Low timer
+                                <div className={`vor-indicator ${isDarkMode ? 'text-yellow-500' : 'text-yellow-700'} font-black`}>
+                                    <div className="vor-flag">
+                                      <div className="vor-side vor-front">TO</div>
+                                      <div className="vor-side vor-hatch"></div>
+                                      <div className="vor-side vor-back">FR</div>
+                                    </div>
+                                </div>
+                                wing mentor
+                            </span>
+                            {/* Animated Underline Container - Increased Plane Size */}
+                            <div className="absolute -bottom-2 left-0 w-full h-[2px] bg-yellow-500/20 pointer-events-none">
+                                <img 
+                                    src={images.RUNWAY_HOLDING_POINT} 
+                                    className="animate-plane-underline h-10 w-10 -top-5 object-contain"
+                                    alt="Underline Plane" 
+                                    style={{ filter: isDarkMode ? 'brightness(1.5) drop-shadow(0 0 8px rgba(234,179,8,0.9))' : 'brightness(0.8)' }}
+                                />
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </RevealOnScroll>
