@@ -86,7 +86,6 @@ const AppContent: React.FC = () => {
       PASSPORT: goToOperatingHandbook,
       LOGS: goToOperatingHandbook,
       MAIL: goToMailSystem,
-      HUB: goToHub,
       LOGIN: () => setStage(LoadingStage.LOGIN),
       TOOLS: goToLanding
     };
